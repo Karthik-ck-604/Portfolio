@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Mail, MapPin, Calendar, CheckCircle2, ArrowRight, Github, Linkedin } from "lucide-react";
+import { Mail, MapPin, Calendar, CheckCircle2, ArrowRight, Github, Linkedin, HelpCircle, Copy, Check } from "lucide-react";
 import { contactDetails, socialLinks } from "@/data/socials";
 import { SectionHeading } from "@/components/common/SectionHeading";
 import { Card } from "@/components/common/Card";
@@ -21,6 +21,24 @@ type ContactFormData = z.infer<typeof contactSchema>;
 export const Contact: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [emailCopied, setEmailCopied] = useState(false);
+
+  useEffect(() => {
+    if (emailCopied) {
+      const timer = setTimeout(() => setEmailCopied(false), 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [emailCopied]);
+
+  const handleCopyEmail = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    try {
+      await navigator.clipboard.writeText(contactDetails.email);
+      setEmailCopied(true);
+    } catch (err) {
+      console.error("Failed to copy email: ", err);
+    }
+  };
 
   const {
     register,
@@ -80,9 +98,27 @@ export const Contact: React.FC = () => {
                 </div>
                 <div className="flex flex-col">
                   <span className="text-[9px] uppercase tracking-wider text-[#A8A8A8]/60">Email Address</span>
-                  <a href={`mailto:${contactDetails.email}`} className="text-[#F8F8F8] hover:text-[#DC2626] transition-colors outline-none">
-                    {contactDetails.email}
-                  </a>
+                  <div className="flex items-center gap-2">
+                    <a href={`mailto:${contactDetails.email}`} data-cursor="pointer" className="text-[#F8F8F8] hover:text-[#DC2626] transition-colors outline-none">
+                      {contactDetails.email}
+                    </a>
+                    <button
+                      onClick={handleCopyEmail}
+                      data-cursor="pointer"
+                      className="p-1 text-[#A8A8A8] hover:text-white hover:bg-[#2A2A2A]/40 rounded transition-colors focus:outline-none focus-visible:ring-1 focus-visible:ring-[#DC2626] relative group"
+                      aria-label="Copy email address"
+                      title="Copy email to clipboard"
+                    >
+                      {emailCopied ? <Check className="w-3.5 h-3.5 text-[#22C55E]" /> : <Copy className="w-3.5 h-3.5" />}
+                      
+                      {/* Tooltip */}
+                      {emailCopied && (
+                        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 bg-[#161616] border border-[#2A2A2A] text-[9px] text-[#F8F8F8] px-1.5 py-0.5 rounded shadow-lg pointer-events-none select-none z-30 whitespace-nowrap animate-in fade-in zoom-in duration-200">
+                          Copied!
+                        </div>
+                      )}
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -103,7 +139,12 @@ export const Contact: React.FC = () => {
                   <Calendar className="w-4 h-4" />
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-[9px] uppercase tracking-wider text-[#A8A8A8]/60">Availability Status</span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-[9px] uppercase tracking-wider text-[#A8A8A8]/60">Availability Status</span>
+                    <span title="Current employment search status" data-cursor="help" className="inline-flex items-center">
+                      <HelpCircle className="w-3.5 h-3.5 text-[#A8A8A8]/60 cursor-help" />
+                    </span>
+                  </div>
                   <span className="text-[#F8F8F8] font-semibold">{contactDetails.availability}</span>
                 </div>
               </div>

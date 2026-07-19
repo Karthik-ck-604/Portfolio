@@ -191,6 +191,7 @@ export const Hero: React.FC<HeroProps> = ({ isLoaded = true }) => {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Download PDF resume"
+              data-cursor="pointer"
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full border-2 border-[#3A3A3A] hover:border-[#DC2626] text-[#D0D0D0] hover:text-[#F8F8F8] bg-transparent hover:bg-[#DC2626]/8 text-sm font-semibold tracking-wide transition-all duration-250 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626]"
             >
               Download Resume
@@ -211,6 +212,7 @@ export const Hero: React.FC<HeroProps> = ({ isLoaded = true }) => {
                   href={link.url}
                   target={link.name !== "Email" ? "_blank" : undefined}
                   rel="noopener noreferrer"
+                  data-cursor="pointer"
                   className="group relative flex items-center justify-center w-10 h-10 border border-[#2A2A2A] rounded-full text-[#A8A8A8] hover:text-[#F8F8F8] hover:border-[#DC2626] hover:bg-[rgba(220,38,38,0.08)] transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626]"
                   aria-label={link.tooltip}
                 >

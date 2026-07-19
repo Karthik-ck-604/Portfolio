@@ -69,3 +69,23 @@
     outline-offset: 2px;
   }
 }
+
+/* Hide native cursor globally when custom cursor is active */
+.cursor-none,
+.cursor-none * {
+  cursor: none !important;
+}
+
+/* Disable text selection globally */
+* {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Explicitly re-enable selection inside form fields for usability */
+input,
+textarea {
+  user-select: text !important;
+  -webkit-user-select: text !important;
+}
+

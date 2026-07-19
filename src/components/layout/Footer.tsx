@@ -24,31 +24,31 @@ export const Footer: React.FC = () => {
   };
 
   const footerLinks = [
-    { label: "About",          id: "about" },
-    { label: "Experience",     id: "experience" },
-    { label: "Skills",         id: "skills" },
-    { label: "Projects",       id: "projects" },
-    { label: "Publications",   id: "publications" },
+    { label: "About", id: "about" },
+    { label: "Experience", id: "experience" },
+    { label: "Skills", id: "skills" },
+    { label: "Projects", id: "projects" },
+    { label: "Publications", id: "publications" },
     { label: "Certifications", id: "certifications" },
-    { label: "Contact",        id: "contact" },
+    { label: "Contact", id: "contact" },
   ];
 
   const socials = [
     {
       label: "GitHub",
-      href: "https://github.com",
+      href: "https://github.com/Karthik-ck-604",
       icon: <Github className="w-4 h-4" />,
       ariaLabel: "GitHub Profile",
     },
     {
       label: "LinkedIn",
-      href: "https://linkedin.com",
+      href: "https://https://linkedin.com/in/karthikeyan-cfsd",
       icon: <Linkedin className="w-4 h-4" />,
       ariaLabel: "LinkedIn Profile",
     },
     {
       label: "Email",
-      href: "mailto:karthikeyanc.cse@gmail.com",
+      href: "mailto:karthikeyan610204@gmail.com",
       icon: <Mail className="w-4 h-4" />,
       ariaLabel: "Send Email",
     },
@@ -69,12 +69,13 @@ export const Footer: React.FC = () => {
             <a
               href="#hero"
               onClick={(e) => handleLinkClick(e, "hero")}
+              data-cursor="pointer"
               className="group flex items-center gap-2.5 outline-none focus-visible:ring-1 focus-visible:ring-[#DC2626] rounded-md p-1 -ml-1"
               aria-label="Scroll to top"
             >
               <img
                 src={logoImg}
-                alt="KC Logo"
+                alt="CK Logo"
                 className="w-9 h-9 object-contain transition-transform duration-300 group-hover:scale-110"
               />
             </a>
@@ -108,6 +109,7 @@ export const Footer: React.FC = () => {
                   key={link.id}
                   href={`#${link.id}`}
                   onClick={(e) => handleLinkClick(e, link.id)}
+                  data-cursor="pointer"
                   className="group flex items-center gap-1.5 text-[#888888] hover:text-[#F0F0F0] transition-colors duration-200 outline-none focus-visible:text-[#DC2626] text-xs font-medium tracking-wide"
                 >
                   {/* Red dot indicator */}
@@ -136,6 +138,7 @@ export const Footer: React.FC = () => {
                   target={href.startsWith("mailto") ? undefined : "_blank"}
                   rel={href.startsWith("mailto") ? undefined : "noopener noreferrer"}
                   aria-label={ariaLabel}
+                  data-cursor="pointer"
                   className="group flex items-center gap-3 w-fit outline-none focus-visible:ring-1 focus-visible:ring-[#DC2626] rounded-md"
                 >
                   <span className="w-8 h-8 flex items-center justify-center border border-[#2A2A2A] rounded-full text-[#888888] group-hover:text-[#F0F0F0] group-hover:border-[#DC2626] group-hover:bg-[#DC2626]/10 group-hover:scale-110 transition-all duration-250">
@@ -173,6 +176,7 @@ export const Footer: React.FC = () => {
             exit={{ opacity: 0, scale: 0.75, y: 16 }}
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
             onClick={handleScrollToTop}
+            data-cursor="pointer"
             className="fixed bottom-6 right-6 w-10 h-10 bg-[#DC2626] hover:bg-[#B91C1C] border border-[#DC2626] hover:border-[#B91C1C] rounded-full text-white flex items-center justify-center cursor-pointer shadow-[0_4px_20px_rgba(220,38,38,0.35)] hover:shadow-[0_6px_24px_rgba(220,38,38,0.5)] transition-all duration-250 z-40 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626] focus-visible:ring-offset-2 focus-visible:ring-offset-black group"
             aria-label="Scroll to top of the page"
           >

@@ -71,7 +71,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
     };
 
     const baseStyles =
-      "inline-flex items-center justify-center gap-2 select-none outline-none transition-all duration-300 font-sans tracking-wide cursor-pointer focus-visible:ring-2 focus-visible:ring-[#DC2626] focus-visible:ring-offset-2 focus-visible:ring-offset-[#050505] disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none";
+      "inline-flex items-center justify-center gap-2 select-none outline-none transition-all duration-300 font-sans tracking-wide cursor-pointer focus-visible:ring-2 focus-visible:ring-[#DC2626] focus-visible:ring-offset-2 focus-visible:ring-offset-[#050505] disabled:opacity-50 disabled:cursor-not-allowed";
 
     const content = (
       <>
@@ -114,6 +114,9 @@ export const Button = React.forwardRef<any, ButtonProps>(
         }
       : {};
 
+    const defaultCursor = disabled ? "not-allowed" : (loading ? "wait" : "pointer");
+    const cursorProp = (props as any)["data-cursor"] || defaultCursor;
+
     if (href) {
       return (
         <motion.a
@@ -124,7 +127,9 @@ export const Button = React.forwardRef<any, ButtonProps>(
           download={download}
           aria-label={ariaLabel}
           className={cn(baseStyles, variantStyles[variant], sizeStyles[size], "group", className)}
+          data-cursor={cursorProp}
           {...animateProps}
+          {...(props as any)}
         >
           {content}
         </motion.a>
@@ -138,6 +143,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
         disabled={disabled || loading}
         aria-label={ariaLabel}
         className={cn(baseStyles, variantStyles[variant], sizeStyles[size], "group", className)}
+        data-cursor={cursorProp}
         {...animateProps}
         {...props}
       >

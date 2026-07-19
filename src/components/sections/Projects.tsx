@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Github, ExternalLink, ShieldCheck, HelpCircle, Lightbulb, TrendingUp, Terminal } from "lucide-react";
+import { Github, ExternalLink, ShieldCheck, HelpCircle, Lightbulb, TrendingUp, Terminal, Check, AlertCircle } from "lucide-react";
 import { projects } from "@/data/projects";
 import { SectionHeading } from "@/components/common/SectionHeading";
 import { Card } from "@/components/common/Card";
@@ -16,6 +16,28 @@ interface ProjectCardProps {
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ project, idx }) => {
   const isEven = idx % 2 === 0;
+  const [copyStatus, setCopyStatus] = useState<"idle" | "copied" | "error">("idle");
+
+  useEffect(() => {
+    if (copyStatus !== "idle") {
+      const timer = setTimeout(() => {
+        setCopyStatus("idle");
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [copyStatus]);
+
+  const handleCopyCmd = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (!project.installCommand) return;
+    try {
+      await navigator.clipboard.writeText(project.installCommand);
+      setCopyStatus("copied");
+    } catch (err) {
+      console.error("Failed to copy text: ", err);
+      setCopyStatus("error");
+    }
+  };
 
   return (
     <motion.div
@@ -115,22 +137,36 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, idx }) => {
                 </Button>
               )}
               {project.installCommand && !project.githubUrl && (
-                <Button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    navigator.clipboard.writeText(project.installCommand!);
-                    // Optionally alert or toast here; for now it just copies silently
-                  }}
-                  variant="secondary"
-                  size="sm"
-                  icon={<Terminal className="w-4 h-4" />}
-                  iconPosition="left"
-                  ariaLabel={`Copy install command for ${project.name}`}
-                  className="w-full sm:w-auto group relative"
-                  title="Click to copy command"
-                >
-                  Copy Install Cmd
-                </Button>
+                <div className="relative w-full sm:w-auto">
+                  <Button
+                    onClick={handleCopyCmd}
+                    variant="secondary"
+                    size="sm"
+                    icon={
+                      copyStatus === "copied" ? (
+                        <Check className="w-4 h-4 text-[#22C55E]" />
+                      ) : copyStatus === "error" ? (
+                        <AlertCircle className="w-4 h-4 text-[#EF4444]" />
+                      ) : (
+                        <Terminal className="w-4 h-4" />
+                      )
+                    }
+                    iconPosition="left"
+                    ariaLabel={`Copy install command for ${project.name}`}
+                    className="w-full sm:w-auto group"
+                    title="Click to copy command"
+                    data-cursor="pointer"
+                  >
+                    {copyStatus === "copied" ? "Copied!" : copyStatus === "error" ? "Failed to Copy" : "Copy Install Cmd"}
+                  </Button>
+
+                  {/* Tooltip */}
+                  {copyStatus !== "idle" && (
+                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-[#161616] border border-[#2A2A2A] text-[10px] text-[#F8F8F8] px-2.5 py-1 rounded shadow-lg pointer-events-none select-none z-30 whitespace-nowrap animate-in fade-in zoom-in duration-200">
+                      {copyStatus === "copied" ? "Copied to clipboard!" : "Error copying command"}
+                    </div>
+                  )}
+                </div>
               )}
               {project.liveUrl && (
                 <Button
@@ -211,7 +247,7 @@ export const Projects: React.FC = () => {
               </p>
             </div>
             <Button
-              href="https://github.com" // Pointers to Github profile
+              href="https://github.com/Karthik-ck-604" // Pointers to Github profile
               target="_blank"
               rel="noopener noreferrer"
               variant="primary"

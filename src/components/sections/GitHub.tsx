@@ -52,7 +52,7 @@ export const GitHub: React.FC = () => {
             {/* Profile CTA */}
             <div className="flex pt-4">
               <Button
-                href="https://github.com"
+                href="https://github.com/Karthik-ck-604"
                 target="_blank"
                 rel="noopener noreferrer"
                 variant="primary"
@@ -128,6 +128,7 @@ export const GitHub: React.FC = () => {
                           href={repo.url}
                           target="_blank"
                           rel="noopener noreferrer"
+                          data-cursor="pointer"
                           className="p-1 hover:text-[#DC2626] transition-colors outline-none focus-visible:ring-1 focus-visible:ring-[#DC2626] rounded"
                           aria-label={`View code for ${repo.name} repository on GitHub`}
                         >
@@ -140,6 +141,7 @@ export const GitHub: React.FC = () => {
                             e.preventDefault();
                             navigator.clipboard.writeText(repo.installCommand!);
                           }}
+                          data-cursor="pointer"
                           className="p-1 hover:text-[#DC2626] transition-colors outline-none focus-visible:ring-1 focus-visible:ring-[#DC2626] rounded"
                           aria-label={`Copy install command for ${repo.name}`}
                           title="Click to copy install command"

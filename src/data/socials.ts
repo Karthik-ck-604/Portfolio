@@ -15,26 +15,26 @@ export interface ContactDetails {
 export const socialLinks: SocialLink[] = [
   {
     name: "GitHub",
-    url: "https://github.com", // Generic GitHub profile link for the user
+    url: "https://github.com/Karthik-ck-604", // Generic GitHub profile link for the user
     iconName: "Github",
     tooltip: "Explore open source contributions and projects"
   },
   {
     name: "LinkedIn",
-    url: "https://linkedin.com", // Generic LinkedIn profile link for the user
+    url: "https://linkedin.com/in/karthikeyan-cfsd", // Generic LinkedIn profile link for the user
     iconName: "Linkedin",
     tooltip: "Connect with me professionally"
   },
   {
     name: "Email",
-    url: "mailto:karthikeyanc.cse@gmail.com", // Real email prefix from standard portfolios if applicable or default contact
+    url: "mailto:karthikeyan610204@gmail.com", // Real email prefix from standard portfolios if applicable or default contact
     iconName: "Mail",
     tooltip: "Send me an email directly"
   }
 ];
 
 export const contactDetails: ContactDetails = {
-  email: "karthikeyanc.cse@gmail.com",
+  email: "karthikeyan610204@gmail.com",
   phone: "+91 9000000000", // Generic placeholder matching user request location
   location: "Coimbatore, Tamil Nadu, India",
   availability: "Available for Internships & Full-Time Roles (2026 Grad)"

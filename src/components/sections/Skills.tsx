@@ -49,6 +49,45 @@ export const Skills: React.FC = () => {
               </p>
             </div>
 
+            {/* Draggable/Scrollable Tech Stack Strip */}
+            <div className="flex flex-col gap-4 border-t border-[#2A2A2A]/60 pt-6">
+              <span className="text-[10px] uppercase tracking-widest text-[#A8A8A8]/60 font-semibold block mb-1">
+                Ecosystem Tools (Scroll / Drag to explore)
+              </span>
+              <div
+                data-cursor="grab"
+                className="w-full overflow-x-auto flex gap-3 pb-3 pt-1 scrollbar-none cursor-grab active:cursor-grabbing select-none"
+                style={{ scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }}
+                onMouseDown={(e) => {
+                  const el = e.currentTarget;
+                  el.setAttribute("data-cursor", "grabbing");
+                  const cursorEvent = new CustomEvent("cursorchange", { detail: "grabbing" });
+                  window.dispatchEvent(cursorEvent);
+                }}
+                onMouseUp={(e) => {
+                  const el = e.currentTarget;
+                  el.setAttribute("data-cursor", "grab");
+                  const cursorEvent = new CustomEvent("cursorchange", { detail: "grab" });
+                  window.dispatchEvent(cursorEvent);
+                }}
+                onMouseLeave={(e) => {
+                  const el = e.currentTarget;
+                  el.setAttribute("data-cursor", "grab");
+                  const cursorEvent = new CustomEvent("cursorchange", { detail: "grab" });
+                  window.dispatchEvent(cursorEvent);
+                }}
+              >
+                {["React", "Node.js", "Express", "MongoDB", "Java", "Spring Boot", "TypeScript", "Tailwind CSS", "Vite", "Framer Motion", "Docker", "Git", "Oracle OCI", "AWS"].map((tech) => (
+                  <div
+                    key={tech}
+                    className="flex-shrink-0 px-4 py-2 bg-[#161616] border border-[#2A2A2A]/50 rounded-full text-xs text-[#F8F8F8] font-mono tracking-wide"
+                  >
+                    {tech}
+                  </div>
+                ))}
+              </div>
+            </div>
+
             {/* Featured Badges Grid */}
             <div className="flex flex-col gap-4 border-t border-[#2A2A2A]/60 pt-8">
               <span className="text-[10px] uppercase tracking-widest text-[#A8A8A8]/60 font-semibold block mb-2">Core Strengths</span>

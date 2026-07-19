@@ -82,7 +82,7 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      <div className="min-h-screen bg-[#050505] text-[#F8F8F8] antialiased selection:bg-[#DC2626] selection:text-[#F8F8F8] font-sans">
+      <div className="min-h-screen bg-[#050505] text-[#F8F8F8] antialiased font-sans">
         <SkipToContent />
         <ScrollProgress />
         <CursorGlow />

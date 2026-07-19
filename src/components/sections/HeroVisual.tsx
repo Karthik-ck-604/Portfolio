@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { motion, useReducedMotion, TargetAndTransition } from "framer-motion";
-import { Server, Cpu } from "lucide-react";
 import profileImg from "@/hero_section_profile.png";
 
 interface HeroVisualProps {

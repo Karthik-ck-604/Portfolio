@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useMotionValueEvent, LayoutGroup } from "framer-motion";
 import { Menu, X, ArrowUpRight } from "lucide-react";
 import { useActiveSection } from "@/hooks/useActiveSection";
 import { Button } from "@/components/common/Button";
@@ -12,8 +12,22 @@ interface NavbarProps {
 
 export const Navbar: React.FC<NavbarProps> = ({ isLoaded = true }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  
   const sectionIds = ["hero", "about", "skills", "experience", "projects", "certifications", "publications", "contact"];
   const activeSection = useActiveSection(sectionIds);
+  const { scrollY } = useScroll();
+
+  // Track scroll position dynamically with Framer Motion (optimized, updates state only on state changes)
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    const shouldScroll = latest > 60;
+    setIsScrolled((prev) => (prev !== shouldScroll ? shouldScroll : prev));
+  });
+
+  // Sync scroll state on mount (critical for page refreshes)
+  useEffect(() => {
+    setIsScrolled(window.scrollY > 60);
+  }, []);
 
   const navLinks = [
     { label: "About", id: "about" },
@@ -74,81 +88,151 @@ export const Navbar: React.FC<NavbarProps> = ({ isLoaded = true }) => {
     }
   };
 
+  // Explicit fluid variant configuration
+  const headerVariants = {
+    hidden: {
+      y: -100,
+      opacity: 0,
+    },
+    top: {
+      y: 0,
+      opacity: 1,
+      width: "100%",
+      maxWidth: "100%",
+      borderRadius: "0px",
+      height: "80px",
+      paddingTop: "20px",
+      paddingBottom: "20px",
+      backgroundColor: "rgba(5, 5, 5, 0)", // mostly transparent
+      backdropFilter: "blur(0px)",
+      borderTopColor: "rgba(0, 0, 0, 0)",
+      borderBottomColor: "rgba(26, 26, 26, 0.6)", // bottom hairline
+      borderLeftColor: "rgba(0, 0, 0, 0)",
+      borderRightColor: "rgba(0, 0, 0, 0)",
+      boxShadow: "0px 0px 0px rgba(0, 0, 0, 0)",
+    },
+    scrolled: {
+      y: 16, // top-4 equivalent
+      opacity: 1,
+      width: "90%",
+      maxWidth: "1280px",
+      borderRadius: "9999px", // rounded-full pill
+      height: "64px",
+      paddingTop: "10px",
+      paddingBottom: "10px",
+      backgroundColor: "rgba(15, 15, 15, 0.6)", // semi-transparent dark background
+      backdropFilter: "blur(8px)",
+      borderTopColor: "rgba(255, 255, 255, 0.06)", // 1px hairline border all-around
+      borderBottomColor: "rgba(255, 255, 255, 0.06)",
+      borderLeftColor: "rgba(255, 255, 255, 0.06)",
+      borderRightColor: "rgba(255, 255, 255, 0.06)",
+      boxShadow: "0 10px 30px -10px rgba(0, 0, 0, 0.5)", // subtle drop shadow
+    }
+  };
+
+  const headerTransition = {
+    // Layout properties use spring physics
+    type: "spring" as const,
+    stiffness: 300,
+    damping: 30,
+    // Styling properties use smooth tween
+    backgroundColor: { type: "tween" as const, ease: "easeOut", duration: 0.35 },
+    backdropFilter: { type: "tween" as const, ease: "easeOut", duration: 0.35 },
+    borderTopColor: { type: "tween" as const, ease: "easeOut", duration: 0.35 },
+    borderBottomColor: { type: "tween" as const, ease: "easeOut", duration: 0.35 },
+    borderLeftColor: { type: "tween" as const, ease: "easeOut", duration: 0.35 },
+    borderRightColor: { type: "tween" as const, ease: "easeOut", duration: 0.35 },
+    boxShadow: { type: "tween" as const, ease: "easeOut", duration: 0.35 },
+  };
+
+  const animateState = !isLoaded ? "hidden" : (isScrolled ? "scrolled" : "top");
+
   return (
     <>
-      <motion.header
-        initial={{ y: -80, opacity: 0 }}
-        animate={isLoaded ? { y: 0, opacity: 1 } : { y: -80, opacity: 0 }}
-        transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-        className="fixed top-0 left-0 right-0 h-20 z-50 flex items-center justify-between px-6 md:px-12 lg:px-16 bg-[#050505]/85 backdrop-blur-xl border-b border-[#1A1A1A]/60 transition-all duration-300"
-      >
-        {/* Logo Monogram */}
-        <a
-          href="#hero"
-          onClick={(e) => handleLinkClick(e, "hero")}
-          className="flex items-center outline-none focus-visible:ring-1 focus-visible:ring-[#DC2626] rounded-md p-1 group"
-          aria-label="Karthikeyan C Portfolio Home"
+      {/* Outer fixed container to guarantee horizontal centering */}
+      <div className="fixed top-0 left-0 right-0 z-50 flex justify-center pointer-events-none p-0">
+        <motion.header
+          variants={headerVariants}
+          initial="hidden"
+          animate={animateState}
+          transition={headerTransition}
+          className="flex items-center justify-between px-6 md:px-12 lg:px-16 border border-solid pointer-events-auto"
         >
-          <img
-            src={logoImg}
-            alt="KC Logo"
-            className="w-10 h-10 object-contain transition-transform duration-300 group-hover:scale-105"
-          />
-        </a>
-
-        {/* Center Desktop Links */}
-        <nav className="hidden lg:flex items-center gap-4 lg:gap-6 xl:gap-8" aria-label="Main Navigation">
-          {navLinks.map((link) => {
-            const isActive = activeSection === link.id;
-            return (
-              <a
-                key={link.id}
-                href={`#${link.id}`}
-                onClick={(e) => handleLinkClick(e, link.id)}
-                className={cn(
-                  "relative text-sm font-semibold tracking-wide font-sans outline-none py-2 transition-colors focus-visible:ring-1 focus-visible:ring-[#DC2626] rounded-md px-2",
-                  isActive ? "text-[#DC2626]" : "text-[#A8A8A8] hover:text-[#F8F8F8]"
-                )}
-              >
-                {link.label}
-                {isActive && (
-                  <motion.span
-                    layoutId="activeIndicator"
-                    className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-[#DC2626]"
-                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                  />
-                )}
-              </a>
-            );
-          })}
-        </nav>
-
-        {/* Right CTA Button */}
-        <div className="hidden lg:block">
-          <Button
-            href="/cert_oracle.png" // Local certificate mapping as fallback download path
-            target="_blank"
-            rel="noopener noreferrer"
-            variant="secondary"
-            size="sm"
-            magnetic={true}
-            icon={<ArrowUpRight className="w-3.5 h-3.5" />}
-            ariaLabel="Download Resume PDF"
+          {/* Logo Monogram */}
+          <a
+            href="#hero"
+            onClick={(e) => handleLinkClick(e, "hero")}
+            data-cursor="pointer"
+            className="flex items-center outline-none focus-visible:ring-1 focus-visible:ring-[#DC2626] rounded-md p-1 group"
+            aria-label="Karthikeyan C Portfolio Home"
           >
-            Resume
-          </Button>
-        </div>
+            <img
+              src={logoImg}
+              alt="CK Logo"
+              className="w-10 h-10 object-contain transition-transform duration-300 group-hover:scale-105"
+            />
+          </a>
 
-        {/* Mobile Hamburguer */}
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="flex lg:hidden items-center justify-center w-11 h-11 text-[#F8F8F8] hover:text-[#DC2626] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626] rounded-full"
-          aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
-          aria-expanded={isOpen}
-        >
-          {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </button>
-      </motion.header>
+          {/* Center Desktop Links - Wrapped in LayoutGroup to scope layoutId projection */}
+          <LayoutGroup id="navUnderline">
+            <nav className="hidden lg:flex items-center gap-4 lg:gap-6 xl:gap-8" aria-label="Main Navigation">
+              {navLinks.map((link) => {
+                const isActive = activeSection === link.id;
+                return (
+                  <motion.a
+                    layout
+                    key={link.id}
+                    href={`#${link.id}`}
+                    onClick={(e) => handleLinkClick(e, link.id)}
+                    data-cursor="pointer"
+                    className={cn(
+                      "relative text-sm font-semibold tracking-wide font-sans outline-none py-2 transition-colors focus-visible:ring-1 focus-visible:ring-[#DC2626] rounded-md px-2",
+                      isActive ? "text-[#DC2626]" : "text-[#A8A8A8] hover:text-[#F8F8F8]"
+                    )}
+                  >
+                    {link.label}
+                    {isActive && (
+                      <motion.span
+                        layoutId="activeUnderline"
+                        className="absolute bottom-0 left-2 right-2 h-[2px] bg-[#DC2626] rounded-full"
+                        transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                      />
+                    )}
+                  </motion.a>
+                );
+              })}
+            </nav>
+          </LayoutGroup>
+
+          {/* Right CTA Button */}
+          <div className="hidden lg:block">
+            <Button
+              href="/cert_oracle.png" // Local certificate mapping as fallback download path
+              target="_blank"
+              rel="noopener noreferrer"
+              variant="secondary"
+              size="sm"
+              magnetic={true}
+              icon={<ArrowUpRight className="w-3.5 h-3.5" />}
+              ariaLabel="Download Resume PDF"
+              data-cursor="pointer"
+            >
+              Resume
+            </Button>
+          </div>
+
+          {/* Mobile Hamburguer */}
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            data-cursor="pointer"
+            className="flex lg:hidden items-center justify-center w-11 h-11 text-[#F8F8F8] hover:text-[#DC2626] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626] rounded-full"
+            aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-expanded={isOpen}
+          >
+            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
+        </motion.header>
+      </div>
 
       {/* Mobile Drawer Overlay */}
       <AnimatePresence>
@@ -178,6 +262,7 @@ export const Navbar: React.FC<NavbarProps> = ({ isLoaded = true }) => {
                 <span className="text-xl font-heading font-bold text-[#F8F8F8]">Menu</span>
                 <button
                   onClick={() => setIsOpen(false)}
+                  data-cursor="pointer"
                   className="w-10 h-10 flex items-center justify-center text-[#A8A8A8] hover:text-[#F8F8F8] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626] rounded-full"
                   aria-label="Close menu"
                 >
@@ -193,6 +278,7 @@ export const Navbar: React.FC<NavbarProps> = ({ isLoaded = true }) => {
                       key={link.id}
                       href={`#${link.id}`}
                       onClick={(e) => handleLinkClick(e, link.id)}
+                      data-cursor="pointer"
                       className={cn(
                         "text-lg font-semibold tracking-wide font-sans py-1 outline-none transition-colors focus-visible:text-[#DC2626]",
                         isActive ? "text-[#DC2626]" : "text-[#A8A8A8] hover:text-[#F8F8F8]"
@@ -212,6 +298,7 @@ export const Navbar: React.FC<NavbarProps> = ({ isLoaded = true }) => {
                   variant="primary"
                   className="w-full"
                   ariaLabel="Download Resume PDF"
+                  data-cursor="pointer"
                 >
                   Download Resume
                 </Button>

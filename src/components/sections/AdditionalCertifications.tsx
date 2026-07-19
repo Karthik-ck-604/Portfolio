@@ -40,6 +40,7 @@ export const AdditionalCertifications: React.FC = () => {
                 translateOnHover={true}
                 onClick={() => setSelectedDoc({ url: cert.credentialUrl, title: cert.name })}
                 className="p-5 h-full flex flex-col justify-between bg-[#161616]/40 hover:bg-[#161616]/80 cursor-pointer border border-[#2A2A2A]/60"
+                data-cursor="pointer"
               >
                 <div className="flex flex-col gap-3">
                   {/* Category & Header */}

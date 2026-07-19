@@ -26,9 +26,13 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "unset";
+      const cursorEvent = new CustomEvent("cursorchange", { detail: "default" });
+      window.dispatchEvent(cursorEvent);
     }
     return () => {
       document.body.style.overflow = "unset";
+      const cursorEvent = new CustomEvent("cursorchange", { detail: "default" });
+      window.dispatchEvent(cursorEvent);
     };
   }, [isOpen]);
 
@@ -44,6 +48,13 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
 
   const handleZoomIn = () => setZoom((z) => Math.min(z + 0.25, 2.5));
   const handleZoomOut = () => setZoom((z) => Math.max(z - 0.25, 0.5));
+  const handleImageClick = () => {
+    if (zoom === 1.0) {
+      setZoom(1.75);
+    } else {
+      setZoom(1.0);
+    }
+  };
 
   // Scholarly Mock Publications Renderers
   const renderScholarlyPaper = () => {
@@ -304,14 +315,17 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
                 <div
                   className="w-full h-full flex items-center justify-center overflow-auto"
                   style={{ cursor: zoom > 1 ? "grab" : "default" }}
+                  data-cursor={zoom === 1.0 ? "zoom-in" : "zoom-out"}
                 >
                   <motion.img
                     src={fileUrl}
                     alt={title}
                     animate={{ scale: zoom }}
                     transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                    className="max-w-full max-h-full object-contain rounded-lg shadow-lg select-none"
+                    className="max-w-full max-h-full object-contain rounded-lg shadow-lg select-none cursor-pointer"
                     style={{ originX: 0.5, originY: 0.5 }}
+                    data-cursor={zoom === 1.0 ? "zoom-in" : "zoom-out"}
+                    onClick={handleImageClick}
                   />
                 </div>
               )}

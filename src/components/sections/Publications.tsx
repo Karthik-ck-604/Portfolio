@@ -68,6 +68,7 @@ const CertLightbox: React.FC<LightboxProps> = ({ img, label, onClose }) => {
           <div className="flex items-center gap-2">
             <button
               onClick={() => setZoom((z) => Math.max(z - 0.25, 0.5))}
+              data-cursor="pointer"
               className="w-8 h-8 flex items-center justify-center rounded-md border border-[#2A2A2A] text-[#A8A8A8] hover:text-white hover:border-[#DC2626] transition-all"
               aria-label="Zoom out"
             >
@@ -78,6 +79,7 @@ const CertLightbox: React.FC<LightboxProps> = ({ img, label, onClose }) => {
             </span>
             <button
               onClick={() => setZoom((z) => Math.min(z + 0.25, 3))}
+              data-cursor="pointer"
               className="w-8 h-8 flex items-center justify-center rounded-md border border-[#2A2A2A] text-[#A8A8A8] hover:text-white hover:border-[#DC2626] transition-all"
               aria-label="Zoom in"
             >
@@ -85,6 +87,7 @@ const CertLightbox: React.FC<LightboxProps> = ({ img, label, onClose }) => {
             </button>
             <button
               onClick={onClose}
+              data-cursor="pointer"
               className="w-8 h-8 ml-2 flex items-center justify-center rounded-md border border-[#2A2A2A] text-[#A8A8A8] hover:text-white hover:bg-[#DC2626] hover:border-[#DC2626] transition-all"
               aria-label="Close"
             >
@@ -217,6 +220,7 @@ export const Publications: React.FC = () => {
                         <button
                           onClick={() => setLightbox(cert)}
                           aria-label={`View ${cert.label}`}
+                          data-cursor="pointer"
                           className="group relative w-full overflow-hidden rounded-xl border border-[#2A2A2A] hover:border-[#DC2626]/60 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626]"
                         >
                           <img
