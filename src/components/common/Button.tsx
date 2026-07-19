@@ -65,9 +65,9 @@ export const Button = React.forwardRef<any, ButtonProps>(
     };
 
     const sizeStyles = {
-      sm: "h-9 px-4 text-xs font-semibold rounded-full",
-      md: "h-11 px-6 text-sm font-semibold rounded-full",
-      lg: "h-14 px-8 text-base font-semibold rounded-full",
+      sm: "min-h-11 h-11 px-4 text-xs sm:text-sm font-semibold rounded-full",
+      md: "min-h-12 h-12 px-6 text-sm font-semibold rounded-full",
+      lg: "min-h-14 h-14 px-8 text-base font-semibold rounded-full",
     };
 
     const baseStyles =

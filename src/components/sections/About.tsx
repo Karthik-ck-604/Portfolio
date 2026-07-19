@@ -56,7 +56,7 @@ export const About: React.FC = () => {
   return (
     <section
       id="about"
-      className="relative py-24 md:py-32 px-6 md:px-12 lg:px-16 bg-[#0F0F0F] border-y border-[#2A2A2A]/40 overflow-hidden"
+      className="relative py-20 sm:py-24 md:py-32 px-4 sm:px-6 md:px-12 lg:px-16 bg-[#0F0F0F] border-y border-[#2A2A2A]/40 overflow-hidden"
     >
       {/* Background ambient lighting */}
       <div className="absolute top-1/4 left-0 w-80 h-80 bg-[#DC2626]/2 blur-[100px] rounded-full pointer-events-none" />
@@ -70,7 +70,7 @@ export const About: React.FC = () => {
           subtitle="A summary of my educational background, internship progression, and engineering focus."
         />
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start mb-24">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 sm:gap-12 lg:gap-16 items-start mb-16 sm:mb-24">
           
           {/* Left Column: Education details mockup */}
           <div className="lg:col-span-5 flex flex-col gap-6">
@@ -79,7 +79,7 @@ export const About: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.6, ease: easeOutQuint }}
-              className="relative group bg-[#161616]/90 border border-[#2A2A2A] rounded-2xl p-6 md:p-8 shadow-[0_16px_32px_rgba(0,0,0,0.6)] hover:border-[#DC2626] transition-all duration-500 overflow-hidden select-none"
+              className="relative group bg-[#161616]/90 border border-[#2A2A2A] rounded-2xl p-5 sm:p-6 md:p-8 shadow-[0_16px_32px_rgba(0,0,0,0.6)] hover:border-[#DC2626] transition-all duration-500 overflow-hidden select-none"
             >
               {/* Radial ambient glow on hover */}
               <div className="absolute inset-0 bg-radial from-[#DC2626]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -138,13 +138,13 @@ export const About: React.FC = () => {
               whileInView="animate"
               viewport={{ once: true, margin: "-100px" }}
               variants={staggerContainer}
-              className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4"
+              className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 pt-4"
             >
               {highlights.map((item, idx) => (
                 <motion.div
                   key={idx}
                   variants={fadeUp}
-                  className="flex gap-4 items-start"
+                  className="flex gap-3 sm:gap-4 items-start"
                 >
                   <div className="w-10 h-10 rounded-lg bg-[#161616] border border-[#2A2A2A] flex items-center justify-center shrink-0 mt-0.5">
                     {item.icon}
@@ -160,7 +160,7 @@ export const About: React.FC = () => {
         </div>
 
         {/* Core Values Sub-section */}
-        <div className="border-t border-[#2A2A2A]/60 pt-16">
+        <div className="border-t border-[#2A2A2A]/60 pt-12 sm:pt-16">
           <SectionHeading
             eyebrow="Philosophy"
             title="Core values guide my code"

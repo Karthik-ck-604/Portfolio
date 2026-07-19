@@ -121,7 +121,7 @@ export const Publications: React.FC = () => {
   return (
     <section
       id="publications"
-      className="relative py-24 md:py-32 px-6 md:px-12 lg:px-16 bg-[#0F0F0F] border-b border-[#2A2A2A]/40 overflow-hidden"
+      className="relative py-20 sm:py-24 md:py-32 px-4 sm:px-6 md:px-12 lg:px-16 bg-[#0F0F0F] border-b border-[#2A2A2A]/40 overflow-hidden"
     >
       <div className="relative w-full max-w-7xl mx-auto z-10">
 
@@ -138,7 +138,7 @@ export const Publications: React.FC = () => {
           whileInView="animate"
           viewport={{ once: true, margin: "-100px" }}
           variants={staggerContainer}
-          className="flex flex-col gap-12 mt-16 md:mt-24"
+          className="flex flex-col gap-8 sm:gap-10 md:gap-12 mt-12 sm:mt-16 md:mt-24"
         >
           {publications.map((pub) => {
             const isPrimary = pub.badge === "Primary Publication";
@@ -150,7 +150,7 @@ export const Publications: React.FC = () => {
                   hoverGlow={true}
                   borderAccentOnHover={true}
                   translateOnHover={false}
-                  className="p-8 md:p-12 bg-[#161616]/65 border border-[#2A2A2A] rounded-[24px] relative"
+                  className="p-6 sm:p-8 md:p-12 bg-[#161616]/65 border border-[#2A2A2A] rounded-[24px] relative"
                 >
                   {/* Red accent bar for primary publication */}
                   {isPrimary && (

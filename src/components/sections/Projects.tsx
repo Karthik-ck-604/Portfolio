@@ -50,7 +50,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, idx }) => {
         animate: { opacity: 1, y: 0, transition: { duration: 0.8, ease: easeOutQuint } }
       }}
       // Sticky card stacking effect on desktop scroll
-      className="sticky top-[100px] w-full mb-16 last:mb-0"
+      className="sticky top-[96px] sm:top-[100px] w-full mb-10 sm:mb-16 last:mb-0"
     >
       <Card
         hoverGlow={true}
@@ -212,7 +212,7 @@ export const Projects: React.FC = () => {
   return (
     <section
       id="projects"
-      className="relative py-24 md:py-32 px-6 md:px-12 lg:px-16 bg-[#050505] overflow-hidden"
+      className="relative py-20 sm:py-24 md:py-32 px-4 sm:px-6 md:px-12 lg:px-16 bg-[#050505] overflow-hidden"
     >
       {/* Background ambient lighting */}
       <div className="absolute top-1/4 left-0 w-96 h-96 bg-[#DC2626]/2 blur-[120px] rounded-full pointer-events-none" />
@@ -227,14 +227,14 @@ export const Projects: React.FC = () => {
         />
 
         {/* Sticky Cards Deck Wrapper */}
-        <div className="relative flex flex-col gap-12 w-full mt-16 md:mt-24">
+        <div className="relative flex flex-col gap-8 sm:gap-12 w-full mt-12 sm:mt-16 md:mt-24">
           {projects.map((project, idx) => (
             <ProjectCard key={project.id} project={project} idx={idx} />
           ))}
         </div>
 
         {/* Project Gallery CTA */}
-        <div className="flex justify-center mt-20 border-t border-[#2A2A2A]/40 pt-16">
+        <div className="flex justify-center mt-14 sm:mt-20 border-t border-[#2A2A2A]/40 pt-12 sm:pt-16">
           <Card
             hoverGlow={true}
             borderAccentOnHover={true}

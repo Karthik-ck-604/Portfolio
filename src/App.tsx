@@ -82,13 +82,13 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      <div className="min-h-screen bg-[#050505] text-[#F8F8F8] antialiased font-sans">
+      <div className="min-h-screen bg-[#050505] text-[#F8F8F8] antialiased font-sans overflow-x-hidden">
         <SkipToContent />
         <ScrollProgress />
         <CursorGlow />
         <Navbar isLoaded={isLoaded} />
         
-        <main id="main-content" className="outline-none">
+        <main id="main-content" className="outline-none overflow-x-hidden">
           <Hero isLoaded={isLoaded} />
           <About />
           <Skills />

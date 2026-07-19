@@ -7,7 +7,7 @@ interface ProjectVisualProps {
 }
 
 export const ProjectVisual: React.FC<ProjectVisualProps> = ({ projectId }) => {
-  const containerStyle = "relative w-full h-full min-h-[220px] bg-[#0F0F0F] flex items-center justify-center overflow-hidden rounded-xl border border-[#2A2A2A]";
+  const containerStyle = "relative w-full h-full min-h-[180px] sm:min-h-[220px] bg-[#0F0F0F] flex items-center justify-center overflow-hidden rounded-xl border border-[#2A2A2A]";
 
   if (projectId === "meet-iq") {
     return (
@@ -65,7 +65,7 @@ export const ProjectVisual: React.FC<ProjectVisualProps> = ({ projectId }) => {
             <span className="absolute top-0 w-2.5 h-2.5 rounded-full bg-[#22C55E] shadow-[0_0_8px_#22C55E]" />
             <span className="absolute bottom-0 w-2.5 h-2.5 rounded-full bg-[#22C55E] shadow-[0_0_8px_#22C55E]" />
           </motion.div>
-          <span className="text-[10px] font-mono text-[#A8A8A8]/60 uppercase tracking-widest select-none">Interactive Omnitrix UI</span>
+          <span className="text-[10px] font-mono text-[#A8A8A8]/60 uppercase tracking-widest select-none">Interactive Ben10 UI</span>
         </div>
       </div>
     );
@@ -172,7 +172,7 @@ export const ProjectVisual: React.FC<ProjectVisualProps> = ({ projectId }) => {
     <div className={containerStyle}>
       <div className="absolute inset-0 bg-radial from-[#DC2626]/10 to-transparent pointer-events-none" />
       <div className="relative z-10 flex flex-col items-center gap-3">
-        <div className="flex items-center gap-2 w-32 h-10 border border-[#2A2A2A] bg-[#161616] rounded-md px-3 justify-between">
+        <div className="flex items-center gap-2 w-28 sm:w-32 h-10 border border-[#2A2A2A] bg-[#161616] rounded-md px-3 justify-between">
           <span className="text-[10px] font-heading font-bold text-[#F8F8F8]">KC<span className="text-[#DC2626]">.</span></span>
           <div className="flex gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-[#A8A8A8]/40" />

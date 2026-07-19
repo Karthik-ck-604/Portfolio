@@ -39,7 +39,7 @@ const ExperienceCard: React.FC<ExperienceCardProps> = ({ exp, idx, onViewCertifi
         whileInView="animate"
         viewport={{ once: true, margin: "-100px" }}
         variants={cardVariants}
-        className={`w-full md:w-[46%] pl-12 md:pl-0 ${isEven ? "md:pr-12" : "md:pl-12"}`}
+        className={`w-full md:w-[46%] pl-10 sm:pl-12 md:pl-0 ${isEven ? "md:pr-12" : "md:pl-12"}`}
       >
         <Card
           hoverGlow={true}
@@ -126,7 +126,7 @@ export const Experience: React.FC = () => {
   return (
     <section
       id="experience"
-      className="relative py-24 md:py-32 px-6 md:px-12 lg:px-16 bg-[#050505] overflow-hidden"
+      className="relative py-20 sm:py-24 md:py-32 px-4 sm:px-6 md:px-12 lg:px-16 bg-[#050505] overflow-hidden"
     >
       {/* Background soft ambient radial light */}
       <div className="absolute top-1/3 right-0 w-96 h-96 bg-[#DC2626]/2 blur-[100px] rounded-full pointer-events-none" />

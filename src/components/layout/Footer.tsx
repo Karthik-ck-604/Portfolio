@@ -61,8 +61,8 @@ export const Footer: React.FC = () => {
       <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[#DC2626]/30 to-transparent pointer-events-none" />
 
       {/* ── Main 3-column section ── */}
-      <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-16 pt-14 pb-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 lg:px-16 pt-12 sm:pt-14 pb-10 sm:pb-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-10 md:gap-8">
 
           {/* ── Column 1: Logo + tagline ── */}
           <div className="flex flex-col items-center md:items-start gap-4">
@@ -156,7 +156,7 @@ export const Footer: React.FC = () => {
       </div>
 
       {/* ── Bottom copyright bar ── */}
-      <div className="border-t border-[#1A1A1A] max-w-7xl mx-auto px-6 md:px-12 lg:px-16 py-5">
+      <div className="border-t border-[#1A1A1A] max-w-7xl mx-auto px-4 sm:px-6 md:px-12 lg:px-16 py-5">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left">
           <p className="text-[#707070] text-[11px] font-sans">
             &copy; {new Date().getFullYear()} Karthikeyan C. All Rights Reserved.
@@ -177,7 +177,7 @@ export const Footer: React.FC = () => {
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
             onClick={handleScrollToTop}
             data-cursor="pointer"
-            className="fixed bottom-6 right-6 w-10 h-10 bg-[#DC2626] hover:bg-[#B91C1C] border border-[#DC2626] hover:border-[#B91C1C] rounded-full text-white flex items-center justify-center cursor-pointer shadow-[0_4px_20px_rgba(220,38,38,0.35)] hover:shadow-[0_6px_24px_rgba(220,38,38,0.5)] transition-all duration-250 z-40 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626] focus-visible:ring-offset-2 focus-visible:ring-offset-black group"
+            className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 min-w-12 h-12 w-12 bg-[#DC2626] hover:bg-[#B91C1C] border border-[#DC2626] hover:border-[#B91C1C] rounded-full text-white flex items-center justify-center cursor-pointer shadow-[0_4px_20px_rgba(220,38,38,0.35)] hover:shadow-[0_6px_24px_rgba(220,38,38,0.5)] transition-all duration-250 z-40 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626] focus-visible:ring-offset-2 focus-visible:ring-offset-black group"
             aria-label="Scroll to top of the page"
           >
             <ArrowUp className="w-4 h-4 group-hover:-translate-y-0.5 transition-transform duration-200" />

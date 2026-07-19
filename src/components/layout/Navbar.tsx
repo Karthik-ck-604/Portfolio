@@ -150,13 +150,13 @@ export const Navbar: React.FC<NavbarProps> = ({ isLoaded = true }) => {
   return (
     <>
       {/* Outer fixed container to guarantee horizontal centering */}
-      <div className="fixed top-0 left-0 right-0 z-50 flex justify-center pointer-events-none p-0">
+      <div className="fixed top-3 left-0 right-0 z-50 flex justify-center pointer-events-none px-3 sm:px-4 md:px-6">
         <motion.header
           variants={headerVariants}
           initial="hidden"
           animate={animateState}
           transition={headerTransition}
-          className="flex items-center justify-between px-6 md:px-12 lg:px-16 border border-solid pointer-events-auto"
+          className="flex w-[calc(100%-0.75rem)] sm:w-[calc(100%-1.5rem)] max-w-7xl items-center justify-between px-3 sm:px-4 lg:px-6 py-3 md:py-4 border border-solid pointer-events-auto rounded-full"
         >
           {/* Logo Monogram */}
           <a
@@ -225,7 +225,7 @@ export const Navbar: React.FC<NavbarProps> = ({ isLoaded = true }) => {
           <button
             onClick={() => setIsOpen(!isOpen)}
             data-cursor="pointer"
-            className="flex lg:hidden items-center justify-center w-11 h-11 text-[#F8F8F8] hover:text-[#DC2626] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626] rounded-full"
+            className="flex lg:hidden items-center justify-center min-w-11 h-11 w-11 text-[#F8F8F8] hover:text-[#DC2626] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626] rounded-full"
             aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
             aria-expanded={isOpen}
           >
@@ -253,7 +253,7 @@ export const Navbar: React.FC<NavbarProps> = ({ isLoaded = true }) => {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              className="fixed top-0 right-0 bottom-0 w-[280px] bg-[#0F0F0F] border-l border-[#2A2A2A] z-50 flex flex-col px-8 py-10 lg:hidden"
+              className="fixed top-0 right-0 bottom-0 w-[min(88vw,320px)] max-w-[320px] bg-[#0F0F0F] border-l border-[#2A2A2A] z-50 flex flex-col px-5 py-8 sm:px-6 sm:py-10 lg:hidden overflow-y-auto"
               role="dialog"
               aria-modal="true"
               aria-label="Mobile Navigation Menu"
@@ -290,13 +290,13 @@ export const Navbar: React.FC<NavbarProps> = ({ isLoaded = true }) => {
                 })}
               </nav>
 
-              <div className="mt-auto">
+              <div className="mt-auto pt-4">
                 <Button
                   href="/cert_oracle.png"
                   target="_blank"
                   rel="noopener noreferrer"
                   variant="primary"
-                  className="w-full"
+                  className="w-full min-h-11"
                   ariaLabel="Download Resume PDF"
                   data-cursor="pointer"
                 >

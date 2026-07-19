@@ -22,7 +22,7 @@ export const Skills: React.FC = () => {
   return (
     <section
       id="skills"
-      className="relative py-24 md:py-32 px-6 md:px-12 lg:px-16 bg-[#0F0F0F] border-b border-[#2A2A2A]/40 overflow-hidden"
+      className="relative py-20 sm:py-24 md:py-32 px-4 sm:px-6 md:px-12 lg:px-16 bg-[#0F0F0F] border-b border-[#2A2A2A]/40 overflow-hidden"
     >
       {/* Background ambient lighting */}
       <div className="absolute bottom-1/4 right-0 w-80 h-80 bg-[#DC2626]/2 blur-[120px] rounded-full pointer-events-none" />
@@ -36,7 +36,7 @@ export const Skills: React.FC = () => {
           subtitle="A catalog of my skills organized by categories, highlighting core developer competencies."
         />
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 sm:gap-12 lg:gap-16 items-start">
           
           {/* Left Column: Introductions & featured badges */}
           <div className="lg:col-span-5 flex flex-col gap-8">
@@ -117,7 +117,7 @@ export const Skills: React.FC = () => {
             whileInView="animate"
             viewport={{ once: true, margin: "-100px" }}
             variants={staggerContainer}
-            className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-6"
+            className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6"
           >
             {skillCategories.map((cat) => (
               <Card

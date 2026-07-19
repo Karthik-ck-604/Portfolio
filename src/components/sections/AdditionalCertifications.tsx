@@ -13,7 +13,7 @@ export const AdditionalCertifications: React.FC = () => {
   return (
     <section
       id="additional-certifications"
-      className="relative py-20 md:py-24 px-6 md:px-12 lg:px-16 bg-[#050505] overflow-hidden"
+      className="relative py-16 sm:py-20 md:py-24 px-4 sm:px-6 md:px-12 lg:px-16 bg-[#050505] overflow-hidden"
     >
       <div className="relative w-full max-w-7xl mx-auto z-10">
         
@@ -30,7 +30,7 @@ export const AdditionalCertifications: React.FC = () => {
           whileInView="animate"
           viewport={{ once: true, margin: "-100px" }}
           variants={staggerContainer}
-          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 mt-12"
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5 mt-10 sm:mt-12"
         >
           {additionalCertifications.map((cert) => (
             <motion.div key={cert.name} variants={fadeUp}>

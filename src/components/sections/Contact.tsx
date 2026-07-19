@@ -67,7 +67,7 @@ export const Contact: React.FC = () => {
   return (
     <section
       id="contact"
-      className="relative py-24 md:py-32 px-6 md:px-12 lg:px-16 bg-[#050505] overflow-hidden"
+      className="relative py-20 sm:py-24 md:py-32 px-4 sm:px-6 md:px-12 lg:px-16 bg-[#050505] overflow-hidden"
     >
       {/* Background ambient lighting */}
       <div className="absolute top-1/3 left-0 w-96 h-96 bg-[#DC2626]/2 blur-[100px] rounded-full pointer-events-none" />
@@ -81,7 +81,7 @@ export const Contact: React.FC = () => {
           subtitle="Open to professional internships, full-time developer opportunities, and research collaborations."
         />
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start mt-16 md:mt-24">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 sm:gap-12 lg:gap-16 items-start mt-12 sm:mt-16 md:mt-24">
           
           {/* Left Column: Contact details details */}
           <div className="lg:col-span-5 flex flex-col gap-8 text-left">
@@ -89,11 +89,11 @@ export const Contact: React.FC = () => {
               If you have an opening for a Full Stack Developer, need assistance building a MERN or Spring Boot product, or want to collaborate on research, reach out via the form or email!
             </p>
 
-            <div className="flex flex-col gap-5 border-t border-[#2A2A2A]/60 pt-8 font-sans text-sm text-[#A8A8A8] select-none">
+            <div className="flex flex-col gap-5 border-t border-[#2A2A2A]/60 pt-6 sm:pt-8 font-sans text-sm text-[#A8A8A8] select-none">
               
               {/* Email */}
-              <div className="flex items-center gap-3.5">
-                <div className="w-9 h-9 rounded-lg bg-[#0F0F0F] border border-[#2A2A2A] flex items-center justify-center text-[#DC2626] shrink-0">
+              <div className="flex items-start gap-3.5">
+                <div className="min-w-11 h-11 w-11 rounded-lg bg-[#0F0F0F] border border-[#2A2A2A] flex items-center justify-center text-[#DC2626] shrink-0">
                   <Mail className="w-4 h-4" />
                 </div>
                 <div className="flex flex-col">
@@ -105,7 +105,7 @@ export const Contact: React.FC = () => {
                     <button
                       onClick={handleCopyEmail}
                       data-cursor="pointer"
-                      className="p-1 text-[#A8A8A8] hover:text-white hover:bg-[#2A2A2A]/40 rounded transition-colors focus:outline-none focus-visible:ring-1 focus-visible:ring-[#DC2626] relative group"
+                      className="min-w-11 h-11 w-11 p-2 text-[#A8A8A8] hover:text-white hover:bg-[#2A2A2A]/40 rounded transition-colors focus:outline-none focus-visible:ring-1 focus-visible:ring-[#DC2626] relative group flex items-center justify-center"
                       aria-label="Copy email address"
                       title="Copy email to clipboard"
                     >
@@ -123,8 +123,8 @@ export const Contact: React.FC = () => {
               </div>
 
               {/* Location */}
-              <div className="flex items-center gap-3.5">
-                <div className="w-9 h-9 rounded-lg bg-[#0F0F0F] border border-[#2A2A2A] flex items-center justify-center text-[#DC2626] shrink-0">
+              <div className="flex items-start gap-3.5">
+                <div className="min-w-11 h-11 w-11 rounded-lg bg-[#0F0F0F] border border-[#2A2A2A] flex items-center justify-center text-[#DC2626] shrink-0">
                   <MapPin className="w-4 h-4" />
                 </div>
                 <div className="flex flex-col">
@@ -134,8 +134,8 @@ export const Contact: React.FC = () => {
               </div>
 
               {/* Availability */}
-              <div className="flex items-center gap-3.5">
-                <div className="w-9 h-9 rounded-lg bg-[#0F0F0F] border border-[#2A2A2A] flex items-center justify-center text-[#DC2626] shrink-0">
+              <div className="flex items-start gap-3.5">
+                <div className="min-w-11 h-11 w-11 rounded-lg bg-[#0F0F0F] border border-[#2A2A2A] flex items-center justify-center text-[#DC2626] shrink-0">
                   <Calendar className="w-4 h-4" />
                 </div>
                 <div className="flex flex-col">
@@ -152,7 +152,7 @@ export const Contact: React.FC = () => {
             </div>
 
             {/* Social profiles linking */}
-            <div className="flex items-center gap-4 mt-4">
+            <div className="flex flex-wrap items-center gap-3 sm:gap-4 mt-4">
               {socialLinks.map((link) => {
                 const Icon = link.name === "GitHub" ? Github : link.name === "LinkedIn" ? Linkedin : Mail;
                 if (link.name === "Email") return null;
@@ -176,7 +176,7 @@ export const Contact: React.FC = () => {
 
           {/* Right Column: Form submissions */}
           <div className="lg:col-span-7">
-            <Card hoverGlow={false} borderAccentOnHover={false} translateOnHover={false} className="p-6 md:p-8">
+            <Card hoverGlow={false} borderAccentOnHover={false} translateOnHover={false} className="p-5 sm:p-6 md:p-8">
               {isSuccess ? (
                 // Success State Notification
                 <div role="alert" className="flex flex-col items-center justify-center text-center py-10 select-none">
@@ -199,7 +199,7 @@ export const Contact: React.FC = () => {
               ) : (
                 // Contact Form Element
                 <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6" noValidate>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                     <Input
                       id="name"
                       label="Full Name"

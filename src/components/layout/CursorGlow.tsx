@@ -65,11 +65,13 @@ export const CursorGlow: React.FC = () => {
   // Track both pointer and prefers-reduced-motion query listeners
   useEffect(() => {
     const pointerQuery = window.matchMedia("(pointer: fine)");
+    const coarsePointerQuery = window.matchMedia("(any-pointer: coarse)");
     const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 
     const handlePointerChange = (e: MediaQueryListEvent | MediaQueryList) => {
-      setEnabled(e.matches);
-      if (e.matches) {
+      const finePointerEnabled = e.matches && !coarsePointerQuery.matches;
+      setEnabled(finePointerEnabled);
+      if (finePointerEnabled) {
         document.body.classList.add("cursor-none");
       } else {
         document.body.classList.remove("cursor-none");
@@ -87,10 +89,13 @@ export const CursorGlow: React.FC = () => {
     // Event listeners registration
     if (pointerQuery.addEventListener) {
       pointerQuery.addEventListener("change", handlePointerChange);
+      coarsePointerQuery.addEventListener("change", handlePointerChange);
       motionQuery.addEventListener("change", handleMotionChange);
     } else {
       // @ts-ignore
       pointerQuery.addListener(handlePointerChange);
+      // @ts-ignore
+      coarsePointerQuery.addListener(handlePointerChange);
       // @ts-ignore
       motionQuery.addListener(handleMotionChange);
     }
@@ -99,10 +104,13 @@ export const CursorGlow: React.FC = () => {
       document.body.classList.remove("cursor-none");
       if (pointerQuery.removeEventListener) {
         pointerQuery.removeEventListener("change", handlePointerChange);
+        coarsePointerQuery.removeEventListener("change", handlePointerChange);
         motionQuery.removeEventListener("change", handleMotionChange);
       } else {
         // @ts-ignore
         pointerQuery.removeListener(handlePointerChange);
+        // @ts-ignore
+        coarsePointerQuery.removeListener(handlePointerChange);
         // @ts-ignore
         motionQuery.removeListener(handleMotionChange);
       }
