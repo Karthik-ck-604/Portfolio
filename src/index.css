@@ -58,6 +58,9 @@
     scroll-behavior: smooth;
     background-color: #050505;
     scroll-padding-top: 7rem;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
   }
@@ -67,8 +70,16 @@
     color: #F8F8F8;
     background-color: #050505;
     overflow-x: hidden;
+    overflow-y: auto;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
   }
 
   /* Custom outline styling for keyboard focus indicators */
@@ -84,20 +95,19 @@
   cursor: none !important;
 }
 
-/* Disable text selection globally except for editable form controls */
+/* Disable text selection globally and suppress touch callout on mobile/touch devices */
 * {
   user-select: none;
   -webkit-user-select: none;
   -webkit-touch-callout: none;
 }
 
-input,
-textarea,
-select,
-[contenteditable="true"],
-.selectable-text {
+#contact .contact-form input,
+#contact .contact-form textarea,
+#contact .contact-form select,
+#contact .contact-form [contenteditable="true"] {
   user-select: text !important;
   -webkit-user-select: text !important;
-  -webkit-touch-callout: default;
+  -webkit-touch-callout: default !important;
 }
 

@@ -198,7 +198,7 @@ export const Contact: React.FC = () => {
                 </div>
               ) : (
                 // Contact Form Element
-                <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6" noValidate>
+                <form onSubmit={handleSubmit(onSubmit)} className="contact-form flex flex-col gap-6" noValidate>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                     <Input
                       id="name"

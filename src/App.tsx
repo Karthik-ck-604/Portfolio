@@ -55,6 +55,14 @@ export default function App() {
     ]
   };
 
+  const handleContextMenu = (e: React.MouseEvent<HTMLElement>) => {
+    const target = e.target as HTMLElement | null;
+    if (target?.closest("#contact input, #contact textarea, #contact select, #contact [contenteditable='true']")) {
+      return;
+    }
+    e.preventDefault();
+  };
+
   return (
     <HelmetProvider>
       <Helmet>
@@ -82,7 +90,10 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      <div className="min-h-screen bg-[#050505] text-[#F8F8F8] antialiased font-sans overflow-x-hidden">
+      <div
+        className="min-h-screen bg-[#050505] text-[#F8F8F8] antialiased font-sans overflow-x-hidden"
+        onContextMenu={handleContextMenu}
+      >
         <SkipToContent />
         <ScrollProgress />
         <CursorGlow />

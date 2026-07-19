@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 
 export const CursorGlow: React.FC = () => {
   const [enabled, setEnabled] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
   const [baseCursorType, setBaseCursorType] = useState<string>("default");
   const [transientCursorType, setTransientCursorType] = useState<string | null>(null);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
@@ -63,7 +63,7 @@ export const CursorGlow: React.FC = () => {
   };
 
   // Track both pointer and prefers-reduced-motion query listeners
-  useEffect(() => {
+  useLayoutEffect(() => {
     const pointerQuery = window.matchMedia("(pointer: fine)");
     const coarsePointerQuery = window.matchMedia("(any-pointer: coarse)");
     const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -82,9 +82,15 @@ export const CursorGlow: React.FC = () => {
       setPrefersReducedMotion(e.matches);
     };
 
-    // Run initial checks
+    // Run initial checks synchronously before browser paint
     handlePointerChange(pointerQuery);
     handleMotionChange(motionQuery);
+
+    const initialX = window.innerWidth / 2;
+    const initialY = window.innerHeight / 2;
+    mouseX.set(initialX);
+    mouseY.set(initialY);
+    setIsVisible(true);
 
     // Event listeners registration
     if (pointerQuery.addEventListener) {
@@ -115,7 +121,7 @@ export const CursorGlow: React.FC = () => {
         motionQuery.removeListener(handleMotionChange);
       }
     };
-  }, []);
+  }, [mouseX, mouseY]);
 
   // Track mouse coordinates and document hover attributes
   useEffect(() => {

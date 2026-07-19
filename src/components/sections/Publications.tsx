@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { BookOpen, User, Calendar, X, ZoomIn, ZoomOut, Award } from "lucide-react";
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { BookOpen, User, Calendar, Award } from "lucide-react";
 import { publications } from "@/data/publications";
 import { SectionHeading } from "@/components/common/SectionHeading";
 import { Card } from "@/components/common/Card";
 import { Badge } from "@/components/common/Badge";
+import { DocumentViewerModal } from "@/components/common/DocumentViewerModal";
 import { staggerContainer, fadeUp } from "@/utils/motion";
 
 // Import publication certificates as static assets
@@ -23,100 +24,9 @@ const pubCertMap: Record<string, { img: string; label: string }> = {
   },
 };
 
-// ── Lightbox ────────────────────────────────────────────────────────────────
-interface LightboxProps {
-  img: string;
-  label: string;
-  onClose: () => void;
-}
-
-const CertLightbox: React.FC<LightboxProps> = ({ img, label, onClose }) => {
-  const [zoom, setZoom] = useState(1);
-
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-    window.addEventListener("keydown", onKey);
-    return () => {
-      document.body.style.overflow = "";
-      window.removeEventListener("keydown", onKey);
-    };
-  }, [onClose]);
-
-  return (
-    <AnimatePresence>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[9998] bg-black/90 backdrop-blur-md flex flex-col"
-        onClick={onClose}
-      >
-        {/* Top bar */}
-        <div
-          className="flex items-center justify-between px-5 py-3 border-b border-[#2A2A2A] shrink-0"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <div className="flex items-center gap-2">
-            <Award className="w-4 h-4 text-[#DC2626]" />
-            <span className="text-xs font-mono tracking-widest text-[#A8A8A8] uppercase">
-              {label}
-            </span>
-          </div>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setZoom((z) => Math.max(z - 0.25, 0.5))}
-              data-cursor="pointer"
-              className="w-8 h-8 flex items-center justify-center rounded-md border border-[#2A2A2A] text-[#A8A8A8] hover:text-white hover:border-[#DC2626] transition-all"
-              aria-label="Zoom out"
-            >
-              <ZoomOut className="w-4 h-4" />
-            </button>
-            <span className="text-[11px] font-mono text-[#A8A8A8] w-10 text-center">
-              {Math.round(zoom * 100)}%
-            </span>
-            <button
-              onClick={() => setZoom((z) => Math.min(z + 0.25, 3))}
-              data-cursor="pointer"
-              className="w-8 h-8 flex items-center justify-center rounded-md border border-[#2A2A2A] text-[#A8A8A8] hover:text-white hover:border-[#DC2626] transition-all"
-              aria-label="Zoom in"
-            >
-              <ZoomIn className="w-4 h-4" />
-            </button>
-            <button
-              onClick={onClose}
-              data-cursor="pointer"
-              className="w-8 h-8 ml-2 flex items-center justify-center rounded-md border border-[#2A2A2A] text-[#A8A8A8] hover:text-white hover:bg-[#DC2626] hover:border-[#DC2626] transition-all"
-              aria-label="Close"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
-
-        {/* Scrollable image area */}
-        <div
-          className="flex-1 overflow-auto flex items-start justify-center p-6"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <img
-            src={img}
-            alt={label}
-            style={{ transform: `scale(${zoom})`, transformOrigin: "top center" }}
-            className="max-w-full rounded-lg shadow-2xl transition-transform duration-200"
-            draggable={false}
-          />
-        </div>
-      </motion.div>
-    </AnimatePresence>
-  );
-};
-
 // ── Main Publications Section ────────────────────────────────────────────────
 export const Publications: React.FC = () => {
-  const [lightbox, setLightbox] = useState<{ img: string; label: string } | null>(null);
+  const [selectedDoc, setSelectedDoc] = useState<{ url: string; title: string } | null>(null);
 
   return (
     <section
@@ -218,7 +128,7 @@ export const Publications: React.FC = () => {
                           Certificate of Publication
                         </p>
                         <button
-                          onClick={() => setLightbox(cert)}
+                          onClick={() => setSelectedDoc({ url: cert.img, title: cert.label })}
                           aria-label={`View ${cert.label}`}
                           data-cursor="pointer"
                           className="group relative w-full overflow-hidden rounded-xl border border-[#2A2A2A] hover:border-[#DC2626]/60 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626]"
@@ -245,12 +155,13 @@ export const Publications: React.FC = () => {
         </motion.div>
       </div>
 
-      {/* Certificate Lightbox */}
-      {lightbox && (
-        <CertLightbox
-          img={lightbox.img}
-          label={lightbox.label}
-          onClose={() => setLightbox(null)}
+      {/* Shared document viewer */}
+      {selectedDoc && (
+        <DocumentViewerModal
+          isOpen={!!selectedDoc}
+          onClose={() => setSelectedDoc(null)}
+          fileUrl={selectedDoc.url}
+          title={selectedDoc.title}
         />
       )}
     </section>
