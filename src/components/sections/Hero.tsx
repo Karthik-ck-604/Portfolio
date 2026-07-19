@@ -94,7 +94,7 @@ export const Hero: React.FC<HeroProps> = ({ isLoaded = true }) => {
   return (
     <section
       id="hero"
-      className="relative min-h-screen flex items-center justify-center pt-28 pb-20 px-6 md:px-12 lg:px-16 overflow-hidden"
+      className="relative min-h-screen flex items-center justify-center pt-20 md:pt-28 pb-16 md:pb-20 px-4 sm:px-6 md:px-12 lg:px-16 overflow-hidden"
     >
       {/* Interactive canvas backdrop */}
       <HeroBackground />
@@ -201,7 +201,7 @@ export const Hero: React.FC<HeroProps> = ({ isLoaded = true }) => {
           <motion.div
             variants={fadeUp}
             custom={{ delay: 0.85 }}
-            className="flex items-center gap-5 mb-14"
+            className="flex items-center gap-4 sm:gap-5 mb-10 md:mb-14"
           >
             {socialLinks.map((link) => {
               const Icon = link.name === "GitHub" ? Github : link.name === "LinkedIn" ? Linkedin : Mail;

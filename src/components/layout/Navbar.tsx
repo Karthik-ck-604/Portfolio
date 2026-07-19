@@ -28,7 +28,7 @@ export const Navbar: React.FC<NavbarProps> = ({ isLoaded = true }) => {
   // Close drawer on resize
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 768) {
+      if (window.innerWidth >= 1024) {
         setIsOpen(false);
       }
     };
@@ -97,7 +97,7 @@ export const Navbar: React.FC<NavbarProps> = ({ isLoaded = true }) => {
         </a>
 
         {/* Center Desktop Links */}
-        <nav className="hidden md:flex items-center gap-4 lg:gap-6 xl:gap-8" aria-label="Main Navigation">
+        <nav className="hidden lg:flex items-center gap-4 lg:gap-6 xl:gap-8" aria-label="Main Navigation">
           {navLinks.map((link) => {
             const isActive = activeSection === link.id;
             return (
@@ -124,7 +124,7 @@ export const Navbar: React.FC<NavbarProps> = ({ isLoaded = true }) => {
         </nav>
 
         {/* Right CTA Button */}
-        <div className="hidden md:block">
+        <div className="hidden lg:block">
           <Button
             href="/cert_oracle.png" // Local certificate mapping as fallback download path
             target="_blank"
@@ -142,7 +142,7 @@ export const Navbar: React.FC<NavbarProps> = ({ isLoaded = true }) => {
         {/* Mobile Hamburguer */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="flex md:hidden items-center justify-center w-11 h-11 text-[#F8F8F8] hover:text-[#DC2626] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626] rounded-full"
+          className="flex lg:hidden items-center justify-center w-11 h-11 text-[#F8F8F8] hover:text-[#DC2626] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626] rounded-full"
           aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
           aria-expanded={isOpen}
         >
@@ -160,7 +160,7 @@ export const Navbar: React.FC<NavbarProps> = ({ isLoaded = true }) => {
               animate={{ opacity: 0.5 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsOpen(false)}
-              className="fixed inset-0 bg-[#050505] z-50 md:hidden"
+              className="fixed inset-0 bg-[#050505] z-50 lg:hidden"
             />
 
             {/* Slide-out Panel */}
@@ -169,7 +169,7 @@ export const Navbar: React.FC<NavbarProps> = ({ isLoaded = true }) => {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              className="fixed top-0 right-0 bottom-0 w-[280px] bg-[#0F0F0F] border-l border-[#2A2A2A] z-50 flex flex-col px-8 py-10 md:hidden"
+              className="fixed top-0 right-0 bottom-0 w-[280px] bg-[#0F0F0F] border-l border-[#2A2A2A] z-50 flex flex-col px-8 py-10 lg:hidden"
               role="dialog"
               aria-modal="true"
               aria-label="Mobile Navigation Menu"

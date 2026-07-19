@@ -39,7 +39,7 @@ const ExperienceCard: React.FC<ExperienceCardProps> = ({ exp, idx, onViewCertifi
         whileInView="animate"
         viewport={{ once: true, margin: "-100px" }}
         variants={cardVariants}
-        className={`w-full md:w-[46%] pl-16 md:pl-0 ${isEven ? "md:pr-12" : "md:pl-12"}`}
+        className={`w-full md:w-[46%] pl-12 md:pl-0 ${isEven ? "md:pr-12" : "md:pl-12"}`}
       >
         <Card
           hoverGlow={true}
