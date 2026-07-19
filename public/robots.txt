@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://karthikeyan-c.vercel.app/sitemap.xml
