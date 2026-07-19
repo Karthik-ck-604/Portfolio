@@ -106,7 +106,7 @@ export const Navbar: React.FC<NavbarProps> = ({ isLoaded = true }) => {
       backgroundColor: "rgba(5, 5, 5, 0)", // mostly transparent
       backdropFilter: "blur(0px)",
       borderTopColor: "rgba(0, 0, 0, 0)",
-      borderBottomColor: "rgba(26, 26, 26, 0.6)", // bottom hairline
+      borderBottomColor: "rgba(0, 0, 0, 0)",
       borderLeftColor: "rgba(0, 0, 0, 0)",
       borderRightColor: "rgba(0, 0, 0, 0)",
       boxShadow: "0px 0px 0px rgba(0, 0, 0, 0)",
@@ -150,14 +150,17 @@ export const Navbar: React.FC<NavbarProps> = ({ isLoaded = true }) => {
   return (
     <>
       {/* Outer fixed container to guarantee horizontal centering */}
-      <div className="fixed top-3 left-0 right-0 z-50 flex justify-center pointer-events-none px-3 sm:px-4 md:px-6">
+      <div className="fixed top-3 left-0 right-0 z-50 flex justify-center pointer-events-none">
         <motion.header
           variants={headerVariants}
           initial="hidden"
           animate={animateState}
           transition={headerTransition}
-          className="flex w-[calc(100%-0.75rem)] sm:w-[calc(100%-1.5rem)] max-w-7xl items-center justify-between px-3 sm:px-4 lg:px-6 py-3 md:py-4 border border-solid pointer-events-auto rounded-full"
+          className="relative flex w-full max-w-none items-center justify-between px-3 sm:px-4 lg:px-6 py-3 md:py-4 border border-solid border-transparent pointer-events-auto rounded-full"
         >
+          {animateState === "top" && (
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-[rgba(26,26,26,0.6)]" />
+          )}
           {/* Logo Monogram */}
           <a
             href="#hero"
