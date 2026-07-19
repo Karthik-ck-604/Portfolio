@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 
 export const CursorGlow: React.FC = () => {
   const [enabled, setEnabled] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
-  const [cursorType, setCursorType] = useState<string>("default");
+  const [baseCursorType, setBaseCursorType] = useState<string>("default");
+  const [transientCursorType, setTransientCursorType] = useState<string | null>(null);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const baseCursorTypeRef = useRef("default");
+  const transientTimeoutRef = useRef<number | null>(null);
 
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -41,6 +44,23 @@ export const CursorGlow: React.FC = () => {
 
   const currentCursorX = prefersReducedMotion ? mouseX : cursorSpringX;
   const currentCursorY = prefersReducedMotion ? mouseY : cursorSpringY;
+  const resolvedCursorType = transientCursorType ?? baseCursorType;
+
+  const applyBaseCursorType = (nextType: string) => {
+    baseCursorTypeRef.current = nextType;
+    setBaseCursorType(nextType);
+  };
+
+  const triggerSuccessCursor = (duration = 900) => {
+    if (transientTimeoutRef.current) {
+      window.clearTimeout(transientTimeoutRef.current);
+    }
+
+    setTransientCursorType("success");
+    transientTimeoutRef.current = window.setTimeout(() => {
+      setTransientCursorType(null);
+    }, duration);
+  };
 
   // Track both pointer and prefers-reduced-motion query listeners
   useEffect(() => {
@@ -99,12 +119,12 @@ export const CursorGlow: React.FC = () => {
         if (cursorEl) {
           const type = cursorEl.getAttribute("data-cursor");
           if (type) {
-            setCursorType(type);
+            applyBaseCursorType(type);
             return;
           }
         }
       }
-      setCursorType("default");
+      applyBaseCursorType("default");
     };
 
     const handleMouseMove = (e: MouseEvent) => {
@@ -129,9 +149,27 @@ export const CursorGlow: React.FC = () => {
     // Listen to custom cursor changes fired programmatically (e.g., during active dragging)
     const handleCustomCursorChange = (e: Event) => {
       const customEvent = e as CustomEvent;
-      if (customEvent.detail) {
-        setCursorType(customEvent.detail);
+      if (!customEvent.detail) return;
+
+      if (typeof customEvent.detail === "string") {
+        applyBaseCursorType(customEvent.detail);
+        return;
       }
+
+      if (typeof customEvent.detail === "object") {
+        const detail = customEvent.detail as { type?: string; duration?: number };
+        if (detail.type === "success") {
+          triggerSuccessCursor(detail.duration ?? 900);
+        } else if (detail.type) {
+          applyBaseCursorType(detail.type);
+        }
+      }
+    };
+
+    const handleCursorSuccess = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      const detail = customEvent.detail as { duration?: number } | undefined;
+      triggerSuccessCursor(detail?.duration ?? 900);
     };
 
     window.addEventListener("mousemove", handleMouseMove);
@@ -139,6 +177,7 @@ export const CursorGlow: React.FC = () => {
     document.addEventListener("mouseleave", handleMouseLeaveWindow);
     document.addEventListener("mouseenter", handleMouseEnterWindow);
     window.addEventListener("cursorchange", handleCustomCursorChange);
+    window.addEventListener("cursor-success", handleCursorSuccess);
 
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
@@ -146,6 +185,10 @@ export const CursorGlow: React.FC = () => {
       document.removeEventListener("mouseleave", handleMouseLeaveWindow);
       document.removeEventListener("mouseenter", handleMouseEnterWindow);
       window.removeEventListener("cursorchange", handleCustomCursorChange);
+      window.removeEventListener("cursor-success", handleCursorSuccess);
+      if (transientTimeoutRef.current) {
+        window.clearTimeout(transientTimeoutRef.current);
+      }
     };
   }, [enabled, isVisible]);
 
@@ -309,6 +352,20 @@ export const CursorGlow: React.FC = () => {
       backgroundColor: "rgba(0,0,0,0)",
       borderRadius: "0px",
       opacity: 1,
+    },
+    success: {
+      top: "2px",
+      left: "2px",
+      width: "12px",
+      height: "12px",
+      borderTopWidth: "2px",
+      borderLeftWidth: "2px",
+      borderBottomWidth: "0px",
+      borderRightWidth: "0px",
+      borderColor: "#22C55E",
+      backgroundColor: "rgba(0,0,0,0)",
+      borderRadius: "0px",
+      opacity: 1,
     }
   };
 
@@ -457,11 +514,26 @@ export const CursorGlow: React.FC = () => {
       backgroundColor: "rgba(0,0,0,0)",
       borderRadius: "0px",
       opacity: 1,
+    },
+    success: {
+      bottom: "2px",
+      right: "2px",
+      width: "12px",
+      height: "12px",
+      borderTopWidth: "0px",
+      borderLeftWidth: "0px",
+      borderBottomWidth: "2px",
+      borderRightWidth: "2px",
+      borderColor: "#22C55E",
+      backgroundColor: "rgba(0,0,0,0)",
+      borderRadius: "0px",
+      opacity: 1,
     }
   };
 
-  const isWait = cursorType === "wait" && !prefersReducedMotion;
-  const shouldHideDot = cursorType === "text" || cursorType === "zoom-in" || cursorType === "zoom-out";
+  const isWait = resolvedCursorType === "wait" && !prefersReducedMotion;
+  const isSuccess = resolvedCursorType === "success";
+  const shouldHideDot = resolvedCursorType === "text" || resolvedCursorType === "zoom-in" || resolvedCursorType === "zoom-out" || isSuccess;
   const dotTransition = prefersReducedMotion ? { duration: 0 } : centerGlyphTransition;
 
   return (
@@ -499,9 +571,9 @@ export const CursorGlow: React.FC = () => {
       >
         <motion.div
           animate={{
-            opacity: shouldHideDot ? 0 : (cursorType === "not-allowed" ? 0.75 : 1),
-            scale: cursorType === "not-allowed" ? 0.9 : 1,
-            backgroundColor: cursorType === "not-allowed" ? "#737373" : "#DC2626",
+            opacity: shouldHideDot ? 0 : (resolvedCursorType === "not-allowed" ? 0.75 : 1),
+            scale: resolvedCursorType === "not-allowed" ? 0.9 : 1,
+            backgroundColor: resolvedCursorType === "not-allowed" ? "#737373" : (isSuccess ? "#22C55E" : "#DC2626"),
           }}
           transition={dotTransition}
           className="h-[4px] w-[4px] rounded-full bg-[#DC2626]"
@@ -524,9 +596,10 @@ export const CursorGlow: React.FC = () => {
       >
         <motion.div
           animate={{
-            width: cursorType === "pointer" ? 48 : (cursorType === "text" ? 24 : (cursorType === "grabbing" ? 24 : (cursorType === "wait" || cursorType === "help" || cursorType === "zoom-in" || cursorType === "zoom-out" ? 36 : 32))),
-            height: cursorType === "pointer" ? 48 : (cursorType === "text" ? 36 : (cursorType === "grabbing" ? 24 : (cursorType === "wait" || cursorType === "help" || cursorType === "zoom-in" || cursorType === "zoom-out" ? 36 : 32))),
+            width: isSuccess ? 36 : (resolvedCursorType === "pointer" ? 48 : (resolvedCursorType === "text" ? 24 : (resolvedCursorType === "grabbing" ? 24 : (resolvedCursorType === "wait" || resolvedCursorType === "help" || resolvedCursorType === "zoom-in" || resolvedCursorType === "zoom-out" ? 36 : 32)))),
+            height: isSuccess ? 36 : (resolvedCursorType === "pointer" ? 48 : (resolvedCursorType === "text" ? 36 : (resolvedCursorType === "grabbing" ? 24 : (resolvedCursorType === "wait" || resolvedCursorType === "help" || resolvedCursorType === "zoom-in" || resolvedCursorType === "zoom-out" ? 36 : 32)))),
             rotate: isWait ? [0, 360] : 0,
+            scale: isSuccess ? [0.92, 1.04, 1] : 1,
           }}
           transition={
             isWait
@@ -542,7 +615,7 @@ export const CursorGlow: React.FC = () => {
           {/* Top-left bracket */}
           <motion.div
             variants={topLeftVariants}
-            animate={cursorType}
+            animate={resolvedCursorType}
             transition={springTransition}
             className="absolute border-solid border-[#DC2626]"
           />
@@ -550,7 +623,7 @@ export const CursorGlow: React.FC = () => {
           {/* Bottom-right bracket */}
           <motion.div
             variants={bottomRightVariants}
-            animate={cursorType}
+            animate={resolvedCursorType}
             transition={springTransition}
             className="absolute border-solid border-[#DC2626]"
           />
@@ -558,8 +631,8 @@ export const CursorGlow: React.FC = () => {
           {/* Center slash for not-allowed state */}
           <motion.div
             animate={{
-              opacity: cursorType === "not-allowed" ? 1 : 0,
-              scale: cursorType === "not-allowed" ? 1 : 0,
+              opacity: resolvedCursorType === "not-allowed" ? 1 : 0,
+              scale: resolvedCursorType === "not-allowed" ? 1 : 0,
             }}
             transition={centerGlyphTransition}
             className="absolute w-[120%] h-[2px] bg-[#DC2626] rotate-45 pointer-events-none origin-center"
@@ -568,8 +641,8 @@ export const CursorGlow: React.FC = () => {
           {/* Center question mark for help state */}
           <motion.span
             animate={{
-              opacity: cursorType === "help" ? 1 : 0,
-              scale: cursorType === "help" ? 1 : 0,
+              opacity: resolvedCursorType === "help" ? 1 : 0,
+              scale: resolvedCursorType === "help" ? 1 : 0,
             }}
             transition={centerGlyphTransition}
             className="absolute text-[11px] font-bold font-mono text-[#737373] pointer-events-none select-none"
@@ -580,8 +653,8 @@ export const CursorGlow: React.FC = () => {
           {/* Center plus sign for zoom-in state */}
           <motion.span
             animate={{
-              opacity: cursorType === "zoom-in" ? 1 : 0,
-              scale: cursorType === "zoom-in" ? 1 : 0,
+              opacity: resolvedCursorType === "zoom-in" ? 1 : 0,
+              scale: resolvedCursorType === "zoom-in" ? 1 : 0,
             }}
             transition={centerGlyphTransition}
             className="absolute text-[11px] font-bold font-mono text-[#DC2626] pointer-events-none select-none"
@@ -592,15 +665,32 @@ export const CursorGlow: React.FC = () => {
           {/* Center minus sign for zoom-out state */}
           <motion.span
             animate={{
-              opacity: cursorType === "zoom-out" ? 1 : 0,
-              scale: cursorType === "zoom-out" ? 1 : 0,
+              opacity: resolvedCursorType === "zoom-out" ? 1 : 0,
+              scale: resolvedCursorType === "zoom-out" ? 1 : 0,
             }}
             transition={centerGlyphTransition}
             className="absolute text-[11px] font-bold font-mono text-[#DC2626] pointer-events-none select-none"
           >
             -
           </motion.span>
-        </motion.div>
+          {/* Center checkmark for success state */}
+          <motion.div
+            animate={{
+              opacity: isSuccess ? 1 : 0,
+              scale: isSuccess ? 1 : 0.75,
+            }}
+            transition={springTransition}
+            className="absolute flex items-center justify-center pointer-events-none"
+          >
+            <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="#22C55E" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <motion.path
+                d="M5 12.5L9.5 17L19 7.5"
+                initial={{ pathLength: 0, opacity: 0 }}
+                animate={{ pathLength: isSuccess ? 1 : 0, opacity: isSuccess ? 1 : 0 }}
+                transition={springTransition}
+              />
+            </svg>
+          </motion.div>        </motion.div>
 
 
       </motion.div>

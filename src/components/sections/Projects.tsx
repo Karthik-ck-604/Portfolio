@@ -33,6 +33,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, idx }) => {
     try {
       await navigator.clipboard.writeText(project.installCommand);
       setCopyStatus("copied");
+      window.dispatchEvent(new CustomEvent("cursor-success", { detail: { duration: 900 } }));
     } catch (err) {
       console.error("Failed to copy text: ", err);
       setCopyStatus("error");
