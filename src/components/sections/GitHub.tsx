@@ -36,15 +36,15 @@ export const GitHub: React.FC = () => {
             {/* Metrics cards */}
             <div className="grid grid-cols-3 gap-4 border-t border-[#2A2A2A]/60 pt-8 select-none">
               <div className="flex flex-col">
-                <span className="text-3xl font-bold font-mono text-[#F8F8F8] tracking-tight">{githubProfile.totalRepos}</span>
+                <span className="text-2xl sm:text-3xl font-bold font-mono text-[#F8F8F8] tracking-tight">{githubProfile.totalRepos}</span>
                 <span className="text-[10px] uppercase tracking-wider text-[#A8A8A8]/60 font-semibold mt-1">Total Repos</span>
               </div>
               <div className="flex flex-col">
-                <span className="text-3xl font-bold font-mono text-[#F8F8F8] tracking-tight">{githubProfile.featuredReposCount}</span>
+                <span className="text-2xl sm:text-3xl font-bold font-mono text-[#F8F8F8] tracking-tight">{githubProfile.featuredReposCount}</span>
                 <span className="text-[10px] uppercase tracking-wider text-[#A8A8A8]/60 font-semibold mt-1">Featured</span>
               </div>
               <div className="flex flex-col">
-                <span className="text-3xl font-bold font-mono text-[#F8F8F8] tracking-tight">{githubProfile.technologiesCount}</span>
+                <span className="text-2xl sm:text-3xl font-bold font-mono text-[#F8F8F8] tracking-tight">{githubProfile.technologiesCount}</span>
                 <span className="text-[10px] uppercase tracking-wider text-[#A8A8A8]/60 font-semibold mt-1">Tech Used</span>
               </div>
             </div>
@@ -123,15 +123,30 @@ export const GitHub: React.FC = () => {
                       </div>
 
                       {/* External Arrow link to repository code */}
-                      <a
-                        href={`https://github.com/${repo.name}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="p-1 hover:text-[#DC2626] transition-colors outline-none focus-visible:ring-1 focus-visible:ring-[#DC2626] rounded"
-                        aria-label={`View code for ${repo.name} repository on GitHub`}
-                      >
-                        <ExternalLink className="w-4 h-4" />
-                      </a>
+                      {repo.url && (
+                        <a
+                          href={repo.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-1 hover:text-[#DC2626] transition-colors outline-none focus-visible:ring-1 focus-visible:ring-[#DC2626] rounded"
+                          aria-label={`View code for ${repo.name} repository on GitHub`}
+                        >
+                          <ExternalLink className="w-4 h-4" />
+                        </a>
+                      )}
+                      {repo.installCommand && !repo.url && (
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            navigator.clipboard.writeText(repo.installCommand!);
+                          }}
+                          className="p-1 hover:text-[#DC2626] transition-colors outline-none focus-visible:ring-1 focus-visible:ring-[#DC2626] rounded"
+                          aria-label={`Copy install command for ${repo.name}`}
+                          title="Click to copy install command"
+                        >
+                          <Terminal className="w-4 h-4" />
+                        </button>
+                      )}
                     </div>
 
                   </div>

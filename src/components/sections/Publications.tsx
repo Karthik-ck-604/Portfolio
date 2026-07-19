@@ -1,24 +1,119 @@
-import React, { useState } from "react";
-import { motion } from "framer-motion";
-import { BookOpen, User, Calendar, Award, ExternalLink, ArrowUpRight } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { BookOpen, User, Calendar, X, ZoomIn, ZoomOut, Award } from "lucide-react";
 import { publications } from "@/data/publications";
 import { SectionHeading } from "@/components/common/SectionHeading";
 import { Card } from "@/components/common/Card";
-import { Button } from "@/components/common/Button";
 import { Badge } from "@/components/common/Badge";
-import { DocumentViewerModal } from "@/components/common/DocumentViewerModal";
 import { staggerContainer, fadeUp } from "@/utils/motion";
 
-export const Publications: React.FC = () => {
-  const [selectedPub, setSelectedPub] = useState<{ token: string; title: string } | null>(null);
+// Import publication certificates as static assets
+import certYMER from "@/cert_YMER .jpg";
+import certIEJ from "@/cert_Industrial Engineering Journal .png";
 
-  // Map publication titles to mock tokens
-  const getPubToken = (title: string) => {
-    if (title.toLowerCase().includes("accident")) {
-      return "mock-pub-accident";
-    }
-    return "mock-pub-seeker";
-  };
+// Map each publication to its certificate image
+const pubCertMap: Record<string, { img: string; label: string }> = {
+  "Locating Smartphones Using Seeker Tool": {
+    img: certYMER,
+    label: "YMER Certificate of Publication",
+  },
+  "Design Thinking Based Accident Prevention System Using Eye Blink Sensor": {
+    img: certIEJ,
+    label: "Industrial Engineering Journal Certificate",
+  },
+};
+
+// ── Lightbox ────────────────────────────────────────────────────────────────
+interface LightboxProps {
+  img: string;
+  label: string;
+  onClose: () => void;
+}
+
+const CertLightbox: React.FC<LightboxProps> = ({ img, label, onClose }) => {
+  const [zoom, setZoom] = useState(1);
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [onClose]);
+
+  return (
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 z-[9998] bg-black/90 backdrop-blur-md flex flex-col"
+        onClick={onClose}
+      >
+        {/* Top bar */}
+        <div
+          className="flex items-center justify-between px-5 py-3 border-b border-[#2A2A2A] shrink-0"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="flex items-center gap-2">
+            <Award className="w-4 h-4 text-[#DC2626]" />
+            <span className="text-xs font-mono tracking-widest text-[#A8A8A8] uppercase">
+              {label}
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setZoom((z) => Math.max(z - 0.25, 0.5))}
+              className="w-8 h-8 flex items-center justify-center rounded-md border border-[#2A2A2A] text-[#A8A8A8] hover:text-white hover:border-[#DC2626] transition-all"
+              aria-label="Zoom out"
+            >
+              <ZoomOut className="w-4 h-4" />
+            </button>
+            <span className="text-[11px] font-mono text-[#A8A8A8] w-10 text-center">
+              {Math.round(zoom * 100)}%
+            </span>
+            <button
+              onClick={() => setZoom((z) => Math.min(z + 0.25, 3))}
+              className="w-8 h-8 flex items-center justify-center rounded-md border border-[#2A2A2A] text-[#A8A8A8] hover:text-white hover:border-[#DC2626] transition-all"
+              aria-label="Zoom in"
+            >
+              <ZoomIn className="w-4 h-4" />
+            </button>
+            <button
+              onClick={onClose}
+              className="w-8 h-8 ml-2 flex items-center justify-center rounded-md border border-[#2A2A2A] text-[#A8A8A8] hover:text-white hover:bg-[#DC2626] hover:border-[#DC2626] transition-all"
+              aria-label="Close"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+
+        {/* Scrollable image area */}
+        <div
+          className="flex-1 overflow-auto flex items-start justify-center p-6"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <img
+            src={img}
+            alt={label}
+            style={{ transform: `scale(${zoom})`, transformOrigin: "top center" }}
+            className="max-w-full rounded-lg shadow-2xl transition-transform duration-200"
+            draggable={false}
+          />
+        </div>
+      </motion.div>
+    </AnimatePresence>
+  );
+};
+
+// ── Main Publications Section ────────────────────────────────────────────────
+export const Publications: React.FC = () => {
+  const [lightbox, setLightbox] = useState<{ img: string; label: string } | null>(null);
 
   return (
     <section
@@ -26,7 +121,7 @@ export const Publications: React.FC = () => {
       className="relative py-24 md:py-32 px-6 md:px-12 lg:px-16 bg-[#0F0F0F] border-b border-[#2A2A2A]/40 overflow-hidden"
     >
       <div className="relative w-full max-w-7xl mx-auto z-10">
-        
+
         {/* Section Header */}
         <SectionHeading
           eyebrow="Research"
@@ -34,7 +129,7 @@ export const Publications: React.FC = () => {
           subtitle="Peer-reviewed engineering papers published in industrial journals exploring IoT control automations and smartphone geolocation tools."
         />
 
-        {/* Editorial Layout */}
+        {/* Publication Cards */}
         <motion.div
           initial="initial"
           whileInView="animate"
@@ -44,7 +139,8 @@ export const Publications: React.FC = () => {
         >
           {publications.map((pub) => {
             const isPrimary = pub.badge === "Primary Publication";
-            
+            const cert = pubCertMap[pub.title];
+
             return (
               <motion.div key={pub.title} variants={fadeUp}>
                 <Card
@@ -53,18 +149,21 @@ export const Publications: React.FC = () => {
                   translateOnHover={false}
                   className="p-8 md:p-12 bg-[#161616]/65 border border-[#2A2A2A] rounded-[24px] relative"
                 >
-                  {/* Decorative glowing line for primary publication */}
+                  {/* Red accent bar for primary publication */}
                   {isPrimary && (
                     <div className="absolute left-0 top-0 bottom-0 w-[4px] bg-[#DC2626] rounded-l-[24px]" />
                   )}
 
                   <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 justify-between items-start">
-                    
-                    {/* Left details */}
+
+                    {/* ── Left: Metadata ── */}
                     <div className="flex-1 flex flex-col gap-4">
-                      {/* Badge / Category Metadata */}
+                      {/* Badge + Domain */}
                       <div className="flex items-center gap-3 flex-wrap">
-                        <Badge variant={isPrimary ? "primary" : "secondary"} className="tracking-widest uppercase text-[9px] py-1 px-3">
+                        <Badge
+                          variant={isPrimary ? "primary" : "secondary"}
+                          className="tracking-widest uppercase text-[9px] py-1 px-3"
+                        >
                           {pub.badge}
                         </Badge>
                         <span className="text-[10px] font-mono text-[#A8A8A8] bg-[#050505] px-3 py-1 rounded-full border border-[#2A2A2A]/40">
@@ -86,7 +185,6 @@ export const Publications: React.FC = () => {
                             <span className="text-[#F8F8F8] font-semibold">{pub.journal}</span>
                           </div>
                         </div>
-
                         <div className="flex items-center gap-2">
                           <User className="w-4 h-4 text-[#DC2626]" />
                           <div>
@@ -94,7 +192,6 @@ export const Publications: React.FC = () => {
                             <span className="text-[#F8F8F8] font-semibold">{pub.authors}</span>
                           </div>
                         </div>
-
                         <div className="flex items-center gap-2">
                           <Calendar className="w-4 h-4 text-[#DC2626]" />
                           <div>
@@ -104,40 +201,38 @@ export const Publications: React.FC = () => {
                         </div>
                       </div>
 
-                      {/* Abstract Snippet */}
+                      {/* Abstract */}
                       <p className="text-sm text-[#A8A8A8] leading-relaxed max-w-3xl">
                         {pub.summary}
                       </p>
                     </div>
 
-                    {/* Right action controls */}
-                    <div className="lg:shrink-0 flex sm:flex-row lg:flex-col gap-4 w-full lg:w-auto mt-4 lg:mt-0">
-                      <Button
-                        onClick={() => setSelectedPub({ token: getPubToken(pub.title), title: pub.title })}
-                        variant="primary"
-                        size="md"
-                        icon={<BookOpen className="w-4 h-4" />}
-                        ariaLabel={`Read abstract for ${pub.title}`}
-                        className="flex-1 lg:w-48 text-center"
-                      >
-                        Read Publication
-                      </Button>
-
-                      {pub.doiLink && (
-                        <Button
-                          href={pub.doiLink}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          variant="secondary"
-                          size="md"
-                          icon={<ArrowUpRight className="w-4 h-4" />}
-                          ariaLabel={`Open external DOI link for ${pub.title}`}
-                          className="flex-1 lg:w-48 text-center"
+                    {/* ── Right: Certificate Thumbnail ── */}
+                    {cert && (
+                      <div className="lg:shrink-0 w-full sm:w-44 lg:w-52 mt-4 lg:mt-0">
+                        <p className="text-[9px] font-mono text-[#4A4A4A] uppercase tracking-widest mb-2 flex items-center gap-1.5">
+                          <Award className="w-3 h-3 text-[#DC2626]" />
+                          Certificate of Publication
+                        </p>
+                        <button
+                          onClick={() => setLightbox(cert)}
+                          aria-label={`View ${cert.label}`}
+                          className="group relative w-full overflow-hidden rounded-xl border border-[#2A2A2A] hover:border-[#DC2626]/60 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626]"
                         >
-                          DOI Reference
-                        </Button>
-                      )}
-                    </div>
+                          <img
+                            src={cert.img}
+                            alt={cert.label}
+                            className="w-full h-auto object-cover group-hover:scale-[1.03] transition-transform duration-300"
+                          />
+                          {/* Hover overlay */}
+                          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-300 flex items-center justify-center">
+                            <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-[#DC2626] text-white text-[10px] font-mono tracking-widest uppercase px-3 py-1.5 rounded-full">
+                              View Certificate
+                            </div>
+                          </div>
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </Card>
               </motion.div>
@@ -146,13 +241,12 @@ export const Publications: React.FC = () => {
         </motion.div>
       </div>
 
-      {/* Scholarly Document Reader Modal */}
-      {selectedPub && (
-        <DocumentViewerModal
-          isOpen={!!selectedPub}
-          onClose={() => setSelectedPub(null)}
-          fileUrl={selectedPub.token}
-          title={selectedPub.title}
+      {/* Certificate Lightbox */}
+      {lightbox && (
+        <CertLightbox
+          img={lightbox.img}
+          label={lightbox.label}
+          onClose={() => setLightbox(null)}
         />
       )}
     </section>

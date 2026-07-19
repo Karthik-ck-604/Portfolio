@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion, TargetAndTransition } from "framer-motion";
 import profileImg from "@/hero_section_profile.png";
 
-export const HeroVisual: React.FC = () => {
+interface HeroVisualProps {
+  isLoaded?: boolean;
+}
+
+export const HeroVisual: React.FC<HeroVisualProps> = ({ isLoaded = true }) => {
   const [mouseOffset, setMouseOffset] = useState({ x: 0, y: 0 });
   const prefersReducedMotion = useReducedMotion();
 
@@ -37,9 +41,9 @@ export const HeroVisual: React.FC = () => {
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.9, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
-      className="relative w-full max-w-[340px] sm:max-w-[380px] lg:max-w-[440px] mx-auto select-none flex items-center justify-center pointer-events-none"
+      animate={isLoaded ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.95 }}
+      transition={{ duration: 1.2, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
+      className="relative w-full max-w-xs sm:max-w-sm lg:max-w-[440px] mx-auto select-none flex items-center justify-center pointer-events-none"
     >
       {/* Background Soft Crimson Ambient Lighting */}
       <div className="absolute inset-0 bg-[#DC2626]/5 blur-[90px] rounded-full z-0 pointer-events-none scale-110" />
@@ -53,22 +57,53 @@ export const HeroVisual: React.FC = () => {
           ...floatAnimation,
           x: prefersReducedMotion ? 0 : mouseOffset.x,
           y: prefersReducedMotion ? 0 : [mouseOffset.y, mouseOffset.y - 4, mouseOffset.y]
-        }}
-        // Apply smooth spring physics on transform transition
+        } as TargetAndTransition}
         transition={prefersReducedMotion ? {} : {
           x: { type: "spring", stiffness: 80, damping: 25 },
           y: { type: "spring", stiffness: 80, damping: 25 }
         }}
         className="relative z-10 w-full"
       >
+        {/* Portrait image */}
         <img
           src={profileImg}
           alt="Karthikeyan C Portrait"
           className="w-full h-auto object-contain select-none pointer-events-none"
-          // Applying filter: drop-shadow to contour around the alpha mask rather than rectangular boundaries
           style={{
             filter: "drop-shadow(0 20px 40px rgba(0, 0, 0, 0.9)) drop-shadow(0 0 25px rgba(220, 38, 38, 0.25))",
             willChange: "transform, filter"
+          }}
+        />
+
+        {/* Bottom fade — dissolves the hard bottom edge into the dark background */}
+        <div
+          className="absolute bottom-0 left-0 right-0 h-2/5 pointer-events-none"
+          style={{
+            background: "linear-gradient(to top, #050505 0%, #050505 10%, rgba(5,5,5,0.7) 40%, transparent 100%)"
+          }}
+        />
+
+        {/* Left edge fade */}
+        <div
+          className="absolute top-0 left-0 bottom-0 w-1/5 pointer-events-none"
+          style={{
+            background: "linear-gradient(to right, #050505 0%, transparent 100%)"
+          }}
+        />
+
+        {/* Right edge fade */}
+        <div
+          className="absolute top-0 right-0 bottom-0 w-1/5 pointer-events-none"
+          style={{
+            background: "linear-gradient(to left, #050505 0%, transparent 100%)"
+          }}
+        />
+
+        {/* Top edge — subtle fade so hair blends */}
+        <div
+          className="absolute top-0 left-0 right-0 h-1/6 pointer-events-none"
+          style={{
+            background: "linear-gradient(to bottom, #050505 0%, transparent 100%)"
           }}
         />
       </motion.div>

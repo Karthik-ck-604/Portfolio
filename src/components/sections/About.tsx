@@ -126,7 +126,7 @@ export const About: React.FC = () => {
           <div className="lg:col-span-7 flex flex-col gap-10">
             
             {/* Biography Copy */}
-            <div className="flex flex-col gap-6 text-[#A8A8A8] font-sans text-base sm:text-lg leading-relaxed max-w-[680px]">
+            <div className="flex flex-col gap-6 text-[#A8A8A8] font-sans text-base sm:text-lg leading-relaxed max-w-2xl">
               {profile.aboutParagraphs.map((para, idx) => (
                 <p key={idx}>{para}</p>
               ))}

@@ -9,9 +9,10 @@ export interface Project {
   outcome: string;
   technologies: string[];
   highlights: string[];
-  githubUrl: string;
+  githubUrl?: string;
+  installCommand?: string;
   liveUrl?: string;
-  imageUrl: string; // Dynamic or stock-based asset path
+  pypiUrl?: string; // Dynamic or stock-based asset path
 }
 
 export const projects: Project[] = [
@@ -31,8 +32,7 @@ export const projects: Project[] = [
       "Created dynamic team workspaces where users share, edit, and push task cards directly to third-party dashboards.",
       "Implemented a secure WebSocket notification server delivering immediate email briefs after model run completion."
     ],
-    githubUrl: "https://github.com/your-username/meet-iq",
-    imageUrl: "/src/cert_webgen.png" // Using local certificate asset as visual backdrop fallback
+    githubUrl: "https://github.com/Karthik-ck-604/Meet-IQ",
   },
   {
     id: "ben10-portfolio",
@@ -50,28 +50,27 @@ export const projects: Project[] = [
       "Configured modular SVG character vectors with physics-based follow constraints for cursor interactions.",
       "Optimized Three.js lighting layers and polycount configurations, securing 60fps renders on mobile devices."
     ],
-    githubUrl: "https://github.com/your-username/ben10-portfolio",
+    githubUrl: "https://github.com/Karthik-ck-604/ben10-app",
     liveUrl: "https://ben10-app.vercel.app",
-    imageUrl: "/src/cert_webgen.png"
   },
   {
-    id: "car-ai-dashboard",
-    name: "Car AI Dashboard",
-    category: "Automotive UI & Telemetry",
-    status: "Prototype",
+    id: "spidy-agent",
+    name: "Spidy CLI (spidy-agent)",
+    category: "AI & System Automation CLI",
+    status: "Completed",
     year: "2024",
-    problem: "Connected vehicle interfaces need simple visual arrangements for metrics without distracting the driver or causing visual clutter.",
-    solution: "Created a high-contrast automotive dashboard prototype displaying speed, fuel grids, warning states, and custom route maps.",
-    outcome: "Served as a technical reference mockup proving feasibility of real-time client-side sensor rendering inside React containers.",
-    technologies: ["React.js", "TypeScript", "Tailwind CSS", "Canvas API", "Ollama API"],
+    problem: "Developers and system administrators need to constantly switch context between search engines, system stats monitors, security scanners, and terminal helper scripts.",
+    solution: "Built a unified, cross-platform terminal assistant powered by local Ollama and cloud NVIDIA NIM models with capabilities ranging from news to systems checking.",
+    outcome: "Created a zero-dependency CLI utility, easily installable via pip/pipx, offering secure local automation, custom Tamil-Tanglish NLP, and instant developer templates.",
+    technologies: ["Python", "CLI", "NVIDIA NIM", "Ollama", "psutil"],
     highlights: [
-      "Built a mock telemetric data stream pumping synthetic sensor updates at a steady 60hz interval.",
-      "Programmed a high-performance circular speedometer dial drawing dynamically on HTML5 Canvas containers.",
-      "Integrated a local LLM companion API (Ollama) responding to driver commands with immediate speech syntheses.",
-      "Designed a pure dark UI panel layout with crimson danger triggers matching WCAG AA color rules."
+      "Designed a cross-platform core supporting Linux, macOS, and Windows utilizing Python 3.10+ environments.",
+      "Integrated real-time news retrieval with localization filters, psutil diagnostic logging (CPU/RAM/disk/battery), and heuristic vulnerability scanners.",
+      "Created file-system navigator, maps route calculator, AI code debugger, and web mode generating responsive HTML/CSS/JS components.",
+      "Implemented తమిళం (Tamil) & Tanglish chat capabilities with automated local JSONL chat logging with zero external database dependencies."
     ],
-    githubUrl: "https://github.com/your-username/car-ai-dashboard",
-    imageUrl: "/src/cert_webgen.png"
+    installCommand: "pipx install spidy-agent",
+    pypiUrl: "https://pypi.org/user/karthik-60204/",
   },
   {
     id: "student-management",
@@ -89,7 +88,6 @@ export const projects: Project[] = [
       "Developed a backend PDF generator compiling report cards with custom security watermarks.",
       "Implemented role-based access controls (Admin vs. Faculty vs. Student) with server-guarded API endpoints."
     ],
-    githubUrl: "https://github.com/your-username/student-management",
-    imageUrl: "/src/cert_webgen.png"
+    githubUrl: "https://github.com/Karthik-ck-604/React_Project",
   },
 ];

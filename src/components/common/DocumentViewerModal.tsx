@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { X, ZoomIn, ZoomOut, Download, ExternalLink, FileText, User, Calendar, BookOpen } from "lucide-react";
+import { X, ZoomIn, ZoomOut, Download, ExternalLink } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/common/Button";
 

@@ -6,7 +6,11 @@ import { Button } from "@/components/common/Button";
 import { cn } from "@/lib/utils";
 import logoImg from "@/logo.png";
 
-export const Navbar: React.FC = () => {
+interface NavbarProps {
+  isLoaded?: boolean;
+}
+
+export const Navbar: React.FC<NavbarProps> = ({ isLoaded = true }) => {
   const [isOpen, setIsOpen] = useState(false);
   const sectionIds = ["hero", "about", "skills", "experience", "projects", "certifications", "publications", "contact"];
   const activeSection = useActiveSection(sectionIds);
@@ -74,9 +78,9 @@ export const Navbar: React.FC = () => {
     <>
       <motion.header
         initial={{ y: -80, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        className="fixed top-0 left-0 right-0 h-20 z-50 flex items-center justify-between px-6 md:px-12 lg:px-16 bg-transparent"
+        animate={isLoaded ? { y: 0, opacity: 1 } : { y: -80, opacity: 0 }}
+        transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+        className="fixed top-0 left-0 right-0 h-20 z-50 flex items-center justify-between px-6 md:px-12 lg:px-16 bg-[#050505]/85 backdrop-blur-xl border-b border-[#1A1A1A]/60 transition-all duration-300"
       >
         {/* Logo Monogram */}
         <a
@@ -93,7 +97,7 @@ export const Navbar: React.FC = () => {
         </a>
 
         {/* Center Desktop Links */}
-        <nav className="hidden md:flex items-center gap-8" aria-label="Main Navigation">
+        <nav className="hidden md:flex items-center gap-4 lg:gap-6 xl:gap-8" aria-label="Main Navigation">
           {navLinks.map((link) => {
             const isActive = activeSection === link.id;
             return (
@@ -138,7 +142,7 @@ export const Navbar: React.FC = () => {
         {/* Mobile Hamburguer */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="flex md:hidden items-center justify-center w-10 h-10 text-[#F8F8F8] hover:text-[#DC2626] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626] rounded-full"
+          className="flex md:hidden items-center justify-center w-11 h-11 text-[#F8F8F8] hover:text-[#DC2626] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626] rounded-full"
           aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
           aria-expanded={isOpen}
         >

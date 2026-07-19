@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Github, ExternalLink, ShieldCheck, HelpCircle, Lightbulb, TrendingUp } from "lucide-react";
+import { Github, ExternalLink, ShieldCheck, HelpCircle, Lightbulb, TrendingUp, Terminal } from "lucide-react";
 import { projects } from "@/data/projects";
 import { SectionHeading } from "@/components/common/SectionHeading";
 import { Card } from "@/components/common/Card";
@@ -98,20 +98,40 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, idx }) => {
             </div>
 
             {/* CTA action buttons */}
-            <div className="flex items-center gap-4 w-full sm:w-auto">
-              <Button
-                href={project.githubUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                variant="secondary"
-                size="sm"
-                icon={<Github className="w-4 h-4" />}
-                iconPosition="left"
-                ariaLabel={`View ${project.name} code on GitHub`}
-                className="w-full sm:w-auto"
-              >
-                GitHub
-              </Button>
+            <div className="flex flex-wrap items-center gap-3 w-full">
+              {project.githubUrl && (
+                <Button
+                  href={project.githubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  variant="secondary"
+                  size="sm"
+                  icon={<Github className="w-4 h-4" />}
+                  iconPosition="left"
+                  ariaLabel={`View ${project.name} code on GitHub`}
+                  className="w-full sm:w-auto"
+                >
+                  GitHub
+                </Button>
+              )}
+              {project.installCommand && !project.githubUrl && (
+                <Button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigator.clipboard.writeText(project.installCommand!);
+                    // Optionally alert or toast here; for now it just copies silently
+                  }}
+                  variant="secondary"
+                  size="sm"
+                  icon={<Terminal className="w-4 h-4" />}
+                  iconPosition="left"
+                  ariaLabel={`Copy install command for ${project.name}`}
+                  className="w-full sm:w-auto group relative"
+                  title="Click to copy command"
+                >
+                  Copy Install Cmd
+                </Button>
+              )}
               {project.liveUrl && (
                 <Button
                   href={project.liveUrl}
@@ -125,6 +145,21 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, idx }) => {
                   className="w-full sm:w-auto"
                 >
                   Live Demo
+                </Button>
+              )}
+              {project.pypiUrl && (
+                <Button
+                  href={project.pypiUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  variant="primary"
+                  size="sm"
+                  icon={<ExternalLink className="w-3.5 h-3.5" />}
+                  iconPosition="right"
+                  ariaLabel={`View ${project.name} on PyPI`}
+                  className="w-full sm:w-auto"
+                >
+                  PyPI
                 </Button>
               )}
             </div>

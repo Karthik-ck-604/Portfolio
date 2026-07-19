@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Mic, User } from "lucide-react";
+import { Mic, User, Terminal, Cpu } from "lucide-react";
 
 interface ProjectVisualProps {
   projectId: string;
@@ -71,33 +71,63 @@ export const ProjectVisual: React.FC<ProjectVisualProps> = ({ projectId }) => {
     );
   }
 
-  if (projectId === "car-ai-dashboard") {
+  if (projectId === "spidy-agent") {
     return (
       <div className={containerStyle}>
         <div className="absolute inset-0 bg-radial from-[#DC2626]/10 to-transparent pointer-events-none" />
-        <div className="relative z-10 flex flex-col items-center gap-3">
-          {/* Speed dial */}
-          <div className="relative w-24 h-24 rounded-full border border-[#2A2A2A] flex flex-col items-center justify-center">
-            <span className="text-2xl font-bold font-mono text-[#F8F8F8] tracking-tighter">120</span>
-            <span className="text-[8px] uppercase tracking-wider text-[#A8A8A8]/60">KM/H</span>
-            
-            {/* Speed line indicator */}
-            <svg className="absolute inset-0 w-full h-full -rotate-90">
-              <circle
-                cx="48"
-                cy="48"
-                r="40"
-                className="stroke-[#DC2626] fill-none"
-                strokeWidth="2.5"
-                strokeDasharray="251"
-                strokeDashoffset="120"
-              />
-            </svg>
+        <div className="relative z-10 flex flex-col w-full px-5 py-4 gap-3 h-full justify-between">
+          
+          {/* Terminal Window Header */}
+          <div className="flex items-center justify-between border-b border-[#2A2A2A] pb-2">
+            <div className="flex items-center gap-1.5">
+              <Terminal className="w-3.5 h-3.5 text-[#DC2626]" />
+              <span className="text-[10px] font-mono text-[#F8F8F8] tracking-wider font-semibold">spidy-agent@terminal</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#DC2626]/60" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#F59E0B]/60" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#22C55E]/60" />
+            </div>
           </div>
-          <div className="flex gap-2">
-            <span className="px-2 py-0.5 text-[8px] font-mono border border-[#DC2626]/40 rounded bg-[rgba(220,38,38,0.05)] text-[#DC2626] font-semibold animate-pulse">LIDAR ACTIVE</span>
-            <span className="px-2 py-0.5 text-[8px] font-mono border border-[#2A2A2A] rounded bg-[#161616] text-[#A8A8A8]">AUTOPILOT</span>
+
+          {/* Terminal Contents */}
+          <div className="flex flex-col gap-2 font-mono text-[9px] text-[#A8A8A8] text-left select-none overflow-hidden">
+            <div className="flex items-center gap-1">
+              <span className="text-[#DC2626] font-semibold">$</span>
+              <span>pip install spidy-agent</span>
+            </div>
+            <div className="text-[8px] text-[#6A6A6A] -mt-1 pl-3">Installing dependencies... Successfully built spidy-agent</div>
+
+            <div className="flex items-center gap-1 mt-1">
+              <span className="text-[#DC2626] font-semibold">$</span>
+              <span>spidy --status</span>
+            </div>
+
+            {/* Diagnostic stats container */}
+            <div className="grid grid-cols-2 gap-2 bg-[#161616]/90 p-2 rounded-lg border border-[#2A2A2A] mt-1">
+              <div className="flex items-center gap-1.5 border-r border-[#2A2A2A] pr-2">
+                <Cpu className="w-3 h-3 text-[#DC2626]" />
+                <div className="flex flex-col">
+                  <span className="text-[7px] text-[#6A6A6A] uppercase font-bold">CPU Usage</span>
+                  <span className="text-[#F8F8F8] font-bold">14.5%</span>
+                </div>
+              </div>
+              <div className="flex items-center gap-1.5 pl-1">
+                <div className="w-1.5 h-1.5 rounded-full bg-[#22C55E] animate-pulse shrink-0" />
+                <div className="flex flex-col">
+                  <span className="text-[7px] text-[#6A6A6A] uppercase font-bold">Ollama / NIM</span>
+                  <span className="text-[#22C55E] font-bold">ONLINE</span>
+                </div>
+              </div>
+            </div>
           </div>
+
+          {/* Prompt input feedback */}
+          <div className="flex items-center gap-1.5 font-mono text-[8px] text-left bg-[#161616] p-1.5 rounded border border-[#2A2A2A]/40 mt-1 select-none">
+            <span className="text-[#22C55E]">Tamil-NLP:</span>
+            <span className="text-[#F8F8F8]">சிஸ்டம் என்ன பண்ணுது?</span>
+          </div>
+
         </div>
       </div>
     );

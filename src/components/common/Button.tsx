@@ -9,6 +9,7 @@ interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>
   href?: string; // Renders as anchor if provided
   target?: string;
   rel?: string;
+  download?: boolean | string;
   icon?: React.ReactNode;
   iconPosition?: "left" | "right";
   loading?: boolean;
@@ -26,6 +27,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
       href,
       target,
       rel,
+      download,
       icon,
       iconPosition = "right",
       loading = false,
@@ -119,6 +121,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
           href={href}
           target={target}
           rel={rel}
+          download={download}
           aria-label={ariaLabel}
           className={cn(baseStyles, variantStyles[variant], sizeStyles[size], "group", className)}
           {...animateProps}

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Award, Cloud, ShieldAlert, Code2, Eye, Calendar, ArrowRight } from "lucide-react";
+import { Award, Cloud, ShieldAlert, Code2, Eye, Calendar } from "lucide-react";
 import { professionalCertifications } from "@/data/certifications";
 import { SectionHeading } from "@/components/common/SectionHeading";
 import { Card } from "@/components/common/Card";
@@ -46,7 +46,7 @@ export const ProfessionalCertifications: React.FC = () => {
           variants={staggerContainer}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-16 md:mt-24"
         >
-          {professionalCertifications.map((cert, idx) => (
+          {professionalCertifications.map((cert) => (
             <motion.div key={cert.name} variants={fadeUp}>
               <Card
                 hoverGlow={true}

@@ -1,3 +1,5 @@
+import { useState, useEffect } from "react";
+import { AnimatePresence } from "framer-motion";
 import { HelmetProvider, Helmet } from "react-helmet-async";
 import { SkipToContent } from "@/components/layout/SkipToContent";
 import { ScrollProgress } from "@/components/layout/ScrollProgress";
@@ -14,8 +16,22 @@ import { Publications } from "@/components/sections/Publications";
 import { AdditionalCertifications } from "@/components/sections/AdditionalCertifications";
 import { GitHub } from "@/components/sections/GitHub";
 import { Contact } from "@/components/sections/Contact";
+import { Preloader } from "@/components/common/Preloader";
 
 export default function App() {
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    // Lock scrolling while loading
+    if (!isLoaded) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isLoaded]);
   const personSchema = {
     "@context": "https://schema.org",
     "@type": "Person",
@@ -60,14 +76,20 @@ export default function App() {
         </script>
       </Helmet>
 
+      <AnimatePresence mode="wait">
+        {!isLoaded && (
+          <Preloader onComplete={() => setIsLoaded(true)} />
+        )}
+      </AnimatePresence>
+
       <div className="min-h-screen bg-[#050505] text-[#F8F8F8] antialiased selection:bg-[#DC2626] selection:text-[#F8F8F8] font-sans">
         <SkipToContent />
         <ScrollProgress />
         <CursorGlow />
-        <Navbar />
+        <Navbar isLoaded={isLoaded} />
         
         <main id="main-content" className="outline-none">
-          <Hero />
+          <Hero isLoaded={isLoaded} />
           <About />
           <Skills />
           <Experience />
