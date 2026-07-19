@@ -336,7 +336,8 @@ export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
 
   useEffect(() => {
     let frameId: number;
-    const duration = 5800; // Slow cinematic load time: ~5.8s
+    const duration = 4000; // Smooth cinematic load time: ~4s
+    const completionPause = 0;
     const startTime = performance.now();
 
     const runProgressLoop = (timestamp: number) => {
@@ -393,7 +394,7 @@ export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
         setIsFinishing(true);
         setTimeout(() => {
           onComplete();
-        }, 1200); // 1.2s post-complete pause to absorb the final cinematic state
+        }, completionPause);
       }
     };
 

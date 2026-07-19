@@ -204,7 +204,7 @@ export const Contact: React.FC = () => {
                       id="name"
                       label="Full Name"
                       type="text"
-                      placeholder="e.g. Adithya Sharma"
+                      placeholder="Your full name"
                       error={errors.name?.message}
                       {...register("name", {
                         required: "Name is required",
@@ -216,7 +216,7 @@ export const Contact: React.FC = () => {
                       id="email"
                       label="Email Address"
                       type="email"
-                      placeholder="e.g. adithya@example.com"
+                      placeholder="youremail@example.com"
                       error={errors.email?.message}
                       {...register("email", {
                         required: "Email is required",

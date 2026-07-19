@@ -124,8 +124,8 @@ export const ProjectVisual: React.FC<ProjectVisualProps> = ({ projectId }) => {
 
           {/* Prompt input feedback */}
           <div className="flex items-center gap-1.5 font-mono text-[8px] text-left bg-[#161616] p-1.5 rounded border border-[#2A2A2A]/40 mt-1 select-none">
-            <span className="text-[#22C55E]">Tamil-NLP:</span>
-            <span className="text-[#F8F8F8]">சிஸ்டம் என்ன பண்ணுது?</span>
+            <span className="text-[#22C55E]">Thanglish-NLP:</span>
+            <span className="text-[#F8F8F8]">Vanakam friend</span>
           </div>
 
         </div>
@@ -144,21 +144,21 @@ export const ProjectVisual: React.FC<ProjectVisualProps> = ({ projectId }) => {
           <div className="flex items-center justify-between bg-[#161616]/80 p-2 rounded border border-[#2A2A2A]">
             <div className="flex items-center gap-2">
               <User className="w-3.5 h-3.5 text-[#DC2626]/80" />
-              <span className="text-[#F8F8F8]">Karthikeyan C</span>
+              <span className="text-[#F8F8F8]">Karthik</span>
             </div>
             <span className="text-[#22C55E] font-semibold">92.5%</span>
           </div>
           <div className="flex items-center justify-between bg-[#161616]/80 p-2 rounded border border-[#2A2A2A]">
             <div className="flex items-center gap-2">
               <User className="w-3.5 h-3.5 text-[#A8A8A8]/80" />
-              <span>Adithya Sharma</span>
+              <span>Padhmasri</span>
             </div>
             <span className="text-[#F59E0B]">87.2%</span>
           </div>
           <div className="flex items-center justify-between bg-[#161616]/80 p-2 rounded border border-[#2A2A2A]">
             <div className="flex items-center gap-2">
               <User className="w-3.5 h-3.5 text-[#A8A8A8]/80" />
-              <span>Priya Nair</span>
+              <span>Abinaya</span>
             </div>
             <span className="text-[#22C55E] font-semibold">95.0%</span>
           </div>
