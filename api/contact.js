@@ -122,7 +122,7 @@ module.exports = async (req, res) => {
     // Gmail also weighs sender reputation, which builds over time and improves when
     // recipients mark messages as "Not Spam."
     const mailOptions = {
-      from: `"Karthik CK" <${process.env.EMAIL_USER}>`,
+      from: `"From Portfolio" <${process.env.EMAIL_USER}>`,
       replyTo: email,
       to: process.env.RECEIVER_EMAIL,
       subject: `New Portfolio Contact: ${subject}`,
