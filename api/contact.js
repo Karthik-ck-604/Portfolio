@@ -4,6 +4,8 @@ const RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000;
 const MAX_REQUESTS_PER_WINDOW = 5;
 const requestLog = new Map();
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const portfolioUrl = (process.env.PORTFOLIO_URL || "https://karthik-portfolio.com").replace(/\/$/, "");
+const coverPhotoUrl = `${portfolioUrl}/assets/cover-photo.png`;
 
 const escapeHtml = (value) => String(value)
   .replace(/&/g, "&amp;")
@@ -96,7 +98,7 @@ module.exports = async (req, res) => {
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:680px;margin:0 auto;background:#1b1b1b;border:1px solid #3a3a3a;border-radius:12px;overflow:hidden;color:#f8f8f8">
         <tr>
           <td style="background:#252525;font-size:0;line-height:0">
-            <img src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1200&q=85" width="680" height="200" alt="Karthik CK Portfolio" style="display:block;width:100%;max-width:680px;height:200px;border:0;outline:none;text-decoration:none;background:#252525;color:#f8f8f8;font-size:16px;line-height:200px;text-align:center">
+            <img src="${coverPhotoUrl}" width="680" height="200" alt="Karthik CK Portfolio" style="display:block;width:100%;max-width:680px;height:200px;border:0;outline:none;text-decoration:none;background:#252525;color:#f8f8f8;font-size:16px;line-height:200px;text-align:center">
           </td>
         </tr>
         <tr>
