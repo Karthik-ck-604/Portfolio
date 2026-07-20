@@ -92,24 +92,71 @@ module.exports = async (req, res) => {
   const { name, email, subject, message } = clean;
   const mailtoEmail = encodeURIComponent(clean.email);
   const emailHtml = `
-    <div style="margin:0;padding:24px;font-family:Arial,sans-serif;line-height:1.6;color:#242424">
-      <div style="max-width:680px;margin:0 auto;background:#1b1b1b;border:1px solid #3a3a3a;border-radius:12px;overflow:hidden;color:#f8f8f8">
-        <div style="padding:24px 28px;border-bottom:3px solid #dc2626">
-          <p style="margin:0;color:#ef4444;font-size:12px;font-weight:700;letter-spacing:1px">Portfolio contact</p>
-          <h1 style="margin:8px 0 0;font-size:24px;color:#f8f8f8">New message from your portfolio</h1>
-        </div>
-        <div style="padding:28px">
-          <p style="margin:0 0 8px;color:#b8b8b8;font-size:12px;letter-spacing:1px">Name</p>
-          <p style="margin:0 0 20px;color:#f8f8f8">${safe.name}</p>
-          <p style="margin:0 0 8px;color:#b8b8b8;font-size:12px;letter-spacing:1px">Email</p>
-          <p style="margin:0 0 20px"><a href="mailto:${mailtoEmail}" style="color:#ef4444">${safe.email}</a></p>
-          <p style="margin:0 0 8px;color:#b8b8b8;font-size:12px;letter-spacing:1px">Subject</p>
-          <p style="margin:0 0 20px;color:#f8f8f8">${safe.subject}</p>
-          <p style="margin:0 0 8px;color:#b8b8b8;font-size:12px;letter-spacing:1px">Message</p>
-          <div style="padding:18px;border:1px solid #3a3a3a;border-left:3px solid #dc2626;border-radius:4px;color:#f8f8f8;white-space:pre-wrap">${safe.message}</div>
-        </div>
-        <div style="padding:18px 28px;border-top:1px solid #2a2a2a;color:#a8a8a8;font-size:12px">&mdash;<br>Sent from karthik-portfolio.com contact form</div>
-      </div>
+    <div style="margin:0;padding:24px;background:#f3f4f6;font-family:'Helvetica Neue',Arial,sans-serif;line-height:1.6;color:#242424">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:680px;margin:0 auto;background:#1b1b1b;border:1px solid #3a3a3a;border-radius:12px;overflow:hidden;color:#f8f8f8">
+        <tr>
+          <td style="background:#252525;font-size:0;line-height:0">
+            <img src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1200&q=85" width="680" height="200" alt="Karthik CK Portfolio" style="display:block;width:100%;max-width:680px;height:200px;border:0;outline:none;text-decoration:none;background:#252525;color:#f8f8f8;font-size:16px;line-height:200px;text-align:center">
+          </td>
+        </tr>
+        <tr>
+          <td style="height:10px;line-height:10px;font-size:0;background:#1b1b1b;background-image:linear-gradient(90deg,#101010 0%,#3b1216 50%,#101010 100%)">&nbsp;</td>
+        </tr>
+        <tr>
+          <td style="padding:28px 28px 24px;border-bottom:3px solid #dc2626">
+            <span style="display:inline-block;padding:5px 10px;border:1px solid #653035;border-radius:999px;background:#111111;color:#ef4444;font-size:11px;font-weight:700;letter-spacing:1px;line-height:1.2">PORTFOLIO CONTACT</span>
+            <h1 style="margin:18px 0 0;font-family:'Helvetica Neue',Arial,sans-serif;font-size:27px;line-height:1.25;font-weight:700;color:#f8f8f8">New message from your portfolio</h1>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:28px">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td width="50%" valign="top" style="padding:0 8px 16px 0">
+                  <div style="padding:14px 15px;border:1px solid #3a3a3a;border-radius:8px;background:#202020">
+                    <p style="margin:0 0 4px;color:#a8a8a8;font-size:11px;font-weight:700;letter-spacing:1px">NAME</p>
+                    <p style="margin:0;color:#f8f8f8;font-size:15px;word-break:break-word">${safe.name}</p>
+                  </div>
+                </td>
+                <td width="50%" valign="top" style="padding:0 0 16px 8px">
+                  <div style="padding:14px 15px;border:1px solid #3a3a3a;border-radius:8px;background:#202020">
+                    <p style="margin:0 0 4px;color:#a8a8a8;font-size:11px;font-weight:700;letter-spacing:1px">EMAIL</p>
+                    <p style="margin:0;font-size:15px;word-break:break-word"><a href="mailto:${mailtoEmail}" style="color:#ef4444;text-decoration:none">${safe.email}</a></p>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2" style="padding:0 0 22px">
+                  <div style="padding:14px 15px;border:1px solid #3a3a3a;border-radius:8px;background:#202020">
+                    <p style="margin:0 0 4px;color:#a8a8a8;font-size:11px;font-weight:700;letter-spacing:1px">SUBJECT</p>
+                    <p style="margin:0;color:#f8f8f8;font-size:15px;word-break:break-word">${safe.subject}</p>
+                  </div>
+                </td>
+              </tr>
+            </table>
+            <p style="margin:0 0 8px;color:#b8b8b8;font-size:11px;font-weight:700;letter-spacing:1px">MESSAGE</p>
+            <div style="padding:20px;border:1px solid #3a3a3a;border-left:3px solid #e63946;border-radius:8px;background:#202020;color:#f8f8f8;font-size:15px;line-height:1.75;white-space:pre-wrap;word-break:break-word">${safe.message}</div>
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-top:24px">
+              <tr>
+                <td style="border-radius:7px;background:#e63946;box-shadow:0 2px 6px rgba(230,57,70,0.3)">
+                  <a href="mailto:${mailtoEmail}" style="display:inline-block;padding:13px 20px;border-radius:7px;color:#ffffff;font-size:14px;font-weight:700;line-height:1;text-decoration:none">Reply to ${safe.name} &rarr;</a>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:18px 28px;border-top:1px solid #2a2a2a;background:#171717;text-align:center">
+            <p style="margin:0 0 12px;color:#a8a8a8;font-size:12px">&mdash;</p>
+            <p style="margin:0 0 12px">
+              <a href="https://karthik-portfolio.com" style="display:inline-block;width:28px;height:28px;margin:0 4px;border:1px solid #454545;border-radius:50%;background:#252525;color:#f8f8f8;font-size:11px;font-weight:700;line-height:28px;text-align:center;text-decoration:none" aria-label="Portfolio">P</a>
+              <a href="https://github.com/Karthik-ck-604" style="display:inline-block;width:28px;height:28px;margin:0 4px;border:1px solid #454545;border-radius:50%;background:#252525;color:#f8f8f8;font-size:11px;font-weight:700;line-height:28px;text-align:center;text-decoration:none" aria-label="GitHub">GH</a>
+              <a href="https://linkedin.com/in/karthikeyan-cfsd" style="display:inline-block;width:28px;height:28px;margin:0 4px;border:1px solid #454545;border-radius:50%;background:#252525;color:#f8f8f8;font-size:10px;font-weight:700;line-height:28px;text-align:center;text-decoration:none" aria-label="LinkedIn">in</a>
+            </p>
+            <p style="margin:0;color:#5a5a5a;font-size:11px;line-height:1.4">Sent from karthik-portfolio.com contact form</p>
+          </td>
+        </tr>
+      </table>
     </div>`;
 
   try {
