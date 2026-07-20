@@ -101,17 +101,20 @@ module.exports = async (req, res) => {
         <style>
           @media only screen and (max-width: 600px) {
             .email-container { width: 100% !important; }
+            .email-shell { padding: 16px !important; }
             .two-column-cell { display: block !important; width: 100% !important; box-sizing: border-box !important; }
-            .cover-image { height: auto !important; }
+            .cover-image { width: 100% !important; height: 180px !important; }
           }
         </style>
       </head>
-      <body style="margin:0;padding:0">
-        <div style="margin:0;padding:24px;background:#f3f4f6;font-family:'Helvetica Neue',Arial,sans-serif;line-height:1.6;color:#242424">
-      <table role="presentation" class="email-container" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;margin:0 auto;background:#1b1b1b;border:1px solid #3a3a3a;border-radius:12px;overflow:hidden;color:#f8f8f8">
+      <body style="margin:0;padding:0;background:#f3f4f6;font-family:'Helvetica Neue',Arial,sans-serif;line-height:1.6;color:#242424">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:0;background:#f3f4f6">
+          <tr>
+            <td class="email-shell" align="center" style="padding:0">
+              <table role="presentation" class="email-container" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;margin:0 auto;background:#1b1b1b;border:1px solid #3a3a3a;border-radius:12px;overflow:hidden;color:#f8f8f8">
         <tr>
           <td style="background:#252525;font-size:0;line-height:0">
-            <img src="${coverPhotoUrl}" class="cover-image" width="600" height="200" alt="Karthik CK Portfolio" style="display:block;width:100%;max-width:100%;height:200px;border:0;outline:none;text-decoration:none;object-fit:cover;background:#252525;color:#f8f8f8;font-size:16px;line-height:200px;text-align:center">
+            <img src="${coverPhotoUrl}" class="cover-image" width="600" height="180" alt="Karthik CK Portfolio" style="display:block;width:100%;max-width:600px;height:180px;border:0;outline:none;text-decoration:none;object-fit:cover;background:#252525;color:#f8f8f8;font-size:16px;line-height:180px;text-align:center">
           </td>
         </tr>
         <tr>
@@ -164,15 +167,17 @@ module.exports = async (req, res) => {
           <td style="padding:18px 28px;border-top:1px solid #2a2a2a;background:#171717;text-align:center">
             <p style="margin:0 0 12px;color:#a8a8a8;font-size:12px">&mdash;</p>
             <p style="margin:0 0 12px">
-              <a href="https://karthik-portfolio.com" style="display:inline-block;width:28px;height:28px;margin:0 4px;border:1px solid #454545;border-radius:50%;background:#252525;color:#f8f8f8;font-size:11px;font-weight:700;line-height:28px;text-align:center;text-decoration:none" aria-label="Portfolio">P</a>
+              <a href="${portfolioUrl}" style="display:inline-block;width:28px;height:28px;margin:0 4px;border:1px solid #454545;border-radius:50%;background:#252525;color:#f8f8f8;font-size:11px;font-weight:700;line-height:28px;text-align:center;text-decoration:none" aria-label="Portfolio">P</a>
               <a href="https://github.com/Karthik-ck-604" style="display:inline-block;width:28px;height:28px;margin:0 4px;border:1px solid #454545;border-radius:50%;background:#252525;color:#f8f8f8;font-size:11px;font-weight:700;line-height:28px;text-align:center;text-decoration:none" aria-label="GitHub">GH</a>
               <a href="https://linkedin.com/in/karthikeyan-cfsd" style="display:inline-block;width:28px;height:28px;margin:0 4px;border:1px solid #454545;border-radius:50%;background:#252525;color:#f8f8f8;font-size:10px;font-weight:700;line-height:28px;text-align:center;text-decoration:none" aria-label="LinkedIn">in</a>
             </p>
-            <p style="margin:0;color:#5a5a5a;font-size:11px;line-height:1.4">Sent from karthik-portfolio.com contact form</p>
+            <p style="margin:0;color:#5a5a5a;font-size:11px;line-height:1.4">Sent from your portfolio contact form</p>
           </td>
         </tr>
-      </table>
-        </div>
+              </table>
+            </td>
+          </tr>
+        </table>
       </body>
     </html>`;
 
