@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { ArrowUp, Github, Linkedin, Mail } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import logoImg from "@/logo.png";
+
+const logoImg = "/assets/logo.png";
 
 export const Footer: React.FC = () => {
   const [showScrollTop, setShowScrollTop] = useState(false);

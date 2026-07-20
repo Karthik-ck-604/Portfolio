@@ -45,5 +45,5 @@ export const profile: Profile = {
     { value: "10+", label: "Completed Projects" },
     { value: "2026", label: "Graduate Year" }
   ],
-  resumeUrl: "/cert_generative_ai.pdf" // Using a local PDF file path for the resume download
+  resumeUrl: "/assets/cert_generative_ai.pdf"
 };

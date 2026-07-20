@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, useReducedMotion, TargetAndTransition } from "framer-motion";
-import profileImg from "@/hero_section_profile.png";
+
+const profileImg = "/assets/hero_section_profile.png";
 
 interface HeroVisualProps {
   isLoaded?: boolean;

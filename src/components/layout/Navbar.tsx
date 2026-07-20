@@ -4,7 +4,8 @@ import { Menu, X, ArrowUpRight } from "lucide-react";
 import { useActiveSection } from "@/hooks/useActiveSection";
 import { Button } from "@/components/common/Button";
 import { cn } from "@/lib/utils";
-import logoImg from "@/logo.png";
+
+const logoImg = "/assets/logo.png";
 
 interface NavbarProps {
   isLoaded?: boolean;
@@ -210,7 +211,7 @@ export const Navbar: React.FC<NavbarProps> = ({ isLoaded = true }) => {
           {/* Right CTA Button */}
           <div className="hidden lg:block">
             <Button
-              href="/cert_oracle.png" // Local certificate mapping as fallback download path
+              href="/assets/cert_generative_ai.pdf"
               target="_blank"
               rel="noopener noreferrer"
               variant="secondary"
@@ -295,7 +296,7 @@ export const Navbar: React.FC<NavbarProps> = ({ isLoaded = true }) => {
 
               <div className="mt-auto pt-4">
                 <Button
-                  href="/cert_oracle.png"
+                  href="/assets/cert_generative_ai.pdf"
                   target="_blank"
                   rel="noopener noreferrer"
                   variant="primary"

@@ -8,9 +8,8 @@ import { Badge } from "@/components/common/Badge";
 import { DocumentViewerModal } from "@/components/common/DocumentViewerModal";
 import { staggerContainer, fadeUp } from "@/utils/motion";
 
-// Import publication certificates as static assets
-import certYMER from "@/cert_YMER .jpg";
-import certIEJ from "@/cert_Industrial Engineering Journal .png";
+const certYMER = "/assets/cert_YMER .jpg";
+const certIEJ = "/assets/cert_Industrial Engineering Journal .png";
 
 // Map each publication to its certificate image
 const pubCertMap: Record<string, { img: string; label: string }> = {
