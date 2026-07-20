@@ -564,6 +564,7 @@ export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
             <img
               src={logoImg}
               alt="KC Monogram"
+              draggable={false}
               className="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 object-contain filter brightness-[1.1]"
             />
           </motion.div>

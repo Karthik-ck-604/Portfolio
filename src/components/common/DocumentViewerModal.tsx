@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { X, ZoomIn, ZoomOut, Download, ExternalLink } from "lucide-react";
+import { X, ZoomIn, ZoomOut, Download } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/common/Button";
 
@@ -9,6 +9,19 @@ interface DocumentViewerModalProps {
   fileUrl: string;
   title: string;
 }
+
+export const downloadDocument = async (fileUrl: string) => {
+  const response = await fetch(fileUrl);
+  if (!response.ok) throw new Error("Download failed");
+  const blobUrl = URL.createObjectURL(await response.blob());
+  const link = document.createElement("a");
+  link.href = blobUrl;
+  link.download = fileUrl.split("/").pop() || "document";
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(blobUrl);
+};
 
 export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
   isOpen,
@@ -53,6 +66,14 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
       setZoom(1.75);
     } else {
       setZoom(1.0);
+    }
+  };
+
+  const handleControlledDownload = async () => {
+    try {
+      await downloadDocument(fileUrl);
+    } catch (error) {
+      console.error("Unable to download document:", error);
     }
   };
 
@@ -235,8 +256,7 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
                 {/* Download option (Only for real files) */}
                 {!isMockPub && (
                   <Button
-                    href={fileUrl}
-                    download
+                    onClick={handleControlledDownload}
                     variant="secondary"
                     size="sm"
                     icon={<Download className="w-3.5 h-3.5" />}
@@ -259,7 +279,7 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
             </div>
 
             {/* Document display viewport */}
-            <div className="flex-1 w-full bg-[#050505] overflow-auto flex items-center justify-center p-6 relative">
+            <div className="document-viewer flex-1 w-full bg-[#050505] overflow-auto flex items-center justify-center p-6 relative" onContextMenu={(event) => event.preventDefault()}>
               {isMockPub ? (
                 // Scholarly mock reader
                 <div
@@ -276,9 +296,9 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
                 </div>
               ) : isPdf ? (
                 // PDF Viewer
-                <object
-                  data={fileUrl}
-                  type="application/pdf"
+                <iframe
+                  src={`${fileUrl}#toolbar=0&navpanes=0`}
+                  title={title}
                   className="w-full h-full rounded-lg"
                 >
                   <div className="flex flex-col items-center justify-center text-center gap-4 py-12">
@@ -287,8 +307,7 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
                     </p>
                     <div className="flex gap-4">
                       <Button
-                        href={fileUrl}
-                        download
+                        onClick={handleControlledDownload}
                         variant="primary"
                         size="sm"
                         icon={<Download className="w-4 h-4" />}
@@ -296,20 +315,9 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
                       >
                         Download PDF
                       </Button>
-                      <Button
-                        href={fileUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        variant="secondary"
-                        size="sm"
-                        icon={<ExternalLink className="w-3.5 h-3.5" />}
-                        ariaLabel="Open PDF in new tab"
-                      >
-                        Open in New Tab
-                      </Button>
                     </div>
                   </div>
-                </object>
+                </iframe>
               ) : (
                 // Image Viewer
                 <div
@@ -326,6 +334,7 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
                     style={{ originX: 0.5, originY: 0.5 }}
                     data-cursor={zoom === 1.0 ? "zoom-in" : "zoom-out"}
                     onClick={handleImageClick}
+                    draggable={false}
                   />
                 </div>
               )}

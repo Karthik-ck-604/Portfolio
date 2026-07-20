@@ -55,12 +55,11 @@ export default function App() {
     ]
   };
 
-  const handleContextMenu = (e: React.MouseEvent<HTMLElement>) => {
-    const target = e.target as HTMLElement | null;
-    if (target?.closest("#contact input, #contact textarea, #contact select, #contact [contenteditable='true']")) {
-      return;
+  const handleAssetContextMenu = (event: React.MouseEvent<HTMLElement>) => {
+    const target = event.target as HTMLElement | null;
+    if (target?.closest("img, .document-viewer")) {
+      event.preventDefault();
     }
-    e.preventDefault();
   };
 
   return (
@@ -90,10 +89,7 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      <div
-        className="min-h-screen bg-[#050505] text-[#F8F8F8] antialiased font-sans overflow-x-hidden"
-        onContextMenu={handleContextMenu}
-      >
+      <div className="min-h-screen bg-[#050505] text-[#F8F8F8] antialiased font-sans overflow-x-hidden" onContextMenu={handleAssetContextMenu}>
         <SkipToContent />
         <ScrollProgress />
         <CursorGlow />

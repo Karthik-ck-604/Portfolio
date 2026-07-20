@@ -4,6 +4,7 @@ import { Menu, X, ArrowUpRight } from "lucide-react";
 import { useActiveSection } from "@/hooks/useActiveSection";
 import { Button } from "@/components/common/Button";
 import { cn } from "@/lib/utils";
+import { downloadDocument } from "@/components/common/DocumentViewerModal";
 
 const logoImg = "/assets/logo.png";
 
@@ -18,6 +19,14 @@ export const Navbar: React.FC<NavbarProps> = ({ isLoaded = true }) => {
   const sectionIds = ["hero", "about", "skills", "experience", "projects", "certifications", "publications", "contact"];
   const activeSection = useActiveSection(sectionIds);
   const { scrollY } = useScroll();
+
+  const handleResumeDownload = async () => {
+    try {
+      await downloadDocument("/assets/cert_generative_ai.pdf");
+    } catch (error) {
+      console.error("Unable to download resume:", error);
+    }
+  };
 
   // Track scroll position dynamically with Framer Motion (optimized, updates state only on state changes)
   useMotionValueEvent(scrollY, "change", (latest) => {
@@ -173,6 +182,7 @@ export const Navbar: React.FC<NavbarProps> = ({ isLoaded = true }) => {
             <img
               src={logoImg}
               alt="CK Logo"
+              draggable={false}
               className="w-10 h-10 object-contain transition-transform duration-300 group-hover:scale-105"
             />
           </a>
@@ -211,9 +221,7 @@ export const Navbar: React.FC<NavbarProps> = ({ isLoaded = true }) => {
           {/* Right CTA Button */}
           <div className="hidden lg:block">
             <Button
-              href="/assets/cert_generative_ai.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
+              onClick={handleResumeDownload}
               variant="secondary"
               size="sm"
               magnetic={true}
@@ -296,9 +304,7 @@ export const Navbar: React.FC<NavbarProps> = ({ isLoaded = true }) => {
 
               <div className="mt-auto pt-4">
                 <Button
-                  href="/assets/cert_generative_ai.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  onClick={handleResumeDownload}
                   variant="primary"
                   className="w-full min-h-11"
                   ariaLabel="Download Resume PDF"

@@ -77,6 +77,7 @@ export const Footer: React.FC = () => {
               <img
                 src={logoImg}
                 alt="CK Logo"
+                draggable={false}
                 className="w-9 h-9 object-contain transition-transform duration-300 group-hover:scale-110"
               />
             </a>

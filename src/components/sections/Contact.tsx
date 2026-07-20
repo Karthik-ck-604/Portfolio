@@ -17,10 +17,12 @@ const contactSchema = z.object({
 });
 
 type ContactFormData = z.infer<typeof contactSchema>;
+type ContactSubmissionData = ContactFormData & { _subject: string; _gotcha: string };
 
 export const Contact: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState(false);
   const [emailCopied, setEmailCopied] = useState(false);
 
   useEffect(() => {
@@ -43,25 +45,50 @@ export const Contact: React.FC = () => {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
     reset
-  } = useForm<ContactFormData>({
+  } = useForm<ContactSubmissionData>({
     mode: "onTouched"
   });
 
-  const onSubmit = async (data: ContactFormData) => {
+  const onSubmit = async (data: ContactSubmissionData) => {
     // Validate using Zod schema as safety wrapper
     const validationResult = contactSchema.safeParse(data);
     if (!validationResult.success) return;
 
+    if (data._gotcha) return;
+
     setIsSubmitting(true);
-    
-    // Simulate API request delay
-    await new Promise((resolve) => setTimeout(resolve, 1800));
-    
-    setIsSubmitting(false);
-    setIsSuccess(true);
-    reset();
+    setSubmitError(false);
+
+    try {
+      const response = await fetch("https://formspree.io/f/mqerbpbr", {
+        method: "POST",
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          _subject: `New Portfolio Contact from ${data.name}`,
+          name: data.name,
+          email: data.email,
+          subject: data.subject,
+          message: `New message from your portfolio contact form\n\nName: ${data.name}\nEmail: ${data.email}\nSubject: ${data.subject}\n\nMessage:\n${data.message}\n\n---\nSent from karthik-portfolio.com contact form`,
+          _gotcha: ""
+        })
+      });
+
+      if (!response.ok) throw new Error("Formspree submission failed");
+
+      setIsSuccess(true);
+      reset();
+    } catch (error) {
+      console.error("Contact form submission failed:", error);
+      setSubmitError(true);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -183,9 +210,9 @@ export const Contact: React.FC = () => {
                   <div className="w-16 h-16 rounded-full bg-[#22C55E]/10 border border-[#22C55E]/20 flex items-center justify-center mb-6">
                     <CheckCircle2 className="w-8 h-8 text-[#22C55E]" />
                   </div>
-                  <h3 className="text-xl font-heading font-bold text-[#F8F8F8] mb-2">Message Sent!</h3>
+                  <h3 className="text-xl font-heading font-bold text-[#F8F8F8] mb-2">Message sent!</h3>
                   <p className="text-sm text-[#A8A8A8] max-w-sm leading-relaxed mb-6">
-                    Thank you for reaching out. Your message has been received, and I'll get back to you shortly.
+                    I'll get back to you soon.
                   </p>
                   <Button
                     onClick={() => setIsSuccess(false)}
@@ -199,6 +226,9 @@ export const Contact: React.FC = () => {
               ) : (
                 // Contact Form Element
                 <form onSubmit={handleSubmit(onSubmit)} className="contact-form flex flex-col gap-6" noValidate>
+                  {/* Formspree uses these values to set the email subject and filter bots. */}
+                  <input type="hidden" {...register("_subject")} value={`New Portfolio Contact from ${watch("name") || "{name}"}`} readOnly />
+                  <input type="text" {...register("_gotcha")} className="hidden" tabIndex={-1} autoComplete="off" aria-hidden="true" />
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                     <Input
                       id="name"
@@ -264,9 +294,15 @@ export const Contact: React.FC = () => {
                       ariaLabel="Submit contact form details"
                       className="w-full sm:w-auto"
                     >
-                      Send Message
+                      {isSubmitting ? "Sending..." : "Send Message"}
                     </Button>
                   </div>
+
+                  {submitError && (
+                    <p role="alert" className="text-sm text-[#EF4444] text-center sm:text-right">
+                      Something went wrong. Please email me directly at <a href="mailto:karthikeyan610204@gmail.com" className="underline hover:text-[#F8F8F8]">karthikeyan610204@gmail.com</a>.
+                    </p>
+                  )}
                 </form>
               )}
             </Card>

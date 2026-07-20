@@ -135,6 +135,7 @@ export const Publications: React.FC = () => {
                           <img
                             src={cert.img}
                             alt={cert.label}
+                            draggable={false}
                             className="w-full h-auto object-cover group-hover:scale-[1.03] transition-transform duration-300"
                           />
                           {/* Hover overlay */}
