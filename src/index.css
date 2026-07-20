@@ -111,7 +111,7 @@
   -webkit-touch-callout: default !important;
 }
 
-/* Casual asset-protection deterrents: source files remain accessible to browser tools. */
+/* Casual asset-protection deterrents only: DevTools and the Network tab can still access assets. */
 img,
 .document-viewer {
   user-select: none;

@@ -17,7 +17,7 @@ const contactSchema = z.object({
 });
 
 type ContactFormData = z.infer<typeof contactSchema>;
-type ContactSubmissionData = ContactFormData & { _subject: string; _gotcha: string };
+const contactApiUrl = import.meta.env.VITE_CONTACT_API_URL || "/api/contact";
 
 export const Contact: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -45,41 +45,29 @@ export const Contact: React.FC = () => {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
     reset
-  } = useForm<ContactSubmissionData>({
+  } = useForm<ContactFormData>({
     mode: "onTouched"
   });
 
-  const onSubmit = async (data: ContactSubmissionData) => {
+  const onSubmit = async (data: ContactFormData) => {
     // Validate using Zod schema as safety wrapper
     const validationResult = contactSchema.safeParse(data);
     if (!validationResult.success) return;
-
-    if (data._gotcha) return;
 
     setIsSubmitting(true);
     setSubmitError(false);
 
     try {
-      const response = await fetch("https://formspree.io/f/mqerbpbr", {
+      const response = await fetch(contactApiUrl, {
         method: "POST",
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          _subject: `New Portfolio Contact from ${data.name}`,
-          name: data.name,
-          email: data.email,
-          subject: data.subject,
-          message: `New message from your portfolio contact form\n\nName: ${data.name}\nEmail: ${data.email}\nSubject: ${data.subject}\n\nMessage:\n${data.message}\n\n---\nSent from karthik-portfolio.com contact form`,
-          _gotcha: ""
-        })
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
       });
+      const result = await response.json().catch(() => null);
 
-      if (!response.ok) throw new Error("Formspree submission failed");
+      if (!response.ok || !result?.success) throw new Error("Contact form submission failed");
 
       setIsSuccess(true);
       reset();
@@ -226,9 +214,6 @@ export const Contact: React.FC = () => {
               ) : (
                 // Contact Form Element
                 <form onSubmit={handleSubmit(onSubmit)} className="contact-form flex flex-col gap-6" noValidate>
-                  {/* Formspree uses these values to set the email subject and filter bots. */}
-                  <input type="hidden" {...register("_subject")} value={`New Portfolio Contact from ${watch("name") || "{name}"}`} readOnly />
-                  <input type="text" {...register("_gotcha")} className="hidden" tabIndex={-1} autoComplete="off" aria-hidden="true" />
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                     <Input
                       id="name"

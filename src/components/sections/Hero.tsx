@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import {
   Github, Linkedin, Mail, ArrowRight, ArrowDown,
@@ -7,7 +7,7 @@ import {
 import { profile } from "@/data/profile";
 import { socialLinks } from "@/data/socials";
 import { Button } from "@/components/common/Button";
-import { downloadDocument } from "@/components/common/DocumentViewerModal";
+import { DocumentViewerModal, downloadDocument } from "@/components/common/DocumentViewerModal";
 import { HeroBackground } from "./HeroBackground";
 import { HeroVisual } from "./HeroVisual";
 import { useAnimatedCounter } from "@/hooks/useAnimatedCounter";
@@ -72,6 +72,8 @@ interface HeroProps {
 }
 
 export const Hero: React.FC<HeroProps> = ({ isLoaded = true }) => {
+  const [isResumeViewerOpen, setIsResumeViewerOpen] = useState(false);
+
   const handleResumeDownload = async () => {
     try {
       await downloadDocument(profile.resumeUrl);
@@ -194,6 +196,17 @@ export const Hero: React.FC<HeroProps> = ({ isLoaded = true }) => {
               View Projects
             </Button>
 
+            <Button
+              type="button"
+              onClick={() => setIsResumeViewerOpen(true)}
+              variant="secondary"
+              size="md"
+              ariaLabel="View resume"
+              className="w-full sm:w-auto"
+            >
+              View Resume
+            </Button>
+
             {/* Download Resume — solid border for clear visibility on dark bg */}
             <button
               type="button"
@@ -256,6 +269,14 @@ export const Hero: React.FC<HeroProps> = ({ isLoaded = true }) => {
           <HeroVisual isLoaded={isLoaded} />
         </div>
       </div>
+
+      {/* The PDF stays in an embedded viewer; downloading only occurs through the controlled button. */}
+      <DocumentViewerModal
+        isOpen={isResumeViewerOpen}
+        onClose={() => setIsResumeViewerOpen(false)}
+        fileUrl={profile.resumeUrl}
+        title="Karthikeyan C Resume"
+      />
 
       {/* Floating scroll indicator */}
       <motion.div
