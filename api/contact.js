@@ -4,7 +4,7 @@ const RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000;
 const MAX_REQUESTS_PER_WINDOW = 5;
 const requestLog = new Map();
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const portfolioUrl = (process.env.PORTFOLIO_URL || "https://karthik-portfolio.com").replace(/\/$/, "");
+const portfolioUrl = (process.env.PORTFOLIO_URL || "https://karthikeyan-c.vercel.app").replace(/\/$/, "");
 const coverPhotoUrl = `${portfolioUrl}/assets/cover-photo.png`;
 
 const escapeHtml = (value) => String(value)
@@ -94,11 +94,24 @@ module.exports = async (req, res) => {
   const { name, email, subject, message } = clean;
   const mailtoEmail = encodeURIComponent(clean.email);
   const emailHtml = `
-    <div style="margin:0;padding:24px;background:#f3f4f6;font-family:'Helvetica Neue',Arial,sans-serif;line-height:1.6;color:#242424">
-      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:680px;margin:0 auto;background:#1b1b1b;border:1px solid #3a3a3a;border-radius:12px;overflow:hidden;color:#f8f8f8">
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+          @media only screen and (max-width: 600px) {
+            .email-container { width: 100% !important; }
+            .two-column-cell { display: block !important; width: 100% !important; box-sizing: border-box !important; }
+            .cover-image { height: auto !important; }
+          }
+        </style>
+      </head>
+      <body style="margin:0;padding:0">
+        <div style="margin:0;padding:24px;background:#f3f4f6;font-family:'Helvetica Neue',Arial,sans-serif;line-height:1.6;color:#242424">
+      <table role="presentation" class="email-container" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;margin:0 auto;background:#1b1b1b;border:1px solid #3a3a3a;border-radius:12px;overflow:hidden;color:#f8f8f8">
         <tr>
           <td style="background:#252525;font-size:0;line-height:0">
-            <img src="${coverPhotoUrl}" width="680" height="200" alt="Karthik CK Portfolio" style="display:block;width:100%;max-width:680px;height:200px;border:0;outline:none;text-decoration:none;background:#252525;color:#f8f8f8;font-size:16px;line-height:200px;text-align:center">
+            <img src="${coverPhotoUrl}" class="cover-image" width="600" height="200" alt="Karthik CK Portfolio" style="display:block;width:100%;max-width:100%;height:200px;border:0;outline:none;text-decoration:none;object-fit:cover;background:#252525;color:#f8f8f8;font-size:16px;line-height:200px;text-align:center">
           </td>
         </tr>
         <tr>
@@ -114,13 +127,13 @@ module.exports = async (req, res) => {
           <td style="padding:28px">
             <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
               <tr>
-                <td width="50%" valign="top" style="padding:0 8px 16px 0">
+                <td class="two-column-cell" width="50%" valign="top" style="width:50%;max-width:100%;padding:0 8px 16px 0">
                   <div style="padding:14px 15px;border:1px solid #3a3a3a;border-radius:8px;background:#202020">
                     <p style="margin:0 0 4px;color:#a8a8a8;font-size:11px;font-weight:700;letter-spacing:1px">NAME</p>
                     <p style="margin:0;color:#f8f8f8;font-size:15px;word-break:break-word">${safe.name}</p>
                   </div>
                 </td>
-                <td width="50%" valign="top" style="padding:0 0 16px 8px">
+                <td class="two-column-cell" width="50%" valign="top" style="width:50%;max-width:100%;padding:0 0 16px 8px">
                   <div style="padding:14px 15px;border:1px solid #3a3a3a;border-radius:8px;background:#202020">
                     <p style="margin:0 0 4px;color:#a8a8a8;font-size:11px;font-weight:700;letter-spacing:1px">EMAIL</p>
                     <p style="margin:0;font-size:15px;word-break:break-word"><a href="mailto:${mailtoEmail}" style="color:#ef4444;text-decoration:none">${safe.email}</a></p>
@@ -141,7 +154,7 @@ module.exports = async (req, res) => {
             <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-top:24px">
               <tr>
                 <td style="border-radius:7px;background:#e63946;box-shadow:0 2px 6px rgba(230,57,70,0.3)">
-                  <a href="mailto:${mailtoEmail}" style="display:inline-block;padding:13px 20px;border-radius:7px;color:#ffffff;font-size:14px;font-weight:700;line-height:1;text-decoration:none">Reply to ${safe.name} &rarr;</a>
+                  <a href="mailto:${mailtoEmail}" style="display:inline-block;max-width:100%;box-sizing:border-box;padding:13px 20px;border-radius:7px;color:#ffffff;font-size:14px;font-weight:700;line-height:1;text-decoration:none;overflow-wrap:anywhere">Reply to ${safe.name} &rarr;</a>
                 </td>
               </tr>
             </table>
@@ -159,7 +172,9 @@ module.exports = async (req, res) => {
           </td>
         </tr>
       </table>
-    </div>`;
+        </div>
+      </body>
+    </html>`;
 
   try {
     const transporter = nodemailer.createTransport({
