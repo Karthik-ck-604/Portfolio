@@ -4,7 +4,8 @@ import { Menu, X, ArrowUpRight } from "lucide-react";
 import { useActiveSection } from "@/hooks/useActiveSection";
 import { Button } from "@/components/common/Button";
 import { cn } from "@/lib/utils";
-import { downloadDocument } from "@/components/common/DocumentViewerModal";
+import { scrollToSection } from "@/lib/scrollToSection";
+import { socialLinks } from "@/data/socials";
 
 const logoImg = "/assets/logo.png";
 
@@ -19,14 +20,7 @@ export const Navbar: React.FC<NavbarProps> = ({ isLoaded = true }) => {
   const sectionIds = ["hero", "about", "skills", "experience", "projects", "certifications", "publications", "contact"];
   const activeSection = useActiveSection(sectionIds);
   const { scrollY } = useScroll();
-
-  const handleResumeDownload = async () => {
-    try {
-      await downloadDocument("/assets/cert_generative_ai.pdf");
-    } catch (error) {
-      console.error("Unable to download resume:", error);
-    }
-  };
+  const githubUrl = socialLinks.find((link) => link.name === "GitHub")?.url;
 
   // Track scroll position dynamically with Framer Motion (optimized, updates state only on state changes)
   useMotionValueEvent(scrollY, "change", (latest) => {
@@ -86,16 +80,7 @@ export const Navbar: React.FC<NavbarProps> = ({ isLoaded = true }) => {
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault();
     setIsOpen(false);
-    const element = document.getElementById(id);
-    if (element) {
-      const offset = 80;
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - offset;
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: "smooth"
-      });
-    }
+    scrollToSection(id);
   };
 
   // Explicit fluid variant configuration
@@ -219,19 +204,23 @@ export const Navbar: React.FC<NavbarProps> = ({ isLoaded = true }) => {
           </LayoutGroup>
 
           {/* Right CTA Button */}
-          <div className="hidden lg:block">
-            <Button
-              onClick={handleResumeDownload}
-              variant="secondary"
-              size="sm"
-              magnetic={true}
-              icon={<ArrowUpRight className="w-3.5 h-3.5" />}
-              ariaLabel="Download Resume PDF"
-              data-cursor="pointer"
-            >
-              Resume
-            </Button>
-          </div>
+          {githubUrl && (
+            <div className="hidden lg:block">
+              <Button
+                href={githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                variant="secondary"
+                size="sm"
+                magnetic={true}
+                icon={<ArrowUpRight className="w-3.5 h-3.5" />}
+                ariaLabel="Visit GitHub profile"
+                data-cursor="pointer"
+              >
+                GitHub
+              </Button>
+            </div>
+          )}
 
           {/* Mobile Hamburguer */}
           <button
@@ -303,15 +292,20 @@ export const Navbar: React.FC<NavbarProps> = ({ isLoaded = true }) => {
               </nav>
 
               <div className="mt-auto pt-4">
-                <Button
-                  onClick={handleResumeDownload}
-                  variant="primary"
-                  className="w-full min-h-11"
-                  ariaLabel="Download Resume PDF"
-                  data-cursor="pointer"
-                >
-                  Download Resume
-                </Button>
+                {githubUrl && (
+                  <Button
+                    href={githubUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    variant="primary"
+                    className="w-full min-h-11"
+                    icon={<ArrowUpRight className="w-3.5 h-3.5" />}
+                    ariaLabel="Visit GitHub profile"
+                    data-cursor="pointer"
+                  >
+                    GitHub
+                  </Button>
+                )}
               </div>
             </motion.div>
           </>

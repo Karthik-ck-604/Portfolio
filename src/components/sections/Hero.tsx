@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import {
   Github, Linkedin, Mail, ArrowRight, ArrowDown,
@@ -7,7 +7,7 @@ import {
 import { profile } from "@/data/profile";
 import { socialLinks } from "@/data/socials";
 import { Button } from "@/components/common/Button";
-import { DocumentViewerModal, downloadDocument } from "@/components/common/DocumentViewerModal";
+import { scrollToSection } from "@/lib/scrollToSection";
 import { HeroBackground } from "./HeroBackground";
 import { HeroVisual } from "./HeroVisual";
 import { useAnimatedCounter } from "@/hooks/useAnimatedCounter";
@@ -72,32 +72,19 @@ interface HeroProps {
 }
 
 export const Hero: React.FC<HeroProps> = ({ isLoaded = true }) => {
-  const [isResumeViewerOpen, setIsResumeViewerOpen] = useState(false);
-
-  const handleResumeDownload = async () => {
-    try {
-      await downloadDocument(profile.resumeUrl);
-    } catch (error) {
-      console.error("Unable to download resume:", error);
-    }
-  };
-
   const handleScrollToProjects = (e: React.MouseEvent) => {
     e.preventDefault();
-    const target = document.getElementById("projects");
-    if (target) {
-      const offsetPosition = target.getBoundingClientRect().top + window.pageYOffset - 80;
-      window.scrollTo({ top: offsetPosition, behavior: "smooth" });
-    }
+    scrollToSection("projects");
+  };
+
+  const handleScrollToContact = (e: React.MouseEvent) => {
+    e.preventDefault();
+    scrollToSection("contact");
   };
 
   const handleScrollToAbout = (e: React.MouseEvent) => {
     e.preventDefault();
-    const target = document.getElementById("about");
-    if (target) {
-      const offsetPosition = target.getBoundingClientRect().top + window.pageYOffset - 80;
-      window.scrollTo({ top: offsetPosition, behavior: "smooth" });
-    }
+    scrollToSection("about");
   };
 
   const headingText = "Karthikeyan C";
@@ -197,26 +184,15 @@ export const Hero: React.FC<HeroProps> = ({ isLoaded = true }) => {
             </Button>
 
             <Button
-              type="button"
-              onClick={() => setIsResumeViewerOpen(true)}
+              href="#contact"
+              onClick={handleScrollToContact}
               variant="secondary"
               size="md"
-              ariaLabel="View resume"
+              ariaLabel="Get in touch"
               className="w-full sm:w-auto"
             >
-              View Resume
+              Contact Me
             </Button>
-
-            {/* Download Resume — solid border for clear visibility on dark bg */}
-            <button
-              type="button"
-              onClick={handleResumeDownload}
-              aria-label="Download PDF resume"
-              data-cursor="pointer"
-              className="w-full sm:w-auto min-h-12 inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full border-2 border-[#3A3A3A] hover:border-[#DC2626] text-[#D0D0D0] hover:text-[#F8F8F8] bg-transparent hover:bg-[#DC2626]/8 text-sm font-semibold tracking-wide transition-all duration-250 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626]"
-            >
-              Download Resume
-            </button>
           </motion.div>
 
           {/* Social Icons */}
@@ -269,14 +245,6 @@ export const Hero: React.FC<HeroProps> = ({ isLoaded = true }) => {
           <HeroVisual isLoaded={isLoaded} />
         </div>
       </div>
-
-      {/* The PDF stays in an embedded viewer; downloading only occurs through the controlled button. */}
-      <DocumentViewerModal
-        isOpen={isResumeViewerOpen}
-        onClose={() => setIsResumeViewerOpen(false)}
-        fileUrl={profile.resumeUrl}
-        title="Karthikeyan C Resume"
-      />
 
       {/* Floating scroll indicator */}
       <motion.div

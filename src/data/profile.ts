@@ -18,7 +18,6 @@ export interface Profile {
   aboutParagraphs: string[];
   education: Education;
   metrics: MetricStat[];
-  resumeUrl: string;
 }
 
 export const profile: Profile = {
@@ -42,8 +41,7 @@ export const profile: Profile = {
     { value: "4", label: "Industry Internships" },
     { value: "15+", label: "Professional Certifications" },
     { value: "3", label: "Research Publications" },
-    { value: "10+", label: "Completed Projects" },
+    { value: "6", label: "Completed Projects" },
     { value: "2026", label: "Graduate Year" }
-  ],
-  resumeUrl: "/assets/cert_generative_ai.pdf"
+  ]
 };
