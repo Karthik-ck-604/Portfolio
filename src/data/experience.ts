@@ -13,7 +13,7 @@ export const experiences: WorkExperience[] = [
   {
     role: "Full Stack Developer Intern",
     company: "Webgen Tech Solutions",
-    duration: "June 2024 - July 2024",
+    duration: "12th May 2025 - 30th June 2025",
     technologies: ["React.js", "Node.js", "Express.js", "MongoDB", "JWT", "Git"],
     summary: "Engineered web architectures and authentication flows for enterprise clients, focusing on secure communication channels and robust data management systems.",
     achievements: [
@@ -26,24 +26,9 @@ export const experiences: WorkExperience[] = [
     certificateUrl: "/assets/cert_webgen.png"
   },
   {
-    role: "MERN Stack Intern",
-    company: "Nitroware Technologies",
-    duration: "May 2024 - June 2024",
-    technologies: ["Node.js", "Express.js", "MongoDB", "Mongoose", "Postman"],
-    summary: "Focused on structural backend engineering, designing database schemas, writing optimized routing modules, and auditing API requests.",
-    achievements: [
-      "Designed and modeled clean relational schemas and NoSQL collections in MongoDB utilizing Mongoose validation.",
-      "Developed secure CRUD backend APIs with strict payload verification rules using Postman for unit endpoint audits.",
-      "Optimized query structures and database indexing mechanisms, decreasing average database retrieval times by 15%.",
-      "Drafted comprehensive backend developer API documentation, smoothing teammate feature integration."
-    ],
-    skillsGained: ["NoSQL Schema Modeling", "CRUD Architecture", "Backend Performance Tuning", "API Testing & Audit"],
-    certificateUrl: "/assets/cert_nitroware.png"
-  },
-  {
     role: "Frontend Development Internship",
     company: "Cognifyz Technologies",
-    duration: "March 2024 - April 2024",
+    duration: "4th March 2025 - 30th March 2025",
     technologies: ["React.js", "Tailwind CSS", "JavaScript", "HTML5", "CSS3"],
     summary: "Built high-performance interface screens, refactoring core code structures for maximum device flexibility and component reuse.",
     achievements: [
@@ -56,9 +41,24 @@ export const experiences: WorkExperience[] = [
     certificateUrl: "/assets/cert_cognifyz.jpg"
   },
   {
+    role: "MERN Stack Intern",
+    company: "Nitroware Technologies",
+    duration: "21st December 2024 - 10th January 2025",
+    technologies: ["Node.js", "Express.js", "MongoDB", "Mongoose", "Postman"],
+    summary: "Focused on structural backend engineering, designing database schemas, writing optimized routing modules, and auditing API requests.",
+    achievements: [
+      "Designed and modeled clean relational schemas and NoSQL collections in MongoDB utilizing Mongoose validation.",
+      "Developed secure CRUD backend APIs with strict payload verification rules using Postman for unit endpoint audits.",
+      "Optimized query structures and database indexing mechanisms, decreasing average database retrieval times by 15%.",
+      "Drafted comprehensive backend developer API documentation, smoothing teammate feature integration."
+    ],
+    skillsGained: ["NoSQL Schema Modeling", "CRUD Architecture", "Backend Performance Tuning", "API Testing & Audit"],
+    certificateUrl: "/assets/cert_nitroware.png"
+  },
+  {
     role: "Full Stack Development Intern",
     company: "Altitudes Technology",
-    duration: "December 2023 - January 2024",
+    duration: "2nd July 2024 - 26th July 2024",
     technologies: ["Python", "Django", "SQLite", "Bootstrap", "Functional Testing"],
     summary: "Contributed to web service backend scripting and automated regression testing suites for rapid software deployments.",
     achievements: [
