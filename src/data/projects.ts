@@ -17,6 +17,43 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    id: "kochen-maint",
+    name: "Kochen Maint",
+    category: "Full-Stack & AI/LLM Platform",
+    status: "In Development",
+    year: "2025",
+    problem: "Households waste food and money because pantry contents are invisible to meal planning — people cook what they remember having, not what's actually there, while dietary rules and nutrition goals go untracked.",
+    solution: "Built a full-stack AI-powered kitchen platform where users manage smart pantries, scan barcodes, and receive Google Gemini–generated recipes matched to real pantry stock while honoring dietary restrictions, nutrition targets, and auto-generated grocery lists from meal plans.",
+    outcome: "Delivered an offline-first monorepo spanning a Next.js 14 web app and React Native (Expo) mobile client with biometric auth, barcode scanning, Stripe subscription billing, a diet-coach module, conflict-resolved mobile sync, background job processing with BullMQ, and an admin dashboard with feature flags, audit logs, and analytics.",
+    technologies: ["Next.js 14", "React Native", "Expo", "NestJS", "Prisma", "PostgreSQL", "Redis", "BullMQ", "Google Gemini", "Stripe", "Docker", "GitHub Actions", "React Query", "Framer Motion", "Tailwind CSS", "JWT", "Monorepo"],
+    highlights: [
+      "Engineered a Google Gemini–powered recipe engine that generates contextual, diet-aware meal suggestions by reading live pantry inventory and user nutrition profiles.",
+      "Built barcode scanning and product ingestion pipeline in React Native (Expo) with offline-first sync and multi-device conflict resolution using vector clocks.",
+      "Designed a NestJS microservice backend with Prisma ORM, PostgreSQL, Redis caching, and BullMQ job queues handling grocery-list generation and scheduled meal-plan processing.",
+      "Implemented Stripe subscription billing with webhook event processing, role-based access control via JWT, and a full admin dashboard featuring feature flags, audit logs, and real-time analytics."
+    ],
+    githubUrl: "https://github.com/Karthik-ck-604/kochen_maint",
+  },
+  {
+    id: "devsync-ai",
+    name: "DevSync-AI",
+    category: "AI & Developer Productivity",
+    status: "Completed",
+    year: "2025",
+    problem: "Developers lose hours context-switching between GitHub history, codebase Q&A sessions, and meeting notes — there is no single tool that connects commits, code understanding, and recorded decisions in one developer workflow.",
+    solution: "Built an AI-powered developer productivity platform that connects GitHub repositories to provide instant AI-generated commit summaries, natural-language codebase search and Q&A over any repo, and meeting-recording uploads that are transcribed and summarized into structured action items.",
+    outcome: "Deployed a production-ready full-stack app with the frontend on Vercel, backend on Render, and PostgreSQL on Neon — giving developers a unified dashboard where code history, semantic search, and meeting intelligence converge in one workflow.",
+    technologies: ["React.js", "Node.js", "PostgreSQL", "Neon", "Vercel", "Render", "GitHub API", "OpenAI", "Whisper", "REST API", "JWT"],
+    highlights: [
+      "Integrated the GitHub API to fetch repository trees and commit histories, passing content through an LLM pipeline that generates concise, structured commit summaries per PR and branch.",
+      "Implemented natural-language codebase Q&A by chunking and embedding repository files, enabling semantic search and context-aware answers over the user's own codebase.",
+      "Built a meeting-recording upload and transcription pipeline using Whisper, with a follow-up summarization step that extracts action items, owners, and priorities into a structured dashboard view.",
+      "Deployed a decoupled architecture — React frontend on Vercel, Node.js/Express backend on Render, and PostgreSQL via Neon — with JWT-secured API routes and GitHub OAuth integration."
+    ],
+    githubUrl: "https://github.com/Karthik-ck-604/DevSync-AI",
+    liveUrl: "https://dev-sync-ai.vercel.app",
+  },
+  {
     id: "meet-iq",
     name: "Meet-IQ",
     category: "AI & Full-Stack Productivity",

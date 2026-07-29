@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Mic, User, Terminal, Cpu } from "lucide-react";
+import { Mic, User, Terminal, Cpu, UtensilsCrossed, Search, GitCommit, Bot, Barcode, ShoppingCart } from "lucide-react";
 
 interface ProjectVisualProps {
   projectId: string;
@@ -8,6 +8,140 @@ interface ProjectVisualProps {
 
 export const ProjectVisual: React.FC<ProjectVisualProps> = ({ projectId }) => {
   const containerStyle = "relative w-full h-full min-h-[180px] sm:min-h-[220px] bg-[#0F0F0F] flex items-center justify-center overflow-hidden rounded-xl border border-[#2A2A2A]";
+
+  if (projectId === "kochen-maint") {
+    const pantryItems = [
+      { name: "Tomatoes", qty: "6", color: "#DC2626" },
+      { name: "Chicken", qty: "500g", color: "#F59E0B" },
+      { name: "Spinach", qty: "200g", color: "#22C55E" },
+      { name: "Garlic", qty: "1 head", color: "#A8A8A8" },
+    ];
+    return (
+      <div className={containerStyle}>
+        <div className="absolute inset-0 bg-radial from-[#F59E0B]/8 to-transparent pointer-events-none" />
+        <div className="relative z-10 flex flex-col w-full h-full px-5 py-4 gap-3 justify-between">
+
+          {/* Header */}
+          <div className="flex items-center justify-between border-b border-[#2A2A2A] pb-2">
+            <div className="flex items-center gap-1.5">
+              <UtensilsCrossed className="w-3.5 h-3.5 text-[#F59E0B]" />
+              <span className="text-[10px] font-mono text-[#F8F8F8] tracking-wider font-semibold">kochen-maint</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <motion.div
+                animate={{ opacity: [1, 0.4, 1] }}
+                transition={{ duration: 1.8, repeat: Infinity }}
+                className="flex items-center gap-1"
+              >
+                <Barcode className="w-3 h-3 text-[#F59E0B]" />
+                <span className="text-[8px] font-mono text-[#F59E0B] font-semibold">SCAN</span>
+              </motion.div>
+            </div>
+          </div>
+
+          {/* Pantry Items */}
+          <div className="flex flex-col gap-1.5 select-none">
+            <span className="text-[8px] font-mono text-[#A8A8A8]/60 uppercase tracking-widest">Smart Pantry</span>
+            {pantryItems.map((item, i) => (
+              <motion.div
+                key={item.name}
+                initial={{ opacity: 0, x: -8 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: i * 0.15, duration: 0.4 }}
+                className="flex items-center justify-between bg-[#161616]/80 px-2 py-1 rounded border border-[#2A2A2A]"
+              >
+                <div className="flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: item.color }} />
+                  <span className="text-[9px] font-mono text-[#F8F8F8]">{item.name}</span>
+                </div>
+                <span className="text-[8px] font-mono text-[#A8A8A8]">{item.qty}</span>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* AI Recipe Suggestion */}
+          <motion.div
+            animate={{ borderColor: ["#2A2A2A", "#F59E0B40", "#2A2A2A"] }}
+            transition={{ duration: 3, repeat: Infinity }}
+            className="bg-[#161616]/90 border rounded-lg p-2 select-none"
+          >
+            <div className="flex items-center gap-1.5 mb-1">
+              <Bot className="w-3 h-3 text-[#F59E0B]" />
+              <span className="text-[8px] font-mono text-[#F59E0B] font-semibold uppercase tracking-wider">Gemini Recipe</span>
+            </div>
+            <p className="text-[8px] font-mono text-[#A8A8A8] leading-relaxed">Chicken Palak — matches 4/4 pantry items · 480 kcal · Low-carb ✓</p>
+          </motion.div>
+
+          {/* Grocery auto-list tag */}
+          <div className="flex items-center gap-1.5 select-none">
+            <ShoppingCart className="w-3 h-3 text-[#22C55E]" />
+            <span className="text-[8px] font-mono text-[#22C55E]">Auto-list generated: +3 items</span>
+          </div>
+
+        </div>
+      </div>
+    );
+  }
+
+  if (projectId === "devsync-ai") {
+    const commits = [
+      { hash: "a3f91c", msg: "feat: add semantic search endpoint", color: "#22C55E" },
+      { hash: "b7d20e", msg: "fix: token refresh race condition", color: "#F59E0B" },
+      { hash: "c14ff8", msg: "chore: update Prisma schema migrations", color: "#A8A8A8" },
+    ];
+    return (
+      <div className={containerStyle}>
+        <div className="absolute inset-0 bg-radial from-[#818CF8]/8 to-transparent pointer-events-none" />
+        <div className="relative z-10 flex flex-col w-full h-full px-5 py-4 gap-3 justify-between">
+
+          {/* Header */}
+          <div className="flex items-center justify-between border-b border-[#2A2A2A] pb-2">
+            <div className="flex items-center gap-1.5">
+              <GitCommit className="w-3.5 h-3.5 text-[#818CF8]" />
+              <span className="text-[10px] font-mono text-[#F8F8F8] tracking-wider font-semibold">DevSync-AI</span>
+            </div>
+            <span className="text-[8px] font-mono text-[#818CF8] border border-[#818CF8]/30 px-1.5 py-0.5 rounded-full">github connected</span>
+          </div>
+
+          {/* Commit log */}
+          <div className="flex flex-col gap-1.5 select-none">
+            <span className="text-[8px] font-mono text-[#A8A8A8]/60 uppercase tracking-widest">AI Commit Summaries</span>
+            {commits.map((c, i) => (
+              <motion.div
+                key={c.hash}
+                initial={{ opacity: 0, x: -8 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: i * 0.18, duration: 0.4 }}
+                className="flex items-start gap-2 bg-[#161616]/80 px-2 py-1.5 rounded border border-[#2A2A2A]"
+              >
+                <span className="font-mono text-[8px] mt-px" style={{ color: c.color }}>{c.hash}</span>
+                <span className="text-[8px] font-mono text-[#A8A8A8] leading-tight">{c.msg}</span>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Semantic search bar */}
+          <div className="flex items-center gap-1.5 bg-[#161616] border border-[#2A2A2A] rounded-lg px-2 py-1.5 select-none">
+            <Search className="w-3 h-3 text-[#818CF8] shrink-0" />
+            <span className="text-[8px] font-mono text-[#A8A8A8]/70">where is auth middleware defined?</span>
+            <motion.span
+              animate={{ opacity: [1, 0, 1] }}
+              transition={{ duration: 0.8, repeat: Infinity }}
+              className="w-px h-3 bg-[#818CF8] ml-0.5 shrink-0"
+            />
+          </div>
+
+          {/* Action item chip */}
+          <div className="flex items-center gap-1.5 select-none">
+            <Bot className="w-3 h-3 text-[#F59E0B]" />
+            <span className="text-[8px] font-mono text-[#F59E0B]">Meeting → 3 action items extracted</span>
+          </div>
+
+        </div>
+      </div>
+    );
+  }
+
 
   if (projectId === "meet-iq") {
     return (
