@@ -2,13 +2,75 @@
 <html lang="en" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/assets/logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- ═══════════════════════════════════════════════════════
+         FAVICON — browser tab icon (all browsers)
+    ════════════════════════════════════════════════════════ -->
+    <!-- ICO for legacy browsers / Windows -->
+    <link rel="shortcut icon" href="/static/favicon.ico" />
+    <!-- PNG favicons (modern browsers pick the best size) -->
+    <link rel="icon" type="image/png" sizes="16x16"  href="/static/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="32x32"  href="/static/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="96x96"  href="/static/favicon-96x96.png" />
+
+    <!-- ═══════════════════════════════════════════════════════
+         APPLE / iOS — home screen icon & status bar
+    ════════════════════════════════════════════════════════ -->
+    <!-- 180×180 opaque PNG — iOS Safari "Add to Home Screen" icon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png" />
+    <!-- Tells iOS Safari to use standalone (full-screen) mode -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Karthikeyan C" />
+
+    <!-- ═══════════════════════════════════════════════════════
+         ANDROID / PWA — manifest + theme
+    ════════════════════════════════════════════════════════ -->
+    <!-- Web App Manifest (Android Chrome "Add to Home Screen" / PWA install) -->
+    <link rel="manifest" href="/manifest.json" />
+    <!-- Android Chrome toolbar / task-switcher color -->
     <meta name="theme-color" content="#050505" />
+    <!-- Fallback for older Android browsers -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="application-name" content="Karthikeyan C" />
+
+    <!-- ═══════════════════════════════════════════════════════
+         WINDOWS — tile icon for IE / Edge pinned sites
+    ════════════════════════════════════════════════════════ -->
+    <meta name="msapplication-TileColor" content="#050505" />
+    <meta name="msapplication-TileImage" content="/static/mstile-150x150.png" />
+    <meta name="msapplication-config" content="none" />
+
+    <!-- ═══════════════════════════════════════════════════════
+         SEO + Open Graph (link preview on social media)
+    ════════════════════════════════════════════════════════ -->
+    <meta name="description" content="Full Stack Developer building AI-powered and scalable web apps — MERN, NestJS, Next.js 14, React Native, and more." />
+    <meta name="author" content="Karthikeyan C" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph (Facebook, LinkedIn, WhatsApp) -->
+    <meta property="og:type"        content="website" />
+    <meta property="og:title"       content="Karthikeyan C | Full Stack Developer" />
+    <meta property="og:description" content="Portfolio of Karthikeyan C — full-stack engineer specialising in AI/LLM platforms, monorepos, and modern web." />
+    <meta property="og:image"       content="/static/logo.png" />
+    <meta property="og:image:width"  content="512" />
+    <meta property="og:image:height" content="512" />
+
+    <!-- Twitter / X Card -->
+    <meta name="twitter:card"        content="summary" />
+    <meta name="twitter:title"       content="Karthikeyan C | Full Stack Developer" />
+    <meta name="twitter:description" content="Portfolio of Karthikeyan C — full-stack engineer specialising in AI/LLM platforms, monorepos, and modern web." />
+    <meta name="twitter:image"       content="/static/logo.png" />
+
+    <!-- ═══════════════════════════════════════════════════════
+         FONTS (preconnect for performance)
+    ════════════════════════════════════════════════════════ -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
-    <title>Karthikeyan C | Full Stack Developer | MERN & Spring Boot</title>
+
+    <title>Karthikeyan C | Full Stack Developer | MERN &amp; Spring Boot</title>
   </head>
   <body class="bg-[#050505] text-[#F8F8F8] antialiased selection:bg-red-600 selection:text-white overflow-x-hidden">
     <div id="root"></div>

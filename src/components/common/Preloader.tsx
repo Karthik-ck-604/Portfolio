@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 
-const logoImg = "/assets/logo.png";
+const logoImg = "/static/logo.png";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Web Audio Synthesizer — fully synthesized, zero external assets

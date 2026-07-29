@@ -58,7 +58,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, idx }) => {
         translateOnHover={false} // Disabled since sticky coordinates stack
         className="p-6 md:p-10 bg-[#161616]/95 shadow-[0_20px_40px_rgba(0,0,0,0.7)]"
       >
-        <div className={`grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center`}>
+        <div className={`grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center min-h-[540px] lg:min-h-[460px]`}>
           
           {/* Mock Visual representation of project */}
           <div className={`lg:col-span-6 w-full ${isEven ? "lg:order-2" : ""}`}>
@@ -102,17 +102,17 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, idx }) => {
               </div>
             </div>
 
-            {/* Tech Chips */}
+            {/* Tech Chips — capped at 8 for consistent card height */}
             <div className="flex flex-wrap gap-1.5 mb-6">
-              {project.technologies.map((tech) => (
+              {project.technologies.slice(0, 8).map((tech) => (
                 <TechChip key={tech} label={tech} />
               ))}
             </div>
 
-            {/* Highlights bullets list */}
+            {/* Highlights bullets list — capped at 4 for consistent card height */}
             <div className="flex flex-col gap-2.5 mb-8 w-full border-t border-[#2A2A2A]/40 pt-5">
               <span className="text-[10px] uppercase tracking-widest text-[#A8A8A8]/60 font-semibold block mb-1">Technical Contributions</span>
-              {project.highlights.map((bullet, index) => (
+              {project.highlights.slice(0, 4).map((bullet, index) => (
                 <div key={index} className="flex items-start gap-2.5 text-xs text-[#A8A8A8] leading-relaxed select-none">
                   <ShieldCheck className="w-4 h-4 text-[#DC2626] shrink-0 mt-0.5" />
                   <p>{bullet}</p>

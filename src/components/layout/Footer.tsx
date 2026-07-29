@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { ArrowUp, Github, Linkedin, Mail } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const logoImg = "/assets/logo.png";
+const logoImg = "/static/logo.png";
 
 export const Footer: React.FC = () => {
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -78,7 +78,7 @@ export const Footer: React.FC = () => {
                 src={logoImg}
                 alt="CK Logo"
                 draggable={false}
-                className="w-9 h-9 object-contain transition-transform duration-300 group-hover:scale-110"
+              className="w-9 h-9 object-contain transition-transform duration-300 group-hover:scale-110"
               />
             </a>
 

@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 import { scrollToSection } from "@/lib/scrollToSection";
 import { socialLinks } from "@/data/socials";
 
-const logoImg = "/assets/logo.png";
+const logoImg = "/static/logo.png";
 
 interface NavbarProps {
   isLoaded?: boolean;
