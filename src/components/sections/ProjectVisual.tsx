@@ -128,15 +128,17 @@ export const ProjectVisual: React.FC<ProjectVisualProps> = ({ projectId }) => {
   ───────────────────────────────────────────────────────────── */
   if (projectId === "devsync-ai") {
     const nodes = [
-      { id: "gh",    label: "GitHub",    sub: "commits · tree",  color: "#F8F8F8", icon: "⬡", x: 14 },
-      { id: "emb",   label: "Embeddings",sub: "chunked · vector", color: "#818CF8", icon: "◈", x: 36 },
-      { id: "srch",  label: "Sem. Search",sub: "NL query",         color: "#22C55E", icon: "⊕", x: 58 },
-      { id: "summ",  label: "Summary",   sub: "action items",     color: "#F59E0B", icon: "✦", x: 80 },
+      { id: "gh", label: "GitHub", sub: "commits · tree", color: "#F8F8F8", icon: "⬡" },
+      { id: "emb", label: "Embeddings", sub: "chunked · vector", color: "#818CF8", icon: "◈" },
+      { id: "srch", label: "Sem. Search", sub: "NL query", color: "#22C55E", icon: "⊕" },
+      { id: "summ", label: "Summary", sub: "action items", color: "#F59E0B", icon: "✦" },
     ];
+    // Node centres sit at 12.5%, 37.5%, 62.5%, and 87.5% in the four-column grid.
+    // Ending each connector 5.5% from a centre keeps a consistent clear gap around every icon.
     const edges = [
-      { x1: "23%", x2: "35%", y: "38px", color: "#818CF8" },
-      { x1: "46%", x2: "58%", y: "38px", color: "#22C55E" },
-      { x1: "69%", x2: "80%", y: "38px", color: "#F59E0B" },
+      { x1: "18%", x2: "32%", color: "#818CF8" },
+      { x1: "43%", x2: "57%", color: "#22C55E" },
+      { x1: "68%", x2: "82%", color: "#F59E0B" },
     ];
 
     return (
@@ -156,13 +158,13 @@ export const ProjectVisual: React.FC<ProjectVisualProps> = ({ projectId }) => {
           </div>
 
           {/* Flow diagram */}
-          <div className="relative flex-1 flex items-center">
+          <div className="relative flex-1 min-h-[88px]">
             {/* SVG edges */}
             <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none">
               {edges.map((e, i) => (
                 <motion.line
                   key={i}
-                  x1={e.x1} y1="50%" x2={e.x2} y2="50%"
+                  x1={e.x1} y1="20px" x2={e.x2} y2="20px"
                   stroke={e.color}
                   strokeWidth="1.5"
                   strokeDasharray="4 3"
@@ -174,14 +176,14 @@ export const ProjectVisual: React.FC<ProjectVisualProps> = ({ projectId }) => {
             </svg>
 
             {/* Nodes */}
-            <div className="relative flex w-full justify-between px-0">
+            <div className="relative grid w-full grid-cols-4">
               {nodes.map((n, i) => (
                 <motion.div
                   key={n.id}
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.15, duration: 0.4 }}
-                  className="flex flex-col items-center gap-1 w-[22%]"
+                  className="flex flex-col items-center gap-1 min-w-0"
                 >
                   <div
                     className="w-10 h-10 rounded-xl flex items-center justify-center border text-base"
