@@ -1,8 +1,10 @@
 import { useCallback, useState, useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 import { HelmetProvider, Helmet } from "react-helmet-async";
+import { SmoothScrollProvider } from "@/providers/SmoothScrollProvider";
 import { SkipToContent } from "@/components/layout/SkipToContent";
 import { ScrollProgress } from "@/components/layout/ScrollProgress";
+import { ScrollProgressButton } from "@/components/layout/ScrollProgressButton";
 import { CursorGlow } from "@/components/layout/CursorGlow";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -77,51 +79,54 @@ export default function App() {
   };
 
   return (
-    <HelmetProvider>
-      <Helmet>
-        <title>Karthikeyan C | Full Stack Developer | MERN & Spring Boot</title>
-        <meta name="description" content="Professional portfolio of Karthikeyan C, a Full Stack Developer specializing in MERN stack, Java Spring Boot, AI integration, and cloud technologies." />
-        <meta name="robots" content="index, follow" />
-        {/* Open Graph */}
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content="Karthikeyan C | Full Stack Developer Portfolio" />
-        <meta property="og:description" content="MERN & Spring Boot developer specializing in high-performance web products, AI integrations, and cloud architectures." />
-        {/* Twitter */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Karthikeyan C | Full Stack Developer" />
-        <meta name="twitter:description" content="MERN & Spring Boot portfolio featuring cloud, AI, and full-stack software products." />
-        
-        {/* Inject JSON-LD Schema */}
-        <script type="application/ld+json">
-          {JSON.stringify(personSchema)}
-        </script>
-      </Helmet>
+    <SmoothScrollProvider>
+      <HelmetProvider>
+        <Helmet>
+          <title>Karthikeyan C | Full Stack Developer | MERN &amp; Spring Boot</title>
+          <meta name="description" content="Professional portfolio of Karthikeyan C, a Full Stack Developer specializing in MERN stack, Java Spring Boot, AI integration, and cloud technologies." />
+          <meta name="robots" content="index, follow" />
+          {/* Open Graph */}
+          <meta property="og:type" content="website" />
+          <meta property="og:title" content="Karthikeyan C | Full Stack Developer Portfolio" />
+          <meta property="og:description" content="MERN &amp; Spring Boot developer specializing in high-performance web products, AI integrations, and cloud architectures." />
+          {/* Twitter */}
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:title" content="Karthikeyan C | Full Stack Developer" />
+          <meta name="twitter:description" content="MERN &amp; Spring Boot portfolio featuring cloud, AI, and full-stack software products." />
+          
+          {/* Inject JSON-LD Schema */}
+          <script type="application/ld+json">
+            {JSON.stringify(personSchema)}
+          </script>
+        </Helmet>
 
-      <AnimatePresence>
-        {showLoader && <LoadingScreen onComplete={handleLoaderComplete} />}
-      </AnimatePresence>
+        <AnimatePresence>
+          {showLoader && <LoadingScreen onComplete={handleLoaderComplete} />}
+        </AnimatePresence>
 
-      <div className="min-h-screen bg-[#050505] text-[#F8F8F8] antialiased font-sans overflow-x-hidden" onContextMenu={handleAssetContextMenu}>
-        <SkipToContent />
-        <ScrollProgress />
-        <CursorGlow />
-        <Navbar isLoaded={isLoaded} />
-        
-        <main id="main-content" className="outline-none overflow-x-hidden">
-          <Hero isLoaded={isLoaded} />
-          <About />
-          <Skills />
-          <Experience />
-          <Projects />
-          <ProfessionalCertifications />
-          <Publications />
-          <AdditionalCertifications />
-          <GitHub />
-          <Contact />
-        </main>
-        
-        <Footer />
-      </div>
-    </HelmetProvider>
+        <div className="min-h-screen bg-[#050505] text-[#F8F8F8] antialiased font-sans overflow-x-hidden" onContextMenu={handleAssetContextMenu}>
+          <SkipToContent />
+          <ScrollProgress />
+          <ScrollProgressButton />
+          <CursorGlow />
+          <Navbar isLoaded={isLoaded} />
+          
+          <main id="main-content" className="outline-none overflow-x-hidden">
+            <Hero isLoaded={isLoaded} />
+            <About />
+            <Skills />
+            <Experience />
+            <Projects />
+            <ProfessionalCertifications />
+            <Publications />
+            <AdditionalCertifications />
+            <GitHub />
+            <Contact />
+          </main>
+          
+          <Footer />
+        </div>
+      </HelmetProvider>
+    </SmoothScrollProvider>
   );
 }

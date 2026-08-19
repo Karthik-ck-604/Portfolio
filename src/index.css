@@ -75,15 +75,26 @@
     background-color: #050505;
     overflow-x: hidden;
     overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
+  /* Global site-wide scrollbar removal for Webkit, Firefox & IE/Edge */
+  * {
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+  }
+
+  ::-webkit-scrollbar,
+  *::-webkit-scrollbar,
   html::-webkit-scrollbar,
   body::-webkit-scrollbar {
-    display: none;
-    width: 0;
-    height: 0;
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    background: transparent !important;
   }
 
   /* Custom outline styling for keyboard focus indicators */

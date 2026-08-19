@@ -1,27 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { ArrowUp, Github, Linkedin, Mail } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import React from "react";
+import { Github, Linkedin, Mail } from "lucide-react";
+import { scrollToSection } from "@/lib/scrollToSection";
 
 const logoImg = "/static/logo.png";
 
 export const Footer: React.FC = () => {
-  const [showScrollTop, setShowScrollTop] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => setShowScrollTop(window.scrollY > 400);
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const handleScrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
-
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault();
-    const element = document.getElementById(id);
-    if (element) {
-      const offsetPosition = element.getBoundingClientRect().top + window.pageYOffset - 80;
-      window.scrollTo({ top: offsetPosition, behavior: "smooth" });
-    }
+    scrollToSection(id);
   };
 
   const footerLinks = [
@@ -169,23 +155,7 @@ export const Footer: React.FC = () => {
         </div>
       </div>
 
-      {/* ── Floating Back-to-Top Button ── */}
-      <AnimatePresence>
-        {showScrollTop && (
-          <motion.button
-            initial={{ opacity: 0, scale: 0.75, y: 16 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.75, y: 16 }}
-            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            onClick={handleScrollToTop}
-            data-cursor="pointer"
-            className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 min-w-12 h-12 w-12 bg-[#DC2626] hover:bg-[#B91C1C] border border-[#DC2626] hover:border-[#B91C1C] rounded-full text-white flex items-center justify-center cursor-pointer shadow-[0_4px_20px_rgba(220,38,38,0.35)] hover:shadow-[0_6px_24px_rgba(220,38,38,0.5)] transition-all duration-250 z-40 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626] focus-visible:ring-offset-2 focus-visible:ring-offset-black group"
-            aria-label="Scroll to top of the page"
-          >
-            <ArrowUp className="w-4 h-4 group-hover:-translate-y-0.5 transition-transform duration-200" />
-          </motion.button>
-        )}
-      </AnimatePresence>
+      </div>
     </footer>
   );
 };

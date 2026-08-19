@@ -118,19 +118,18 @@ export const Navbar: React.FC<NavbarProps> = ({ isLoaded = true }) => {
       borderRightColor: "rgba(255, 255, 255, 0)",
       boxShadow: "0 0 0px rgba(0,0,0,0)",
     },
-    // STATE 2: Compact pill. Near-transparent background + 1px visible border.
-    // Border animates in as part of the same spring morph from State 1.
+    // STATE 2: Compact pill. Small, tight & sleek capsule around contents.
     collapsed: {
       y: 12,
       opacity: 1,
-      width: "240px",
-      maxWidth: "260px",
+      width: "176px",
+      maxWidth: "184px",
       borderRadius: "9999px",
-      paddingLeft: "14px",
-      paddingRight: "14px",
-      paddingTop: "8px",
-      paddingBottom: "8px",
-      backgroundColor: "rgba(5, 7, 10, 0.18)",
+      paddingLeft: "12px",
+      paddingRight: "12px",
+      paddingTop: "6px",
+      paddingBottom: "6px",
+      backgroundColor: "rgba(5, 7, 10, 0.22)",
       backdropFilter: "blur(14px) saturate(160%)",
       WebkitBackdropFilter: "blur(14px) saturate(160%)",
       borderTopColor: "rgba(255, 255, 255, 0.15)",
@@ -210,7 +209,10 @@ export const Navbar: React.FC<NavbarProps> = ({ isLoaded = true }) => {
               src={logoImg}
               alt="CK Logo"
               draggable={false}
-              className="w-9 h-9 sm:w-10 sm:h-10 object-contain transition-transform duration-300 group-hover:scale-105"
+              className={cn(
+                "object-contain transition-all duration-300 group-hover:scale-105",
+                isDesktopCollapsed ? "w-8 h-8 sm:w-8 sm:h-8" : "w-9 h-9 sm:w-10 sm:h-10"
+              )}
             />
           </a>
 
@@ -276,7 +278,7 @@ export const Navbar: React.FC<NavbarProps> = ({ isLoaded = true }) => {
                 data-cursor="pointer"
                 className={cn(
                   "transition-all duration-300 min-h-[38px] px-4",
-                  isDesktopCollapsed && "px-3.5 py-1 text-xs bg-[#DC2626] text-white hover:bg-[#EF4444] rounded-full min-h-[34px]"
+                  isDesktopCollapsed && "px-3 py-1.5 text-xs bg-[#DC2626] text-white hover:bg-[#EF4444] rounded-full min-h-[30px] h-[30px]"
                 )}
               >
                 GitHub

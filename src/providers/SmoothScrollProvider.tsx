@@ -29,6 +29,7 @@ import {
   SmoothScrollContext,
   type SmoothScrollContextValue,
 } from "@/context/SmoothScrollContext";
+import { registerLenis } from "@/lib/scrollToSection";
 
 // ─── Shared Lenis motionValue ─────────────────────────────────────────────────
 // Exported so useScrollCollapse can import it directly without going through
@@ -93,6 +94,8 @@ export const SmoothScrollProvider: React.FC<Props> = ({ children }) => {
     ).matches;
     if (prefersReduced) return;
 
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+
     // ── Initialise Lenis ──────────────────────────────────────────────────────
     const instance = new Lenis({
       duration: 1.15,
@@ -100,13 +103,14 @@ export const SmoothScrollProvider: React.FC<Props> = ({ children }) => {
       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
       wheelMultiplier: 1,
-      touchMultiplier: 1.5,
+      // Mobile: lower touchMultiplier for more 1:1 feel; desktop: slightly
+      // higher for glide weight on wheel.
+      touchMultiplier: isMobile ? 1.2 : 1.5,
       infinite: false,
-      // Reduce touch multiplier on narrow viewports for more 1:1 feel
-      // (applied dynamically via the wheel handler override below)
     } as ConstructorParameters<typeof Lenis>[0]);
 
     lenisRef.current = instance;
+    registerLenis(instance);
     setLenis(instance);
 
     // ── Boundary resistance wheel override ───────────────────────────────────
@@ -162,6 +166,7 @@ export const SmoothScrollProvider: React.FC<Props> = ({ children }) => {
       if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
       window.removeEventListener("wheel", wheelHandler, { capture: true });
       instance.destroy();
+      registerLenis(null);
       lenisRef.current = null;
       setLenis(null);
     };
