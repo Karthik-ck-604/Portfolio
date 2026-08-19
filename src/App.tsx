@@ -23,6 +23,7 @@ import { LoadingScreen } from "@/components/common/LoadingScreen";
 const LOADER_SEEN_KEY = "ck-intro-seen";
 
 export default function App() {
+  // Always show loader on page load / refresh as requested
   const [showLoader, setShowLoader] = useState(true);
 
   // Once the loader is gone the whole page is "loaded" — hero + navbar drive

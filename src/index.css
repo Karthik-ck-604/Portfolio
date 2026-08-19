@@ -57,12 +57,16 @@
   html {
     scroll-behavior: smooth;
     background-color: #050505;
-    scroll-padding-top: 7rem;
+    scroll-padding-top: calc(var(--nav-height, 72px) + 20px);
     overflow-y: scroll;
     scrollbar-width: none;
     -ms-overflow-style: none;
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
+  }
+
+  section {
+    scroll-margin-top: calc(var(--nav-height, 72px) + 20px);
   }
   
   body {

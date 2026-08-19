@@ -72,6 +72,42 @@ interface HeroProps {
 }
 
 export const Hero: React.FC<HeroProps> = ({ isLoaded = true }) => {
+  const headingRef = React.useRef<HTMLSpanElement>(null);
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const [fontScale, setFontScale] = React.useState(1);
+
+  React.useLayoutEffect(() => {
+    const el = headingRef.current;
+    if (!el) return;
+
+    const checkFit = () => {
+      const parent = containerRef.current || el.parentElement;
+      if (!parent) return;
+
+      // Temporary reset scale to measure intrinsic scrollWidth
+      el.style.transform = "none";
+      const scrollW = el.scrollWidth;
+      const parentW = parent.clientWidth;
+
+      if (scrollW > parentW && parentW > 0) {
+        const neededScale = Math.min(1, Math.floor((parentW / scrollW) * 1000) / 1000);
+        setFontScale(neededScale);
+      } else {
+        setFontScale(1);
+      }
+    };
+
+    checkFit();
+    const ro = new ResizeObserver(checkFit);
+    if (el.parentElement) ro.observe(el.parentElement);
+    ro.observe(el);
+    window.addEventListener("resize", checkFit);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", checkFit);
+    };
+  }, []);
+
   const handleScrollToProjects = (e: React.MouseEvent) => {
     e.preventDefault();
     scrollToSection("projects");
@@ -87,8 +123,6 @@ export const Hero: React.FC<HeroProps> = ({ isLoaded = true }) => {
     scrollToSection("about");
   };
 
-  const headingText = "Karthikeyan C";
-
   return (
     <section
       id="hero"
@@ -101,10 +135,11 @@ export const Hero: React.FC<HeroProps> = ({ isLoaded = true }) => {
 
         {/* ── Left Side ── */}
         <motion.div
+          ref={containerRef}
           initial="initial"
           animate={isLoaded ? "animate" : "initial"}
           variants={staggerContainer}
-          className="lg:col-span-7 flex flex-col items-start"
+          className="lg:col-span-7 flex flex-col items-start w-full max-w-full overflow-hidden"
         >
           {/* Eyebrow */}
           <motion.span
@@ -115,61 +150,67 @@ export const Hero: React.FC<HeroProps> = ({ isLoaded = true }) => {
             Full Stack Developer &bull; MERN &bull; Spring Boot &bull; AI
           </motion.span>
 
-          {/* Heading with character reveal */}
-          <h1 className="text-[#F8F8F8] font-heading font-bold text-display leading-tight tracking-tight mb-5 select-none break-words">
+          {/* Heading with character reveal — single line guaranteed */}
+          <h1 className="text-[#F8F8F8] font-heading font-bold mb-5 select-none w-full max-w-full">
             <span className="block text-xl sm:text-2xl font-semibold text-[#A8A8A8] tracking-normal font-sans mb-1">
               Hi, I'm
             </span>
-            <span className="block">
+            <span
+              ref={headingRef}
+              className="inline-block whitespace-nowrap origin-left"
+              style={{
+                fontSize: "clamp(1.6rem, 5.8vw, 4.5rem)",
+                lineHeight: 1.05,
+                letterSpacing: "-0.02em",
+                fontFamily: "var(--font-heading)",
+                transform: fontScale < 1 ? `scale(${fontScale})` : undefined,
+              }}
+            >
               {/* "Karthikeyan" */}
-              <span className="inline-block whitespace-nowrap">
-                {"Karthikeyan".split("").map((char, index) => (
-                  <motion.span
-                    key={index}
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-                    transition={{
-                      duration: 0.6,
-                      delay: 0.3 + index * 0.03,
-                      ease: easeOutQuint,
-                    }}
-                    className="inline-block"
-                  >
-                    {char}
-                  </motion.span>
-                ))}
-              </span>
-
-              {/* Space */}
-              <span className="inline-block">&nbsp;</span>
-
-              {/* "C." bound together in whitespace-nowrap so '.' never drops below 'C' */}
-              <span className="inline-block whitespace-nowrap">
+              {"Karthikeyan".split("").map((char, index) => (
                 <motion.span
+                  key={index}
                   initial={{ opacity: 0, y: 30 }}
                   animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
                   transition={{
                     duration: 0.6,
-                    delay: 0.3 + 12 * 0.03,
+                    delay: 0.3 + index * 0.03,
                     ease: easeOutQuint,
                   }}
                   className="inline-block"
                 >
-                  C
+                  {char}
                 </motion.span>
-                <motion.span
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-                  transition={{
-                    duration: 0.6,
-                    delay: 0.3 + 13 * 0.03,
-                    ease: easeOutQuint,
-                  }}
-                  className="inline-block text-[#DC2626]"
-                >
-                  .
-                </motion.span>
-              </span>
+              ))}
+
+              {/* Space */}
+              <span className="inline-block">&nbsp;</span>
+
+              {/* "C." bound together */}
+              <motion.span
+                initial={{ opacity: 0, y: 30 }}
+                animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+                transition={{
+                  duration: 0.6,
+                  delay: 0.3 + 12 * 0.03,
+                  ease: easeOutQuint,
+                }}
+                className="inline-block"
+              >
+                C
+              </motion.span>
+              <motion.span
+                initial={{ opacity: 0, y: 30 }}
+                animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+                transition={{
+                  duration: 0.6,
+                  delay: 0.3 + 13 * 0.03,
+                  ease: easeOutQuint,
+                }}
+                className="inline-block text-[#DC2626]"
+              >
+                .
+              </motion.span>
             </span>
           </h1>
 
