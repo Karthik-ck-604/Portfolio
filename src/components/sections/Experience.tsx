@@ -60,17 +60,17 @@ const ExperienceCard: React.FC<ExperienceCardProps> = ({ exp, idx, onViewCertifi
                 href={exp.website}
                 target="_blank"
                 rel="noreferrer"
-                className="block whitespace-nowrap text-[#DC2626] text-xs font-mono tracking-widest uppercase font-semibold transition-colors hover:text-[#EF4444] focus-visible:rounded-sm"
+                className="block text-[#DC2626] text-xs font-mono tracking-widest uppercase font-semibold transition-colors hover:text-[#EF4444] focus-visible:rounded-sm"
                 aria-label={`Visit ${exp.company} website`}
               >
                 {exp.company}
               </a>
             ) : (
-              <span className="block whitespace-nowrap text-[#DC2626] text-xs font-mono tracking-widest uppercase font-semibold">
+              <span className="block text-[#DC2626] text-xs font-mono tracking-widest uppercase font-semibold">
                 {exp.company}
               </span>
             )}
-            <h3 className="mt-1 whitespace-nowrap text-[clamp(0.9rem,3.5vw,1.25rem)] font-heading font-bold tracking-wide text-[#F8F8F8]">
+            <h3 className="mt-1 text-[clamp(0.95rem,3.5vw,1.25rem)] font-heading font-bold tracking-wide text-[#F8F8F8] leading-snug">
               {exp.role}
             </h3>
             <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-[#A8A8A8] font-mono">

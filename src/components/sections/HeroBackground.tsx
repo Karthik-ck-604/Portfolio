@@ -14,6 +14,14 @@ export const HeroBackground: React.FC = () => {
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
 
+    // Respect prefers-reduced-motion
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReducedMotion) {
+      ctx.fillStyle = "#050505";
+      ctx.fillRect(0, 0, width, height);
+      return;
+    }
+
     const particles: { x: number; y: number; originX: number; originY: number; radius: number }[] = [];
     const spacing = 40;
 

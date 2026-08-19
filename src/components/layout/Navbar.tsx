@@ -229,7 +229,7 @@ export const Navbar: React.FC<NavbarProps> = ({ isLoaded = true }) => {
                   ease: "easeInOut",
                   delay: isScrolled ? 0.05 : 0, // Slight trailing delay to settle container first
                 }}
-                className="hidden lg:flex items-center gap-3 lg:gap-5 xl:gap-7 overflow-hidden whitespace-nowrap"
+                className="hidden lg:flex items-center gap-2 lg:gap-3.5 xl:gap-6 overflow-hidden whitespace-nowrap"
                 aria-label="Main Navigation"
               >
                 <LayoutGroup id="navUnderline">

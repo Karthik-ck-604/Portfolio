@@ -97,9 +97,9 @@ export const About: React.FC = () => {
                 </div>
 
                 <div className="flex flex-col gap-4 border-t border-[#2A2A2A]/60 pt-4 font-sans text-sm text-[#A8A8A8]">
-                  <div className="flex items-center gap-3">
-                    <Calendar className="w-4 h-4 text-[#DC2626]/80" />
-                    <span>{profile.education.institution} &bull; {profile.education.duration}</span>
+                  <div className="flex items-start gap-3">
+                    <Calendar className="w-4 h-4 text-[#DC2626]/80 shrink-0 mt-0.5" />
+                    <span className="leading-snug">{profile.education.institution} &bull; {profile.education.duration}</span>
                   </div>
                   <div className="flex items-center gap-3">
                     <Award className="w-4 h-4 text-[#DC2626]/80" />

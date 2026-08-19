@@ -293,7 +293,7 @@ export const Hero: React.FC<HeroProps> = ({ isLoaded = true }) => {
           <motion.div
             variants={staggerContainer}
             custom={{ staggerChildren: 0.08, delayChildren: 0.9 }}
-            className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 w-full"
+            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 w-full"
           >
             {profile.metrics.map((metric, idx) => (
               <MetricCard

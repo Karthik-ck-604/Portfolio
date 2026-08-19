@@ -4,61 +4,76 @@
  * Floating circular scroll-progress indicator + scroll-to-top button.
  *
  * Features:
- *  • Positioned fixed at bottom-right (bottom-6 right-6 z-40).
- *  • Bound to Lenis scroll position (`lenisScrollY`) for non-janky updates.
- *  • Thin SVG circular progress ring (#DC2626 accent) with rounded stroke ends,
- *    rotating -90° to fill clockwise from the 12 o'clock top position.
- *  • Faint low-opacity ring track behind the progress stroke.
- *  • Solid red circular button (#DC2626) centered inside with white ArrowUp icon.
- *  • Micro-interaction: scale hover effect (1.0 → 1.08) and red glow.
- *  • Fades and scales out completely when scrollY < 120px (at page top).
- *  • Click invokes Lenis smooth scroll to the top of the page.
+ *  • Fixed bottom-right (bottom-6 right-6, z-50).
+ *  • Binds to `lenisScrollY` motionValue — no re-render per scroll tick,
+ *    smooth ring updates via useMotionValueEvent.
+ *  • SVG two-circle ring: faint track + foreground progress arc (red accent),
+ *    stroke-linecap round, starts filling at 12-o'clock via -90° rotation.
+ *  • Outer wrapper: fully transparent — no background box behind the ring.
+ *  • Fades out (opacity 0, scale 0.8) below 120 px scroll depth.
+ *  • Click → Lenis scrollTo(0) with cinematic exponential ease-out (1.2 s),
+ *    matching the same easing used in SmoothScrollProvider and scrollToSection.
+ *  • Hover: scale 1 → 1.08, intensified red glow.
+ *  • Touch target: 52 × 52 px (≥ 44 × 44 min).
+ *  • z-50 — above page content, below modal overlays.
  */
 
 import React, { useState } from "react";
 import { ArrowUp } from "lucide-react";
 import { motion, AnimatePresence, useMotionValueEvent } from "framer-motion";
 import { lenisScrollY } from "@/providers/SmoothScrollProvider";
-import { scrollToSection } from "@/lib/scrollToSection";
+import { useSmoothScroll } from "@/context/SmoothScrollContext";
+
+// Cinematic exponential ease-out — same curve used in SmoothScrollProvider
+const cinematicEase = (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t));
+
+// SVG ring geometry
+const SIZE = 52;
+const STROKE_WIDTH = 2.5;
+const CENTER = SIZE / 2; // 26
+const RADIUS = (SIZE - STROKE_WIDTH) / 2 - 1; // ≈ 23.75
+const CIRCUMFERENCE = 2 * Math.PI * RADIUS; // ≈ 149.22
 
 export const ScrollProgressButton: React.FC = () => {
+  const { scrollTo } = useSmoothScroll();
   const [isVisible, setIsVisible] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
 
-  // SVG Geometry metrics
-  const size = 52;
-  const strokeWidth = 2.5;
-  const center = size / 2; // 26
-  const radius = (size - strokeWidth) / 2 - 1; // ~23.75
-  const circumference = 2 * Math.PI * radius; // ~149.22
-
-  // Update progress percentage and visibility state on Lenis scroll tick
+  // ── Bind to Lenis scroll position — no React re-render on every tick ────────
   useMotionValueEvent(lenisScrollY, "change", (latest) => {
-    if (typeof window !== "undefined") {
-      const maxScroll =
-        document.documentElement.scrollHeight - window.innerHeight;
-      const progress =
-        maxScroll > 0
-          ? Math.min(100, Math.max(0, (latest / maxScroll) * 100))
-          : 0;
+    if (typeof window === "undefined") return;
 
-      setScrollProgress(progress);
-      setIsVisible(latest >= 120);
-    }
+    const maxScroll =
+      document.documentElement.scrollHeight - window.innerHeight;
+
+    const progress =
+      maxScroll > 0
+        ? Math.min(100, Math.max(0, (latest / maxScroll) * 100))
+        : 0;
+
+    setScrollProgress(progress);
+    const isMobileMenuOpen = document.body.style.overflow === "hidden" && window.innerWidth < 1024;
+    setIsVisible(latest >= 120 && !isMobileMenuOpen);
   });
 
+  // ── Click → cinematic scroll to absolute top via Lenis ──────────────────────
   const handleScrollToTop = () => {
-    scrollToSection("hero", 0);
+    scrollTo(0, {
+      duration: 1.2,
+      easing: cinematicEase,
+    });
   };
 
-  // stroke-dashoffset: 0% progress -> circumference (empty), 100% -> 0 (full)
+  // stroke-dashoffset maps progress 0 % → circumference (empty ring)
+  //                                  100 % → 0 (full ring)
   const strokeDashoffset =
-    circumference - (scrollProgress / 100) * circumference;
+    CIRCUMFERENCE - (scrollProgress / 100) * CIRCUMFERENCE;
 
   return (
     <AnimatePresence>
       {isVisible && (
         <motion.button
+          key="scroll-progress-btn"
           initial={{ opacity: 0, scale: 0.8, y: 16 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.8, y: 16 }}
@@ -66,45 +81,51 @@ export const ScrollProgressButton: React.FC = () => {
           onClick={handleScrollToTop}
           data-cursor="pointer"
           aria-label="Scroll to top of page"
-          className="fixed bottom-6 right-6 z-40 p-0 bg-transparent border-0 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626] focus-visible:ring-offset-2 focus-visible:ring-offset-black rounded-full group"
+          className="fixed bottom-6 right-6 z-50 p-0 bg-transparent border-0 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626] focus-visible:ring-offset-2 focus-visible:ring-offset-black rounded-full group"
         >
-          {/* Main outer wrapper with hover scale & shadow */}
-          <div className="relative flex items-center justify-center w-[52px] h-[52px] transition-transform duration-250 ease-out group-hover:scale-108">
-            {/* SVG Progress Ring */}
+          {/* Outer wrapper — transparent, no background box */}
+          <div className="relative flex items-center justify-center w-[52px] h-[52px] transition-transform duration-250 ease-out group-hover:scale-[1.08]">
+
+            {/* ── SVG Progress Ring ─────────────────────────────────────────── */}
             <svg
-              width={size}
-              height={size}
-              viewBox={`0 0 ${size} ${size}`}
+              width={SIZE}
+              height={SIZE}
+              viewBox={`0 0 ${SIZE} ${SIZE}`}
               className="absolute inset-0 pointer-events-none"
+              aria-hidden="true"
             >
-              {/* Background Track Circle (Faint accent red) */}
+              {/* Track circle — faint accent red, always visible once button shows */}
               <circle
-                cx={center}
-                cy={center}
-                r={radius}
+                cx={CENTER}
+                cy={CENTER}
+                r={RADIUS}
                 fill="none"
-                stroke="rgba(220, 38, 38, 0.2)"
-                strokeWidth={strokeWidth}
+                stroke="rgba(220, 38, 38, 0.18)"
+                strokeWidth={STROKE_WIDTH}
               />
-              {/* Foreground Progress Circle (Dynamic fill) */}
+
+              {/* Foreground progress arc — fills clockwise from 12 o'clock */}
               <circle
-                cx={center}
-                cy={center}
-                r={radius}
+                cx={CENTER}
+                cy={CENTER}
+                r={RADIUS}
                 fill="none"
                 stroke="#DC2626"
-                strokeWidth={strokeWidth}
+                strokeWidth={STROKE_WIDTH}
                 strokeLinecap="round"
-                strokeDasharray={circumference}
+                strokeDasharray={CIRCUMFERENCE}
                 strokeDashoffset={strokeDashoffset}
-                transform={`rotate(-90 ${center} ${center})`}
-                className="transition-[stroke-dashoffset] duration-150 ease-out"
+                transform={`rotate(-90 ${CENTER} ${CENTER})`}
+                className="transition-[stroke-dashoffset] duration-100 ease-out"
               />
             </svg>
 
-            {/* Inner Solid Red Accent Button */}
-            <div className="w-[41px] h-[41px] rounded-full bg-[#DC2626] group-hover:bg-[#EF4444] text-white flex items-center justify-center shadow-[0_4px_20px_rgba(220,38,38,0.4)] group-hover:shadow-[0_6px_26px_rgba(220,38,38,0.6)] transition-all duration-250 z-10">
-              <ArrowUp className="w-4 h-4 text-white group-hover:-translate-y-0.5 transition-transform duration-200 shrink-0" />
+            {/* ── Inner transparent button — only icon visible ──────────────── */}
+            <div className="w-[41px] h-[41px] rounded-full bg-transparent flex items-center justify-center z-10">
+              <ArrowUp
+                className="w-4 h-4 text-white shrink-0 group-hover:-translate-y-0.5 transition-transform duration-200"
+                aria-hidden="true"
+              />
             </div>
           </div>
         </motion.button>

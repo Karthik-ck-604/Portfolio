@@ -3,7 +3,6 @@ import { AnimatePresence } from "framer-motion";
 import { HelmetProvider, Helmet } from "react-helmet-async";
 import { SmoothScrollProvider } from "@/providers/SmoothScrollProvider";
 import { SkipToContent } from "@/components/layout/SkipToContent";
-import { ScrollProgress } from "@/components/layout/ScrollProgress";
 import { ScrollProgressButton } from "@/components/layout/ScrollProgressButton";
 import { CursorGlow } from "@/components/layout/CursorGlow";
 import { Navbar } from "@/components/layout/Navbar";
@@ -25,7 +24,7 @@ import { LoadingScreen } from "@/components/common/LoadingScreen";
 const LOADER_SEEN_KEY = "ck-intro-seen";
 
 export default function App() {
-  // Always show loader on page load / refresh as requested
+  // Always show cinematic loader on every page load / refresh
   const [showLoader, setShowLoader] = useState(true);
 
   // Once the loader is gone the whole page is "loaded" — hero + navbar drive
@@ -106,7 +105,6 @@ export default function App() {
 
         <div className="min-h-screen bg-[#050505] text-[#F8F8F8] antialiased font-sans overflow-x-hidden" onContextMenu={handleAssetContextMenu}>
           <SkipToContent />
-          <ScrollProgress />
           <ScrollProgressButton />
           <CursorGlow />
           <Navbar isLoaded={isLoaded} />

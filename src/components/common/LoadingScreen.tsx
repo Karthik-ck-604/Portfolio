@@ -21,7 +21,7 @@ const IRIS_EASING: [number, number, number, number] = [0.76, 0, 0.24, 1];
 const ACCENT_COLOR = "#DC2626"; // Crimson red matching home screen accent
 
 // Typography — Royal Space Grotesk font with fluid clamp sizing
-const NAME_FONT_SIZE = "clamp(2rem, 7vw, 5.25rem)";
+const NAME_FONT_SIZE = "clamp(1.35rem, 5.5vw, 5.25rem)";
 const SUBTITLE_FONT_SIZE = "clamp(0.75rem, 2vw, 0.95rem)";
 
 export interface LetterItem {
@@ -282,7 +282,7 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
                 duration: subtitleStage === "roles-show" ? 1.1 : 0.85,
                 ease: "easeInOut",
               }}
-              className="text-center font-sans text-xs sm:text-sm font-semibold tracking-[0.25em] uppercase text-[#DC2626] whitespace-nowrap"
+              className="text-center font-sans text-[10px] sm:text-xs md:text-sm font-semibold tracking-[0.12em] sm:tracking-[0.25em] uppercase text-[#DC2626] max-w-full px-2"
             >
               {ROLES_TEXT}
             </motion.p>
