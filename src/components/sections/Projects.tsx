@@ -50,7 +50,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, idx }) => {
         animate: { opacity: 1, y: 0, transition: { duration: 0.8, ease: easeOutQuint } }
       }}
       // Sticky card stacking effect on desktop scroll
-      className="sticky top-[96px] sm:top-[100px] w-full mb-10 sm:mb-16 last:mb-0"
+      className="lg:sticky lg:top-[100px] w-full mb-10 sm:mb-16 last:mb-0"
     >
       <Card
         hoverGlow={true}

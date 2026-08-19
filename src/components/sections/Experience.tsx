@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { Calendar, CheckCircle2, FileText } from "lucide-react";
+import { Calendar, CheckCircle2, FileText, MapPin } from "lucide-react";
 import { experiences } from "@/data/experience";
 import { SectionHeading } from "@/components/common/SectionHeading";
 import { Card } from "@/components/common/Card";
@@ -47,19 +47,43 @@ const ExperienceCard: React.FC<ExperienceCardProps> = ({ exp, idx, onViewCertifi
           translateOnHover={true}
           className="p-6 md:p-8 bg-[#161616]/80 hover:bg-[#161616]/95 border border-[#2A2A2A]"
         >
-          {/* Header role & date details */}
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-[#2A2A2A]/40 pb-4 mb-4 select-none">
-            <div>
-              <span className="text-[#DC2626] text-xs font-mono tracking-widest uppercase block font-semibold">
+          {/* Header: titles are isolated from metadata so they keep a clean single-line layout. */}
+          <div className={`relative border-b border-[#2A2A2A]/40 pb-4 mb-4 select-none ${exp.isCurrent ? "pr-16" : ""}`}>
+            {exp.isCurrent && (
+              <span className="absolute right-0 top-0 inline-flex items-center gap-1.5 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-2 py-0.5 text-[10px] font-mono font-bold uppercase tracking-wider text-emerald-300">
+                <span className="live-status-dot h-1.5 w-1.5 rounded-full bg-emerald-400" aria-hidden="true" />
+                Live
+              </span>
+            )}
+            {exp.website ? (
+              <a
+                href={exp.website}
+                target="_blank"
+                rel="noreferrer"
+                className="block whitespace-nowrap text-[#DC2626] text-xs font-mono tracking-widest uppercase font-semibold transition-colors hover:text-[#EF4444] focus-visible:rounded-sm"
+                aria-label={`Visit ${exp.company} website`}
+              >
+                {exp.company}
+              </a>
+            ) : (
+              <span className="block whitespace-nowrap text-[#DC2626] text-xs font-mono tracking-widest uppercase font-semibold">
                 {exp.company}
               </span>
-              <h3 className="text-lg md:text-xl font-heading font-bold text-[#F8F8F8] tracking-wide mt-1">
-                {exp.role}
-              </h3>
-            </div>
-            <div className="flex items-center gap-1.5 text-xs text-[#A8A8A8] font-mono shrink-0">
-              <Calendar className="w-3.5 h-3.5" />
-              <span>{exp.duration}</span>
+            )}
+            <h3 className="mt-1 whitespace-nowrap text-[clamp(0.9rem,3.5vw,1.25rem)] font-heading font-bold tracking-wide text-[#F8F8F8]">
+              {exp.role}
+            </h3>
+            <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-[#A8A8A8] font-mono">
+              <span className="flex items-center gap-1.5">
+                <Calendar className="w-3.5 h-3.5" />
+                {exp.duration}
+              </span>
+              {exp.location && (
+                <span className="flex items-center gap-1.5">
+                  <MapPin className="w-3.5 h-3.5" />
+                  {exp.location}
+                </span>
+              )}
             </div>
           </div>
 
@@ -137,7 +161,7 @@ export const Experience: React.FC = () => {
         <SectionHeading
           eyebrow="Credentials"
           title="Practical industry exposure"
-          subtitle="Timeline of my professional growth, technical duties, and internship contributions."
+          subtitle="Timeline of my professional growth, current technical responsibilities, and internship contributions."
         />
 
         {/* Timeline wrapper */}

@@ -116,34 +116,60 @@ export const Hero: React.FC<HeroProps> = ({ isLoaded = true }) => {
           </motion.span>
 
           {/* Heading with character reveal */}
-          <h1 className="text-[#F8F8F8] font-heading font-bold text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-tight tracking-tight mb-5 select-none break-words">
+          <h1 className="text-[#F8F8F8] font-heading font-bold text-display leading-tight tracking-tight mb-5 select-none break-words">
             <span className="block text-xl sm:text-2xl font-semibold text-[#A8A8A8] tracking-normal font-sans mb-1">
               Hi, I'm
             </span>
             <span className="block">
-              {headingText.split("").map((char, index) => (
+              {/* "Karthikeyan" */}
+              <span className="inline-block whitespace-nowrap">
+                {"Karthikeyan".split("").map((char, index) => (
+                  <motion.span
+                    key={index}
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+                    transition={{
+                      duration: 0.6,
+                      delay: 0.3 + index * 0.03,
+                      ease: easeOutQuint,
+                    }}
+                    className="inline-block"
+                  >
+                    {char}
+                  </motion.span>
+                ))}
+              </span>
+
+              {/* Space */}
+              <span className="inline-block">&nbsp;</span>
+
+              {/* "C." bound together in whitespace-nowrap so '.' never drops below 'C' */}
+              <span className="inline-block whitespace-nowrap">
                 <motion.span
-                  key={index}
                   initial={{ opacity: 0, y: 30 }}
                   animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
                   transition={{
                     duration: 0.6,
-                    delay: 0.3 + index * 0.03,
-                    ease: easeOutQuint
+                    delay: 0.3 + 12 * 0.03,
+                    ease: easeOutQuint,
                   }}
                   className="inline-block"
                 >
-                  {char === " " ? "\u00A0" : char}
+                  C
                 </motion.span>
-              ))}
-              <motion.span
-                initial={{ opacity: 0 }}
-                animate={isLoaded ? { opacity: 1 } : { opacity: 0 }}
-                transition={{ delay: 0.8, duration: 0.3 }}
-                className="text-[#DC2626]"
-              >
-                .
-              </motion.span>
+                <motion.span
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+                  transition={{
+                    duration: 0.6,
+                    delay: 0.3 + 13 * 0.03,
+                    ease: easeOutQuint,
+                  }}
+                  className="inline-block text-[#DC2626]"
+                >
+                  .
+                </motion.span>
+              </span>
             </span>
           </h1>
 

@@ -70,6 +70,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
 
+    <!-- ═══════════════════════════════════════════════════════
+         ABOVE-THE-FOLD HERO IMAGE — preloaded so the iris reveal
+         has zero layout shift / no image pop-in when it opens.
+    ════════════════════════════════════════════════════════ -->
+    <link rel="preload" as="image" href="/static/hero_section_profile.png" fetchpriority="high" />
+
     <title>Karthikeyan C | Full Stack Developer | MERN &amp; Spring Boot</title>
   </head>
   <body class="bg-[#050505] text-[#F8F8F8] antialiased selection:bg-red-600 selection:text-white overflow-x-hidden">

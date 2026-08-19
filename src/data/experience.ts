@@ -2,6 +2,9 @@ export interface WorkExperience {
   role: string;
   company: string;
   duration: string;
+  location?: string;
+  website?: string;
+  isCurrent?: boolean;
   technologies: string[];
   summary: string;
   achievements: string[];
@@ -10,6 +13,24 @@ export interface WorkExperience {
 }
 
 export const experiences: WorkExperience[] = [
+  {
+    role: "Developer",
+    company: "Evocaa Infotech",
+    duration: "03 August 2026",
+    location: "Tamil Nadu, India",
+    website: "https://www.evocaa.in",
+    isCurrent: true,
+    technologies: ["Software Development", "Testing", "Problem Solving", "Team Collaboration", "Git"],
+    summary: "Working in the Digital Marketing & Technology Department, contributing to active technology and software development initiatives in a professional, organization-focused environment.",
+    achievements: [
+      "Contribute to the development and improvement of software solutions based on project and business requirements.",
+      "Collaborate with team members to understand requirements, implement solutions, test functionality, and resolve technical issues.",
+      "Apply modern software development practices to real-world client and business needs.",
+      "Build production-oriented development experience while working to professional standards and project requirements."
+    ],
+    skillsGained: ["Production Development Workflows", "Requirements Analysis", "Quality Assurance", "Technical Collaboration"],
+    certificateUrl: ""
+  },
   {
     role: "Full Stack Developer Intern",
     company: "Webgen Tech Solutions",

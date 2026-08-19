@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 import { HelmetProvider, Helmet } from "react-helmet-async";
 import { SkipToContent } from "@/components/layout/SkipToContent";
@@ -16,13 +16,21 @@ import { Publications } from "@/components/sections/Publications";
 import { AdditionalCertifications } from "@/components/sections/AdditionalCertifications";
 import { GitHub } from "@/components/sections/GitHub";
 import { Contact } from "@/components/sections/Contact";
-import { Preloader } from "@/components/common/Preloader";
+import { LoadingScreen } from "@/components/common/LoadingScreen";
+
+// Session gate key — loader plays once per browser session, then skipped
+// for every in-session route change. A new tab / reopened browser plays again.
+const LOADER_SEEN_KEY = "ck-intro-seen";
 
 export default function App() {
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [showLoader, setShowLoader] = useState(true);
+
+  // Once the loader is gone the whole page is "loaded" — hero + navbar drive
+  // their own entrance animations off this flag.
+  const isLoaded = !showLoader;
 
   useEffect(() => {
-    // Lock scrolling while loading
+    // Lock scrolling while the cinematic intro plays.
     if (!isLoaded) {
       document.body.style.overflow = "hidden";
     } else {
@@ -32,6 +40,11 @@ export default function App() {
       document.body.style.overflow = "";
     };
   }, [isLoaded]);
+
+  const handleLoaderComplete = useCallback(() => {
+    setShowLoader(false);
+  }, []);
+
   const personSchema = {
     "@context": "https://schema.org",
     "@type": "Person",
@@ -83,10 +96,8 @@ export default function App() {
         </script>
       </Helmet>
 
-      <AnimatePresence mode="wait">
-        {!isLoaded && (
-          <Preloader onComplete={() => setIsLoaded(true)} />
-        )}
+      <AnimatePresence>
+        {showLoader && <LoadingScreen onComplete={handleLoaderComplete} />}
       </AnimatePresence>
 
       <div className="min-h-screen bg-[#050505] text-[#F8F8F8] antialiased font-sans overflow-x-hidden" onContextMenu={handleAssetContextMenu}>
