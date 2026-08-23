@@ -5,8 +5,9 @@
  *
  * Features:
  *  • Fixed bottom-right (bottom-6 right-6, z-50).
- *  • Binds to `lenisScrollY` motionValue — no re-render per scroll tick,
- *    smooth ring updates via useMotionValueEvent.
+ *  • Binds to `lenisScrollY` motionValue — the ring progress is derived from a
+ *    spring-smoothed motion value, so it tracks the scroll position precisely
+ *    and smoothly (no re-render per scroll tick, no CSS-transition lag).
  *  • SVG two-circle ring: faint track + foreground progress arc (red accent),
  *    stroke-linecap round, starts filling at 12-o'clock via -90° rotation.
  *  • Outer wrapper: fully transparent — no background box behind the ring.
@@ -20,7 +21,13 @@
 
 import React, { useState } from "react";
 import { ArrowUp } from "lucide-react";
-import { motion, AnimatePresence, useMotionValueEvent } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  useMotionValueEvent,
+  useTransform,
+  useSpring,
+} from "framer-motion";
 import { lenisScrollY } from "@/providers/SmoothScrollProvider";
 import { useSmoothScroll } from "@/context/SmoothScrollContext";
 
@@ -34,26 +41,46 @@ const CENTER = SIZE / 2; // 26
 const RADIUS = (SIZE - STROKE_WIDTH) / 2 - 1; // ≈ 23.75
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS; // ≈ 149.22
 
+// Scroll depth (px) below which the button fades out.
+const VISIBLE_THRESHOLD = 120;
+
 export const ScrollProgressButton: React.FC = () => {
   const { scrollTo } = useSmoothScroll();
   const [isVisible, setIsVisible] = useState(false);
-  const [scrollProgress, setScrollProgress] = useState(0);
 
-  // ── Bind to Lenis scroll position — no React re-render on every tick ────────
+  // ── Progress (0 → 100) mapped from Lenis scroll Y as a motionValue ─────────
+  const maxScroll =
+    typeof window !== "undefined"
+      ? Math.max(
+          0,
+          document.documentElement.scrollHeight - window.innerHeight
+        )
+      : 0;
+
+  const progress = useTransform(lenisScrollY, (y) =>
+    maxScroll > 0 ? Math.min(100, Math.max(0, (y / maxScroll) * 100)) : 0
+  );
+
+  // Gentle spring: relaxes toward the real progress but stays closely in sync.
+  const smoothProgress = useSpring(progress, {
+    stiffness: 220,
+    damping: 45,
+    restDelta: 0.0001,
+  });
+
+  // stroke-dashoffset maps progress 0% → circumference (empty ring)
+  //                             100% → 0 (full ring)
+  const strokeDashoffset = useTransform(
+    smoothProgress,
+    (p) => CIRCUMFERENCE - (p / 100) * CIRCUMFERENCE
+  );
+
+  // ── Visibility only — driven by Lenis scroll position ──────────────────────
   useMotionValueEvent(lenisScrollY, "change", (latest) => {
     if (typeof window === "undefined") return;
-
-    const maxScroll =
-      document.documentElement.scrollHeight - window.innerHeight;
-
-    const progress =
-      maxScroll > 0
-        ? Math.min(100, Math.max(0, (latest / maxScroll) * 100))
-        : 0;
-
-    setScrollProgress(progress);
-    const isMobileMenuOpen = document.body.style.overflow === "hidden" && window.innerWidth < 1024;
-    setIsVisible(latest >= 120 && !isMobileMenuOpen);
+    const isMobileMenuOpen =
+      document.body.style.overflow === "hidden" && window.innerWidth < 1024;
+    setIsVisible(latest >= VISIBLE_THRESHOLD && !isMobileMenuOpen);
   });
 
   // ── Click → cinematic scroll to absolute top via Lenis ──────────────────────
@@ -63,11 +90,6 @@ export const ScrollProgressButton: React.FC = () => {
       easing: cinematicEase,
     });
   };
-
-  // stroke-dashoffset maps progress 0 % → circumference (empty ring)
-  //                                  100 % → 0 (full ring)
-  const strokeDashoffset =
-    CIRCUMFERENCE - (scrollProgress / 100) * CIRCUMFERENCE;
 
   return (
     <AnimatePresence>
@@ -104,8 +126,10 @@ export const ScrollProgressButton: React.FC = () => {
                 strokeWidth={STROKE_WIDTH}
               />
 
-              {/* Foreground progress arc — fills clockwise from 12 o'clock */}
-              <circle
+              {/* Foreground progress arc — fills clockwise from 12 o'clock.
+                  stroke-dashoffset is driven by a spring motionValue so the
+                  fill tracks the real scroll position smoothly & accurately. */}
+              <motion.circle
                 cx={CENTER}
                 cy={CENTER}
                 r={RADIUS}
@@ -114,9 +138,8 @@ export const ScrollProgressButton: React.FC = () => {
                 strokeWidth={STROKE_WIDTH}
                 strokeLinecap="round"
                 strokeDasharray={CIRCUMFERENCE}
-                strokeDashoffset={strokeDashoffset}
+                style={{ strokeDashoffset }}
                 transform={`rotate(-90 ${CENTER} ${CENTER})`}
-                className="transition-[stroke-dashoffset] duration-100 ease-out"
               />
             </svg>
 

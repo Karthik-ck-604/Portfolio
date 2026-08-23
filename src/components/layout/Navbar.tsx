@@ -7,6 +7,7 @@ import { Button } from "@/components/common/Button";
 import { cn } from "@/lib/utils";
 import { scrollToSection } from "@/lib/scrollToSection";
 import { socialLinks } from "@/data/socials";
+import { useSmoothScroll } from "@/context/SmoothScrollContext";
 
 const logoImg = "/static/logo.png";
 
@@ -17,7 +18,11 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({ isLoaded = true }) => {
   const [isOpen, setIsOpen] = useState(false);
   const headerRef = useRef<HTMLElement>(null);
-  
+
+  // Live Lenis instance so we can halt smooth-scroll while the mobile menu is
+  // open (preventing the background from drifting to the next section).
+  const { lenis } = useSmoothScroll();
+
   const sectionIds = ["hero", "about", "skills", "experience", "projects", "certifications", "publications", "contact"];
   const activeSection = useActiveSection(sectionIds);
   const githubUrl = socialLinks.find((link) => link.name === "GitHub")?.url;
@@ -53,17 +58,23 @@ export const Navbar: React.FC<NavbarProps> = ({ isLoaded = true }) => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Body scroll lock while mobile menu is open
+  // Body scroll lock + Lenis stop while mobile menu is open.
+  // This is the robust fix for the background scrolling to the next section:
+  // body overflow alone does NOT stop Lenis (which preventDefaults native wheel
+  // / touch events), so we halt the smooth-scroll engine itself too.
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
+      lenis?.stop();
     } else {
       document.body.style.overflow = "unset";
+      lenis?.start();
     }
     return () => {
       document.body.style.overflow = "unset";
+      lenis?.start();
     };
-  }, [isOpen]);
+  }, [isOpen, lenis]);
 
   // Close mobile menu on Escape key press
   useEffect(() => {
@@ -78,17 +89,28 @@ export const Navbar: React.FC<NavbarProps> = ({ isLoaded = true }) => {
 
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault();
+    // Menu may have been open (Lenis stopped); restart before scrolling so the
+    // cinematic animation actually plays.
+    lenis?.start();
     setIsOpen(false);
     scrollToSection(id);
   };
 
-  // Desktop states: "top" (Full-bleed liquid glass), "collapsed" (Compact Dynamic Island), "expandedPill" (Hover-expanded pill)
-  const isDesktopCollapsed = isScrolled && !isHovered;
+  // Small-screen viewports should never enter the hover-expanded "pill" island
+  // state — a tap/focus would otherwise blow the compact Dynamic Island up on
+  // touch devices (issue: dynamic island expanding on tap in small screens).
+  const isMobileViewport =
+    typeof window !== "undefined" && window.innerWidth < 1024;
+
+  // Desktop states: "top" (Full-bleed liquid glass), "collapsed" (Compact
+  // Dynamic Island), "expandedPill" (hover-expand pill — hover/touch only on lg+)
+  const isDesktopCollapsed =
+    isScrolled && !(isHovered && !isMobileViewport);
   const desktopState = !isLoaded
     ? "hidden"
     : !isScrolled
     ? "top"
-    : isHovered
+    : isHovered && !isMobileViewport
     ? "expandedPill"
     : "collapsed";
 
@@ -96,6 +118,12 @@ export const Navbar: React.FC<NavbarProps> = ({ isLoaded = true }) => {
     hidden: {
       y: -100,
       opacity: 0,
+      // Explicit transparent border so the slide-in never flashes a white
+      // border (Tailwind `border` defaults to currentColor → near-white).
+      borderTopColor: "rgba(255, 255, 255, 0)",
+      borderBottomColor: "rgba(255, 255, 255, 0)",
+      borderLeftColor: "rgba(255, 255, 255, 0)",
+      borderRightColor: "rgba(255, 255, 255, 0)",
     },
     // STATE 1: Fully transparent — no fill, no blur, no border, no shadow.
     // Only the logo/links/buttons are visible; the container itself is invisible.
@@ -193,7 +221,7 @@ export const Navbar: React.FC<NavbarProps> = ({ isLoaded = true }) => {
           onBlur={handleBlur}
           tabIndex={isScrolled ? 0 : undefined}
           className={cn(
-            "relative flex items-center justify-between border border-solid pointer-events-auto transition-colors focus:outline-none",
+            "relative flex items-center justify-between border border-solid border-transparent pointer-events-auto transition-colors focus:outline-none",
             !isScrolled ? "w-full max-w-full" : "top-0"
           )}
         >
@@ -318,6 +346,7 @@ export const Navbar: React.FC<NavbarProps> = ({ isLoaded = true }) => {
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             className="fixed inset-0 top-0 left-0 w-screen h-screen h-[100dvh] bg-[#05070a]/95 backdrop-blur-2xl z-40 flex flex-col justify-between px-6 sm:px-10 pt-24 pb-12 lg:hidden overflow-y-auto"
+            data-lenis-prevent
             role="dialog"
             aria-modal="true"
             aria-label="Mobile Navigation Menu"
